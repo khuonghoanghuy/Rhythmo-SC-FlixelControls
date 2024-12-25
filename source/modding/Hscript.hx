@@ -129,7 +129,6 @@ class Hscript extends FlxBasic {
 		setVariable('FlxBackdrop', FlxBackdrop);
 		setVariable('FlxBasic', FlxBasic);
 		setVariable('FlxCamera', FlxCamera);
-		setVariable('FlxCameraFollowStyle', getFlxCameraFollowStyle());
 		setVariable('FlxColor', getFlxColor());
 		setVariable('FlxEase', FlxEase);
 		setVariable('FlxG', FlxG);
@@ -289,17 +288,6 @@ class Hscript extends FlxBasic {
 			}
 		};
 	}
-
-	public function getFlxCameraFollowStyle() {
-        return {
-            "LOCKON": FlxCameraFollowStyle.LOCKON,
-            "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
-            "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
-            "TOPDOWN_TIGHT": FlxCameraFollowStyle.TOPDOWN_TIGHT,
-            "SCREEN_BY_SCREEN": FlxCameraFollowStyle.SCREEN_BY_SCREEN,
-            "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
-        };
-    }
     
     public function getFlxTextAlign()  {
         return {
