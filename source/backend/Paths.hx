@@ -158,6 +158,9 @@ class Paths {
 		return file(key + extension);
 	}
 
+	static public function validScriptType(n:String):Bool
+		return n.endsWith('.hx') || n.endsWith('.hxs') || n.endsWith('.hxc') || n.endsWith('.hscript');
+
 	inline static public function frag(key:String)
 		return file('shaders/$key.frag');
 

@@ -125,9 +125,11 @@ class Hscript extends FlxBasic {
 		setVariable('Sound', Sound);
 
 		// Flixel
+		setVariable('FlxAxes', getFlxAxes());
 		setVariable('FlxBackdrop', FlxBackdrop);
 		setVariable('FlxBasic', FlxBasic);
 		setVariable('FlxCamera', FlxCamera);
+		setVariable('FlxCameraFollowStyle', getFlxCameraFollowStyle());
 		setVariable('FlxColor', getFlxColor());
 		setVariable('FlxEase', FlxEase);
 		setVariable('FlxG', FlxG);
@@ -139,12 +141,20 @@ class Hscript extends FlxBasic {
 		setVariable('FlxSprite', FlxSprite);
 		setVariable('FlxSpriteGroup', FlxSpriteGroup);
 		setVariable('FlxText', FlxText);
+		setVariable('FlxTextAlign', getFlxTextAlign());
+		setVariable('FlxTextBorderStyle', getFlxTextBorderStyle());
 		setVariable('FlxTimer', FlxTimer);
 		setVariable('FlxTween', FlxTween);
 		setVariable('FlxTypedGroup', FlxTypedGroup);
 		setVariable('createTypedGroup', function() {
 			return new FlxTypedGroup<Dynamic>();
 		});
+
+		// State Stuff
+		setVariable('add', FlxG.state.add);
+		setVariable('remove', FlxG.state.remove);
+		setVariable('insert', FlxG.state.insert);
+		setVariable('members', FlxG.state.members);
 		setVariable('state', FlxG.state);
 
 		// Rhythmo
@@ -277,6 +287,43 @@ class Hscript extends FlxBasic {
 			"to24Bit": function(color:Int) {
 				return color & 0xffffff;
 			}
+		};
+	}
+
+	public function getFlxCameraFollowStyle() {
+        return {
+            "LOCKON": FlxCameraFollowStyle.LOCKON,
+            "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
+            "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
+            "TOPDOWN_TIGHT": FlxCameraFollowStyle.TOPDOWN_TIGHT,
+            "SCREEN_BY_SCREEN": FlxCameraFollowStyle.SCREEN_BY_SCREEN,
+            "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
+        };
+    }
+    
+    public function getFlxTextAlign()  {
+        return {
+            "LEFT": FlxTextAlign.LEFT,
+            "CENTER": FlxTextAlign.CENTER,
+            "RIGHT": FlxTextAlign.RIGHT,
+            "JUSTIFY": FlxTextAlign.JUSTIFY
+        };
+    }
+    
+    public function getFlxTextBorderStyle() {
+        return {
+            "NONE": FlxTextBorderStyle.NONE,
+            "SHADOW": FlxTextBorderStyle.SHADOW,
+            "OUTLINE": FlxTextBorderStyle.OUTLINE,
+            "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
+        };
+    }
+
+	public function getFlxAxes() {
+		return {
+			"X": FlxAxes.X,
+			"Y": FlxAxes.Y,
+			"XY": FlxAxes.XY
 		};
 	}
 

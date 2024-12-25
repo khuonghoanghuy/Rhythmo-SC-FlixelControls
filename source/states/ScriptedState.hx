@@ -22,10 +22,8 @@ class ScriptedState extends ExtendableState {
 			for (folder in folders) {
 				if (FileSystem.exists(folder)) {
 					for (file in FileSystem.readDirectory(folder)) {
-						for (scriptExt in Paths.HSCRIPT_EXT) {
-							if (file.startsWith(path) && file.endsWith(scriptExt)) {
-								path = folder + file;
-							}
+						if (file.startsWith(path) && Paths.validScriptType(file)) {
+							path = folder + file;
 						}
 					}
 				}
@@ -34,12 +32,8 @@ class ScriptedState extends ExtendableState {
 			script = new Hscript(path, false);
 			script.execute(path, false);
 
-			scriptSet('this', this);
-			scriptSet('add', add);
-			scriptSet('remove', remove);
 			scriptSet('multiAdd', multiAdd);
 			scriptSet('multiRemove', multiRemove);
-			scriptSet('insert', insert);
 			scriptSet('openSubState', openSubState);
 		} catch (e:Dynamic) {
 			script = null;

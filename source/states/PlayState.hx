@@ -129,10 +129,8 @@ class PlayState extends ExtendableState {
 		for (folder in foldersToCheck) {
 			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
-					for (scriptExt in Paths.HSCRIPT_EXT) {
-						if (file.endsWith(scriptExt)) {
-							scriptArray.push(new Hscript(folder + file));
-						}
+					if (Paths.validScriptType(file)) {
+						scriptArray.push(new Hscript(folder + file));
 					}
 				}
 			}
@@ -180,10 +178,8 @@ class PlayState extends ExtendableState {
 		for (folder in foldersToCheck) {
 			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
-					for (scriptExt in Paths.HSCRIPT_EXT) {
-						if (file.endsWith(scriptExt)) {
-							scriptArray.push(new Hscript(folder + file));
-						}
+					if (Paths.validScriptType(file)) {
+						scriptArray.push(new Hscript(folder + file));
 					}
 				}
 			}
@@ -565,16 +561,15 @@ class PlayState extends ExtendableState {
 				for (i in 0...possibleNotes.length) {
 					var note = possibleNotes[i];
 
-					if (note.strum == noteDataTimes[Utilities.getNoteIndex(note.dir)] && doNotHit[Utilities.getNoteIndex(note.dir)]) {
-						note.active = false;
+					if (note.strum == noteDataTimes[Utilities.getNoteIndex(note.dir)] && doNotHit[Utilities.getNoteIndex(note.dir)])
 						destroyNote(note);
-					}
 				}
 			}
 		}
 	}
 
 	function destroyNote(note:Note) {
+		note.active = false;
 		notes.remove(note, true);
 		note.kill();
 		note.destroy();
@@ -662,8 +657,6 @@ class PlayState extends ExtendableState {
 		}
 
 		callOnScripts('noteHit', [note, rating]);
-
-		note.active = false;
 		destroyNote(note);
 	}
 

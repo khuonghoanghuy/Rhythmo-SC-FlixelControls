@@ -80,10 +80,11 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `ExtendableSubState`
 * `File`
 * `FileSystem`
-* `FlxAtlasFrames`
+* `FlxAxes`
 * `FlxBackdrop`
 * `FlxBasic`
 * `FlxCamera`
+* `FlxCameraFollowStyle`
 * `FlxColor`
 * `FlxEase`
 * `FlxG`
@@ -91,13 +92,11 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `FlxMath`
 * `FlxObject`
 * `FlxRuntimeShader`
-* `FlxSave`
-* `FlxSort`
 * `FlxSound`
 * `FlxSprite`
 * `FlxSpriteGroup`
-* `FlxStringUtil`
 * `FlxText`
+* `FlxTextAlign`
 * `FlxTextBorderStyle`
 * `FlxTimer`
 * `FlxTween`
@@ -131,7 +130,7 @@ import('states.PlayState');
 
 function create() {
 	var spr:FlxSprite = new FlxSprite(0, 0).makeGraphic(50, 50, FlxColor.BLACK);
-	PlayState.instance.add(spr);
+	add(spr);
 }
 ```
 
@@ -146,7 +145,7 @@ function create() {
 	spr.animation.add('rotate', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], 14);
 	spr.animation.play('rotate');
 	spr.screenCenter();
-	PlayState.instance.add(spr);
+	add(spr);
 }
 ```
 
@@ -158,7 +157,7 @@ import('states.PlayState');
 function create() {
 	var text:FlxText = new FlxText(0, 0, 0, "Hello World", 64);
 	text.screenCenter();
-	PlayState.instance.add(text);
+	add(text);
 }
 ```
 
@@ -190,11 +189,11 @@ import('flixel.FlxG');
 
 function create() {
 	var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, FlxColor.WHITE);
-	this.add(bg);
+	add(bg);
 
 	var text:FlxText = new FlxText(0, 0, FlxG.width, "I am a custom state!", 48);
 	text.color = FlxColor.BLACK;
-	this.add(text);
+	add(text);
 }
 
 function update(elapsed:Float) {

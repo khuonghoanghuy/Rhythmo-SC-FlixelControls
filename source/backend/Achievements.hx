@@ -102,12 +102,7 @@ class Achievements {
 	}
 
 	public static function showAchievement(ach:String, ?onFinish:Void->Void) {
-		var camAwards:FlxCamera = new FlxCamera(0, 0, 0, 0, 1);
-		camAwards.bgColor.alpha = 0;
-		FlxG.cameras.add(camAwards);
-
 		var sprGroup:FlxSpriteGroup = new FlxSpriteGroup();
-		sprGroup.cameras = [camAwards];
 
 		var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/$ach')));
 
@@ -153,7 +148,6 @@ class Achievements {
 					sprGroup.destroy();
 					if (onFinish != null)
 						onFinish();
-					FlxG.cameras.remove(camAwards);
 				}
 			});
 		});

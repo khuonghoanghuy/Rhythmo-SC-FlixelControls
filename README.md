@@ -18,6 +18,6 @@ Mostly based on [FNF](https://github.com/FunkinCrew/Funkin/), go check that out!
 
 ## Credits
 * Joalor64 - Creator / Main Programmer / Composer / Artist
-* Huy1234Th - Additional Programmer
+* Huy1234Th - Additional Programmer / Vietnamese Translation
 * Moxie - Additional Programmer
 * freesound.org - SFX
