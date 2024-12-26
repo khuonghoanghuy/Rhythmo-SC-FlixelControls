@@ -146,8 +146,13 @@ class Hscript extends FlxBasic {
 		setVariable('FlxTimer', FlxTimer);
 		setVariable('FlxTween', FlxTween);
 		setVariable('FlxTypedGroup', FlxTypedGroup);
-		setVariable('createTypedGroup', function() {
-			return new FlxTypedGroup<Dynamic>();
+		setVariable('createTypedGroup', function(?variable) {
+			variable = new FlxTypedGroup<Dynamic>();
+			return variable;
+		});
+		setVariable('createSpriteGroup', function(?variable) {
+			variable = new FlxSpriteGroup<Dynamic>();
+			return variable;
 		});
 
 		// State Stuff
