@@ -126,7 +126,7 @@ class Achievements {
 		achTxt.scrollFactor.set();
 		sprGroup.add(achTxt);
 
-		var flash = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.WHITE);
+		var flash:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.WHITE);
 		flash.scrollFactor.set();
 		sprGroup.add(flash);
 

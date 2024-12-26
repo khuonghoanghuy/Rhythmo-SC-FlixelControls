@@ -150,7 +150,7 @@ class Paths {
 		return file('$key.xml');
 
 	inline static public function script(key:String) {
-		var extension = '.hxs';
+		var extension:String = '.hxs';
 		
 		for (ext in HSCRIPT_EXT)
 			extension = (exists(file(key + ext))) ? ext : extension;

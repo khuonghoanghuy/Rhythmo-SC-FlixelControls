@@ -121,7 +121,7 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `Utilities`
 
 ## Templates
-Some useful templates to get started. For the default template, use [this](https://raw.githubusercontent.com/Joalor64GH/Rhythmo-SC/main/assets/scripts/template.hxs).
+Some useful templates to get started. For the default template, use [this](https://raw.githubusercontent.com/JoaTH-Team/Rhythmo-SC/main/assets/scripts/template.hxs).
 
 ### FlxSprite
 ```hx

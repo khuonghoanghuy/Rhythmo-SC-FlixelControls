@@ -106,7 +106,7 @@ class Hscript extends FlxBasic {
 		#end
 		setVariable('Type', Type);
 		setVariable('Xml', Xml);
-		
+
 		setVariable('createThread', function(func:Void->Void) {
 			#if sys
 			sys.thread.Thread.create(() -> {
@@ -129,6 +129,7 @@ class Hscript extends FlxBasic {
 		setVariable('FlxBackdrop', FlxBackdrop);
 		setVariable('FlxBasic', FlxBasic);
 		setVariable('FlxCamera', FlxCamera);
+		setVariable('FlxCameraFollowStyle', getFlxCameraFollowStyle());
 		setVariable('FlxColor', getFlxColor());
 		setVariable('FlxEase', FlxEase);
 		setVariable('FlxG', FlxG);
@@ -288,24 +289,35 @@ class Hscript extends FlxBasic {
 			}
 		};
 	}
-    
-    public function getFlxTextAlign()  {
-        return {
-            "LEFT": FlxTextAlign.LEFT,
-            "CENTER": FlxTextAlign.CENTER,
-            "RIGHT": FlxTextAlign.RIGHT,
-            "JUSTIFY": FlxTextAlign.JUSTIFY
-        };
-    }
-    
-    public function getFlxTextBorderStyle() {
-        return {
-            "NONE": FlxTextBorderStyle.NONE,
-            "SHADOW": FlxTextBorderStyle.SHADOW,
-            "OUTLINE": FlxTextBorderStyle.OUTLINE,
-            "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
-        };
-    }
+
+	public function getFlxCameraFollowStyle() {
+		return {
+			"LOCKON": FlxCamera.FlxCameraFollowStyle.LOCKON,
+			"PLATFORMER": FlxCamera.FlxCameraFollowStyle.PLATFORMER,
+			"TOPDOWN": FlxCamera.FlxCameraFollowStyle.TOPDOWN,
+			"TOPDOWN_TIGHT": FlxCamera.FlxCameraFollowStyle.TOPDOWN_TIGHT,
+			"SCREEN_BY_SCREEN": FlxCamera.FlxCameraFollowStyle.SCREEN_BY_SCREEN,
+			"NO_DEAD_ZONE": FlxCamera.FlxCameraFollowStyle.NO_DEAD_ZONE
+		};
+	}
+
+	public function getFlxTextAlign() {
+		return {
+			"LEFT": FlxTextAlign.LEFT,
+			"CENTER": FlxTextAlign.CENTER,
+			"RIGHT": FlxTextAlign.RIGHT,
+			"JUSTIFY": FlxTextAlign.JUSTIFY
+		};
+	}
+
+	public function getFlxTextBorderStyle() {
+		return {
+			"NONE": FlxTextBorderStyle.NONE,
+			"SHADOW": FlxTextBorderStyle.SHADOW,
+			"OUTLINE": FlxTextBorderStyle.OUTLINE,
+			"OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
+		};
+	}
 
 	public function getFlxAxes() {
 		return {

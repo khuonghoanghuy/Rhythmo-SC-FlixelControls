@@ -98,7 +98,7 @@ class PlayState extends ExtendableState {
 		var coolBG:FlxSprite = new FlxSprite().makeGraphic(820, FlxG.height, FlxColor.BLACK);
 		coolBG.alpha = SaveData.settings.laneUnderlay / 100;
 		coolBG.screenCenter(X);
-		if (SaveData.settings.laneUnderlay != 0)
+		if (SaveData.settings.laneUnderlay > 0)
 			add(coolBG);
 
 		strumline = new FlxTypedGroup<Note>();
