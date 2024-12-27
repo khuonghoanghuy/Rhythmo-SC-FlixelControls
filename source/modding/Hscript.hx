@@ -151,7 +151,7 @@ class Hscript extends FlxBasic {
 			return variable;
 		});
 		setVariable('createSpriteGroup', function(?variable) {
-			variable = new FlxSpriteGroup<Dynamic>();
+			variable = new FlxSpriteGroup();
 			return variable;
 		});
 
