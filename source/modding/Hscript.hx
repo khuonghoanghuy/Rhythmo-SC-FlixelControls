@@ -184,6 +184,8 @@ class Hscript extends FlxBasic {
 		setVariable('Song', Song);
 		setVariable('Utilities', Utilities);
 
+		setVariable('game', PlayState.instance);
+
 		if (execute)
 			this.execute(file);
 	}
