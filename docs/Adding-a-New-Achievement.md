@@ -26,7 +26,7 @@ var condition:Bool = false;
 var allowEndSong:Bool = false;
 
 function update(elapsed:Float) {
-	if (PlayState.instance.score >= 1000000)
+	if (game.score >= 1000000)
 		condition = true;
 }
 

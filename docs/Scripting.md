@@ -118,6 +118,7 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `ScriptedState`
 * `ScriptedSubState`
 * `Song`
+* `TJSON`
 * `Utilities`
 
 ## Templates
