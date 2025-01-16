@@ -33,6 +33,10 @@
       "type": "haxelib"
     },
     {
+      "name": "tjson",
+      "type": "haxelib"
+    },
+    {
       "name": "funkin.vis",
       "type": "git",
       "dir": null,

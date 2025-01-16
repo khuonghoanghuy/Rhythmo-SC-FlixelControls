@@ -38,7 +38,7 @@ class CreditsState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		credData = Json.parse(Paths.getTextFromFile('credits.json'));
+		credData = TJSON.parse(Paths.getTextFromFile('credits.json'));
 
 		camFollow = new FlxObject(80, 0, 0, 0);
 		camFollow.screenCenter(X);

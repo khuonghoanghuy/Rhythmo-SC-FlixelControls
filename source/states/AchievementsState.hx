@@ -101,7 +101,7 @@ class AchievementsState extends ExtendableState {
 
 	function initAchievementData() {
 		for (i in 0...Achievements.achievements.length) {
-			var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
+			var coolAchieve:AchievementData = cast TJSON.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
 			achievementArray.push(coolAchieve);
 
 			var stringToUse:String = coolAchieve.name;

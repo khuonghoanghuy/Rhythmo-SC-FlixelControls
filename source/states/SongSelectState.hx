@@ -43,7 +43,7 @@ class SongSelectState extends ExtendableState {
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
-		songListData = Json.parse(Paths.getTextFromFile('songs.json'));
+		songListData = TJSON.parse(Paths.getTextFromFile('songs.json'));
 
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/selector_bg'));
 		add(bg);
@@ -51,6 +51,10 @@ class SongSelectState extends ExtendableState {
 		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
 		grid.velocity.set(40, 40);
 		add(grid);
+
+		var bgPanel:FlxSprite = new FlxSprite(0, FlxG.height / 2).makeGraphic(FlxG.width, 760, FlxColor.BLACK);
+		bgPanel.alpha = 0.8;
+		add(bgPanel);
 
 		coverGrp = new FlxTypedGroup<Cover>();
 		add(coverGrp);

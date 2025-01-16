@@ -28,6 +28,7 @@ import lime.app.Application;
 
 import haxe.*;
 import haxe.io.Path;
+import tjson.TJSON;
 
 #if sys
 import sys.*;

@@ -53,7 +53,7 @@ class Localization {
 			jsonContent = Paths.getText(path(DEFAULT_LANGUAGE));
 		}
 
-		return Json.parse(jsonContent);
+		return TJSON.parse(jsonContent);
 	}
 
 	public static function switchLanguage(newLanguage:String) {

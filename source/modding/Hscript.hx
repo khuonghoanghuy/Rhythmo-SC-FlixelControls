@@ -104,6 +104,7 @@ class Hscript extends FlxBasic {
 		#if sys
 		setVariable('Sys', Sys);
 		#end
+		setVariable('TJSON', TJSON);
 		setVariable('Type', Type);
 		setVariable('Xml', Xml);
 

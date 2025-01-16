@@ -36,7 +36,7 @@ class Achievements {
 					if (achievementName != "") {
 						achievements.push(achievementName);
 						try {
-							Json.parse(Paths.getText(Paths.json('achievements/$achievementName')));
+							TJSON.parse(Paths.getText(Paths.json('achievements/$achievementName')));
 							trace("Achievement '" + achievement + "' loaded");
 						} catch (e:Dynamic) {
 							trace('Error loading achievement: $e');
@@ -104,7 +104,7 @@ class Achievements {
 	public static function showAchievement(ach:String, ?onFinish:Void->Void) {
 		var sprGroup:FlxSpriteGroup = new FlxSpriteGroup();
 
-		var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/$ach')));
+		var coolAchieve:AchievementData = cast TJSON.parse(File.getContent(Paths.json('achievements/$ach')));
 
 		var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
 		achBG.scrollFactor.set();

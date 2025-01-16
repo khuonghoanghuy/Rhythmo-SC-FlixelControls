@@ -19,6 +19,7 @@
 * [ ] Discord Rich Presence Support
 * [ ] Sustain Notes + New song
 * [ ] Improve Chart Editor
+* [ ] Improve Note Assets
 * [ ] Silly Visualizer Option
 * [ ] Gameplay Modifiers
 * [ ] Noteskins
