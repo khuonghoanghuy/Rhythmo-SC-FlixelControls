@@ -52,7 +52,7 @@ class SongSelectState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
-		var bgPanel:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 442, FlxColor.BLACK);
+		var bgPanel:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 460, FlxColor.BLACK);
 		bgPanel.screenCenter();
 		bgPanel.alpha = 0.8;
 		add(bgPanel);
