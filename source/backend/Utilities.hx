@@ -49,6 +49,11 @@ class Utilities {
 	public static function wait(milliseconds:Int, callback:Void->Void):Void {
 		Timer.delay(callback, milliseconds);
 	}
+
+	public static function multiFunction(funcs:Array<Void->Void>) {
+		for (func in funcs)
+			func();
+	}
 }
 
 class MapUtil {

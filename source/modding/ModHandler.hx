@@ -36,6 +36,10 @@ class ModHandler {
 	public static function reload():Void {
 		#if FUTURE_POLYMOD
 		trace('Reloading Polymod...');
+		if (!FileSystem.exists('./mods/'))
+			FileSystem.createDirectory('./mods/');
+		if (!FileSystem.exists('mods/mods-go-here.txt'))
+			File.saveContent('mods/mods-go-here.txt', '');
 		loadMods(getMods());
 		#else
 		trace("Polymod reloading is not supported on your Platform!");
@@ -100,6 +104,7 @@ class ModHandler {
 	public static function getParseRules():ParseRules {
 		final output:ParseRules = ParseRules.getDefault();
 		output.addType("txt", TextFileFormat.LINES);
+		output.addType("json", TextFileFormat.JSON);
 		output.addType("hx", TextFileFormat.PLAINTEXT);
 		output.addType("hxs", TextFileFormat.PLAINTEXT);
 		output.addType("hxc", TextFileFormat.PLAINTEXT);
