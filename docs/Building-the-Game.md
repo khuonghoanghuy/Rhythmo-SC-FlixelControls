@@ -1,5 +1,8 @@
 Before doing anything else, make sure to install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/).
 
+> [!NOTE]
+> All files related to building the game are located in the `setup/` directory.
+
 ## Windows
 1. Download and install Microsoft Visual Studio Community.
 2. On the Visual Studio installation screen, go to "Individual Components" and select the following:

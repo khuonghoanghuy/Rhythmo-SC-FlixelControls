@@ -7,7 +7,7 @@ A random rhythm game made from scratch. <br>
 Mostly based on [FNF](https://github.com/FunkinCrew/Funkin/), go check it out!
 
 > [!TIP]
-> The latest builds of the engine can be found in the [Actions](https://github.com/JoaTH-Team/Rhythmo-SC/actions) tab.
+> The latest builds of the game can be found in the [Actions](https://github.com/JoaTH-Team/Rhythmo-SC/actions) tab.
 
 ## Features
 * Modding System (using [Polymod](https://github.com/larsiusprime/polymod/))

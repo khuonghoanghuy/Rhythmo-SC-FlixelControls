@@ -1,8 +1,5 @@
 @echo off
 color 0a
-
-echo Press anything to build the game.
-pause >nul
 cd ..
 @echo on
 echo Installing dependencies
