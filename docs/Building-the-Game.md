@@ -12,7 +12,8 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
         * ⚠ These will take up 4-5GB of available space on your computer.
 3. Download and install [Git](https://git-scm.com/download).
 4. Download the dependencies by running `setup.bat`.
-5. Use `haxelib run lime test windows` to build.
+5. Use `haxelib run lime test windows` to build and launch the game.
+    * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test windows` directly.
 
 > [!CAUTION]
 > Linux and Mac builds have not been tested! <br>
@@ -22,10 +23,12 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
 1. Install `g++`.
 2. Download and install [Git](https://git-scm.com/download).
 3. Download the dependencies by running `setup.sh`.
-4. Use `haxelib run lime test linux` to build.
+4. Use `haxelib run lime test linux` to build and launch the game.
+    * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test linux` directly.
 
 ## Mac
 1. Install `Xcode` to allow C++ building.
 2. Download and install [Git](https://git-scm.com/download).
 3. Download the dependencies by running `setup.sh`.
-4. Use `haxelib run lime test mac` to build.
+4. Use `haxelib run lime test mac` to build and launch the game.
+    * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test mac` directly.
