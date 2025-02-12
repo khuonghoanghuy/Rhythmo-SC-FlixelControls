@@ -20,12 +20,12 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
 
 ## Linux
 1. Install `g++`.
-2. Download and Install [Git](https://git-scm.com/download).
+2. Download and install [Git](https://git-scm.com/download).
 3. Download the dependencies by running `setup.sh`.
 4. Use `haxelib run lime test linux` to build.
 
 ## Mac
 1. Install `Xcode` to allow C++ building.
-2. Download and Install [Git](https://git-scm.com/download).
+2. Download and install [Git](https://git-scm.com/download).
 3. Download the dependencies by running `setup.sh`.
 4. Use `haxelib run lime test mac` to build.
