@@ -11,7 +11,7 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
         * You can skip this by running `msvc.bat`
         * ⚠ These will take up 4-5GB of available space on your computer.
 3. Download and install [Git](https://git-scm.com/download).
-4. Download the dependencies by running `setup-windows.bat`.
+4. Download the dependencies by running `setup.bat`.
 5. Use `haxelib run lime test windows` to build.
 
 > [!CAUTION]
@@ -21,11 +21,11 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
 ## Linux
 1. Install `g++`.
 2. Download and Install [Git](https://git-scm.com/download).
-3. Download the dependencies by running `setup-linux-mac.sh`.
+3. Download the dependencies by running `setup.sh`.
 4. Use `haxelib run lime test linux` to build.
 
 ## Mac
 1. Install `Xcode` to allow C++ building.
 2. Download and Install [Git](https://git-scm.com/download).
-3. Download the dependencies by running `setup-linux-mac.sh`.
+3. Download the dependencies by running `setup.sh`.
 4. Use `haxelib run lime test mac` to build.
