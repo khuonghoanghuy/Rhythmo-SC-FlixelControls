@@ -4,15 +4,17 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
 > All files related to building the game are located in the `setup/` directory.
 
 ## Windows
-1. Download and install Microsoft Visual Studio Community.
-2. On the Visual Studio installation screen, go to "Individual Components" and select the following:
+1. Download [Visual Studio Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe).
+2. Wait for the Visual Studio Installer to install.
+3. On the Visual Studio installation screen, go to "Individual Components" and select the following:
     * MSVC v143 VS 2022 C++ x64/x86 build tools
     * Windows 10/11 SDK
-        * You can skip this by running `msvc.bat`
-        * ⚠ These will take up 4-5GB of available space on your computer.
-3. Download and install [Git](https://git-scm.com/download).
-4. Download the dependencies by running `setup.bat`.
-5. Use `haxelib run lime test windows` to build and launch the game.
+        * You can skip this by running `msvc.bat`.
+4. Once the details are correct, press "Install".
+    * ⚠ This will require 4-5GB of available space on your computer.
+5. Download and install [Git](https://git-scm.com/downloads/win).
+6. Install the dependencies by running `setup.bat`.
+7. Open a Command Prompt/Powershell window in the `Rhythmo-SC` folder, and run `haxelib run lime test windows` to build and launch the game.
     * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test windows` directly.
 
 > [!CAUTION]
@@ -21,14 +23,14 @@ Before doing anything else, make sure to install [Haxe](https://haxe.org/downloa
 
 ## Linux
 1. Install `g++`.
-2. Download and install [Git](https://git-scm.com/download).
-3. Download the dependencies by running `setup.sh`.
-4. Use `haxelib run lime test linux` to build and launch the game.
+2. Download and install [Git](https://git-scm.com/downloads/linux).
+3. Install the dependencies by running `setup.sh`.
+4. Open a Terminal window in the `Rhythmo-SC` folder, and run `haxelib run lime test linux` to build and launch the game.
     * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test linux` directly.
 
-## Mac
-1. Install `Xcode` to allow C++ building.
-2. Download and install [Git](https://git-scm.com/download).
-3. Download the dependencies by running `setup.sh`.
-4. Use `haxelib run lime test mac` to build and launch the game.
+## MacOS
+1. Install [`Xcode`](https://developer.apple.com/documentation/xcode) to allow C++ building.
+2. Download and install [Git](https://git-scm.com/downloads/mac).
+3. Install the dependencies by running `setup.sh`.
+4. Open a Terminal window in the `Rhythmo-SC` folder, and run `haxelib run lime test mac` to build and launch the game.
     * You can run `haxelib run lime setup` to make the lime command global, allowing you to execute `lime test mac` directly.
