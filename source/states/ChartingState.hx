@@ -105,6 +105,13 @@ class ChartingState extends ExtendableState {
 				var chart:String = Json.stringify(song);
 				File.saveContent(Paths.chart(Paths.formatToSongPath(song.song)), chart);
 				trace("chart saved!\nsaved path: " + Paths.chart(Paths.formatToSongPath(song.song)));
+				var savedText:FlxText = new FlxText(0, 0, 0, "Chart saved! Saved path:\n" + Paths.chart(Paths.formatToSongPath(song.song)), 12);
+				savedText.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				savedText.screenCenter();
+				add(savedText);
+				new FlxTimer().start(2.25, (tmr:FlxTimer) -> {
+					FlxTween.tween(savedText, {alpha: 0}, 0.75, {ease: FlxEase.quadOut});
+				});
 			} catch (e:Dynamic) {
 				trace("Error while saving chart: " + e);
 			}
@@ -172,7 +179,7 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var charterVer:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Charter v0.2-rc1 // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Charter v0.2-rc2 // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.scrollFactor.set();
 		add(charterVer);
