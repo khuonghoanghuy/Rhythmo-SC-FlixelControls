@@ -1,4 +1,5 @@
-# Current To-Dos
+# To-Dos
+## Current To-Dos
 * [ ] Chart the songs **[WIP]**
 * [X] Achievements
 * [X] Results
