@@ -120,7 +120,6 @@ class PlayState extends ExtendableState {
 			// damn these note are too far like: left      down       up        right
 			// lmao
 			var note:Note = new Note(startX + i * noteWidth, noteY, noteDirs[i], "receptor");
-			note.screenCenter(Y);
 			strumline.add(note);
 		}
 
