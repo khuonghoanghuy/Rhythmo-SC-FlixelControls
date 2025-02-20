@@ -13,6 +13,7 @@ class PlayState extends ExtendableState {
 	public var konami:Int = 0;
 	public var didKonami:Bool = false;
 
+	public var health:Float = 2; // health system, we can't just like missed entire the song
 	public var speed:Float = 1;
 
 	public var ratingDisplay:Rating;
@@ -110,7 +111,7 @@ class PlayState extends ExtendableState {
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
 
-		var noteWidth:Float = 50; // test, is not good, should have a setting for this
+		var noteWidth:Float = 100; // test, is not good, should have a setting for this
 		var totalWidth:Float = noteDirs.length * noteWidth;
 		var startX:Float = (FlxG.width - totalWidth) / 2;
 		var noteY:Float = (SaveData.settings.downScroll) ? FlxG.height - 250 : 50;
@@ -276,6 +277,8 @@ class PlayState extends ExtendableState {
 
 		super.update(elapsed);
 
+		FlxG.camera.zoom = FlxMath.lerp(1, FlxG.camera.zoom, 0.95);
+
 		if (paused)
 			return;
 
@@ -364,7 +367,7 @@ class PlayState extends ExtendableState {
 
 		if (camZooming && FlxG.sound.music.playing)
 			if (curBeat % (song.timeSignature[0] / 2) == 0)
-				FlxTween.tween(FlxG.camera, {zoom: 1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+				FlxG.camera.zoom += 0.015;
 
 		lastBeatHit = curBeat;
 		callOnScripts('beatHit', [curBeat]);
@@ -602,6 +605,7 @@ class PlayState extends ExtendableState {
 		score += scoreToAdd;
 		combo++;
 		hits++;
+		health += 0.1;
 
 		if (rating == 'perfect' || rating == 'perfect-golden') {
 			var splash:NoteSplash = noteSplashes.recycle(NoteSplash);
@@ -666,6 +670,7 @@ class PlayState extends ExtendableState {
 		isPerfect = false;
 		combo = 0;
 		score -= 10;
+		health -= 0.1;
 		misses++;
 		callOnScripts('noteMiss', [direction]);
 	}
