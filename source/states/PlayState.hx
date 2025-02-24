@@ -366,7 +366,7 @@ class PlayState extends ExtendableState {
 			return;
 
 		if (camZooming && FlxG.sound.music.playing)
-			if (curBeat % (song.timeSignature[0] / 2) == 0)
+			if (curBeat % (song.timeSignature[0] / 4) == 0)
 				FlxG.camera.zoom += 0.015;
 
 		lastBeatHit = curBeat;
