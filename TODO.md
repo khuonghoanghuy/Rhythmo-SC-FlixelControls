@@ -1,6 +1,6 @@
 # To-Dos
 ## Current To-Dos
-* [ ] Chart the songs **[WIP]**
+* [X] Chart the songs **(2 Unfinished LOL)**
 * [X] Achievements
 * [X] Results
 * [X] Note Coloring Menu
@@ -12,11 +12,11 @@
 * [X] New Controls Menu
 * [X] Fix font for some language can't display correctly
 * [X] Fix Controls settings (In main options menu, press R to reset controls)
-* [ ] Make a better charting menu (optional)
-* [ ] Rewrite the gameplay (like note too far for each one)
 * [X] Shader Support
 
 ## Future To-Dos
+* [ ] Make a better charting menu (optional)
+* [ ] Rewrite the gameplay (like note too far for each one)
 * [ ] Discord Rich Presence Support
 * [ ] Sustain Notes + New song
 * [ ] Improve Chart Editor

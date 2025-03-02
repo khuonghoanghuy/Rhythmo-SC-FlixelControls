@@ -111,12 +111,13 @@ class PlayState extends ExtendableState {
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
 
-		var noteWidth:Float = 150; // test, is not good, should have a setting for this
+		var noteWidth:Float = 200; // test, is not good, should have a setting for this
 		var totalWidth:Float = noteDirs.length * noteWidth;
 		var startX:Float = (FlxG.width - totalWidth) / 2;
 		var noteY:Float = (SaveData.settings.downScroll) ? FlxG.height - 250 : 50;
 
 		for (i in 0...noteDirs.length) {
+			// we'll fix this later idk lol
 			// damn these note are too far like: left      down       up        right
 			// lmao
 			var note:Note = new Note(startX + i * noteWidth, noteY, noteDirs[i], "receptor");
