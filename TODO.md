@@ -1,20 +1,6 @@
 # To-Dos
 ## Current To-Dos
-* [X] Chart the songs **(2 Unfinished LOL)**
-* [X] Achievements
-* [X] Results
-* [X] Note Coloring Menu
-* [X] Improve controls system
-* [X] Simple source code reorganization
-* [X] Options organization + better options system
-* [X] Customizable Main Menu + Scripted States
-* [X] Accuracy + Ranking
-* [X] New Controls Menu
-* [X] Fix font for some language can't display correctly
-* [X] Fix Controls settings (In main options menu, press R to reset controls)
-* [X] Shader Support
-
-## Future To-Dos
+* [ ] Maybe actually finish the charts??
 * [ ] Make a better charting menu (optional)
 * [ ] Rewrite the gameplay (like note too far for each one)
 * [ ] Discord Rich Presence Support
@@ -24,3 +10,6 @@
 * [ ] Silly Visualizer Option
 * [ ] Gameplay Modifiers
 * [ ] Noteskins
+
+## Future To-Dos
+Nothing yet...
