@@ -1,4 +1,4 @@
-package;
+package backend;
 
 #if FUTURE_DISCORD_RPC
 import Sys.sleep;
