@@ -88,6 +88,8 @@ class Main extends openfl.display.Sprite {
 
 			FlxG.sound.play(Paths.sound('error'));
 
+			DiscordClient.shutdown();
+
 			#if windows
 			WindowsAPI.messageBox('Error!',
 				'Uncaught Error: \n' + msg +

@@ -14,6 +14,7 @@
 	<!-- [ Custom Defines ] -->
 
 	<define name="FUTURE_POLYMOD" if="desktop" />
+	<define name="FUTURE_DISCORD_RPC" if="desktop" />
 	<define name="UPDATE_CHECK" if="desktop release" />
 
 	<!-- [ Path Settings ] -->
@@ -42,6 +43,7 @@
 	<haxelib name="tjson" />
 	<haxelib name="hscript" if="SIMPLE_SCRIPT" />
 	<haxelib name="polymod" if="FUTURE_POLYMOD" />
+	<haxelib name="linc_discord-rpc" if="FUTURE_DISCORD_RPC" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
 
 	<!-- [ Defines ] -->

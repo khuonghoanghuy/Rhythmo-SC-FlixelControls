@@ -29,6 +29,14 @@ class InitialState extends ExtendableState {
 		#end
 		#end
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.initialize();
+
+		Lib.application.onExit.add(function(exitCode:Int) {
+			DiscordClient.shutdown();
+		});
+		#end
+
 		gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x003500ff, 0x55a800ff, 0xAAe200ff], 1, 90, true);
 		gradientBar.y = FlxG.height - gradientBar.height;
 		gradientBar.scale.y = 0;
