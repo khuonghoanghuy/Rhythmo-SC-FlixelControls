@@ -9,7 +9,7 @@ class DiscordClient {
 	public function new() {
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "988897056292733049", // ID is a placeholder for now
+			clientID: "1271623563454976070",
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -51,7 +51,7 @@ class DiscordClient {
 		trace("Discord Client initialized");
 	}
 
-	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float):Void {
+	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float ?largeImageKey:String = 'icon'):Void {
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
 		if (endTimestamp > 0)
@@ -60,7 +60,7 @@ class DiscordClient {
 		DiscordRpc.presence({
 			details: details,
 			state: state,
-			largeImageKey: 'icon',
+			largeImageKey: largeImageKey,
 			largeImageText: "Rhythmo",
 			smallImageKey: smallImageKey,
 			startTimestamp: Std.int(startTimestamp / 1000),
