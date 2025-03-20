@@ -3,6 +3,7 @@ package backend;
 @:structInit class SaveSettings {
 	public var lang:String = 'en';
 	public var hitSoundType:String = 'Default';
+	public var noteSkinType:String = 'Default';
 	public var framerate:Int = 60;
 	public var songSpeed:Int = 2;
 	public var hitSoundVolume:Int = 0;
@@ -17,6 +18,7 @@ package backend;
 	public var flashing:Bool = true;
 	public var antiMash:Bool = false;
 	public var displayMS:Bool = false;
+	public var sillyVisualizer:Bool = false;
 	public var notesRGB:Array<Array<Int>> = [[221, 0, 255], [0, 128, 255], [0, 215, 54], [255, 0, 106]];
 	public var keyboardBinds:Array<FlxKey> = [LEFT, DOWN, UP, RIGHT, A, S, W, D, ENTER, ESCAPE, R];
 	public var gamepadBinds:Array<FlxGamepadInputID> = [

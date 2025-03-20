@@ -117,9 +117,6 @@ class PlayState extends ExtendableState {
 		var noteY:Float = (SaveData.settings.downScroll) ? FlxG.height - 250 : 50;
 
 		for (i in 0...noteDirs.length) {
-			// we'll fix this later idk lol
-			// damn these note are too far like: left      down       up        right
-			// lmao
 			var note:Note = new Note(startX + i * noteWidth, noteY, noteDirs[i], "receptor");
 			strumline.add(note);
 		}
