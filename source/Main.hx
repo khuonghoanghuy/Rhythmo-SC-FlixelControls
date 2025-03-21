@@ -81,6 +81,9 @@ class Main extends openfl.display.Sprite {
 			}
 			#end
 
+			#if (flixel < "6.0.0")
+			FlxG.bitmap.dumpCache();
+			#end
 			FlxG.bitmap.clearCache();
 
 			if (FlxG.sound.music != null)

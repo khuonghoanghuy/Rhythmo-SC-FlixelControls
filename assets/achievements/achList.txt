@@ -9,4 +9,5 @@ can_improve
 dont_give_up
 failed
 freaky_friday
+speed_demon
 konami

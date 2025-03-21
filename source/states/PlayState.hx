@@ -59,6 +59,10 @@ class PlayState extends ExtendableState {
 
 	var isPerfect:Bool = true;
 
+	#if FUTURE_DISCORD_RPC
+	private var detailsText:String = '';
+	#end
+
 	override public function new() {
 		super();
 
@@ -111,7 +115,7 @@ class PlayState extends ExtendableState {
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
 
-		var noteWidth:Float = 200; // test, is not good, should have a setting for this
+		var noteWidth:Float = 200;
 		var totalWidth:Float = noteDirs.length * noteWidth;
 		var startX:Float = (FlxG.width - totalWidth) / 2;
 		var noteY:Float = (SaveData.settings.downScroll) ? FlxG.height - 250 : 50;
@@ -722,6 +726,7 @@ class PlayState extends ExtendableState {
 					'can_improve',
 					'dont_give_up',
 					'failed',
+					'speed_demon',
 					'konami'
 				]);
 
@@ -777,6 +782,9 @@ class PlayState extends ExtendableState {
 							unlock = true;
 					case 'failed':
 						if (rank == "F")
+							unlock = true;
+					case 'speed_demon':
+						if (SaveData.settings.songSpeed == 10)
 							unlock = true;
 					case 'konami':
 						if (didKonami)

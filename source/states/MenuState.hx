@@ -183,3 +183,13 @@ class MenuState extends ExtendableState {
 		});
 	}
 }
+
+class ModeSelectSubstate extends ExtendableSubState {
+	public function new() {
+		super();
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+	}
+}
