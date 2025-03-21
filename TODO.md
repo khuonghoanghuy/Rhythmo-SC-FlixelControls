@@ -1,6 +1,6 @@
 # To-Dos
 ## Current To-Dos
-### High Priotity
+### High Priority
 * [ ] Maybe actually finish the charts??
 * [ ] Discord Rich Presence Support
 * [ ] Improve Chart Editor
