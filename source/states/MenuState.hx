@@ -206,7 +206,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, 530 + (i * 70));
+			var menuItem:FlxSprite = new GameSprite(0, 220 + (i * 70));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);
@@ -238,6 +238,8 @@ class ModeSelectSubstate extends ExtendableSubState {
 				if (SaveData.settings.flashing)
 					FlxG.camera.flash(FlxColor.WHITE, 1);
 				switch (selections[curSelected]) {
+					case 'campaign':
+						ExtendableState.switchState(new CampaignState());
 					case 'freeplay':
 						ExtendableState.switchState(new SongSelectState());
 				}

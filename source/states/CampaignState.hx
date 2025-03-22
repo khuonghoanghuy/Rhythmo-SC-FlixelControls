@@ -1,5 +1,7 @@
 package states;
 
+import flixel.addons.ui.FlxUIInputText;
+
 class CampaignState extends ExtendableState {
     public static var songList:Array<String> = [];
     public static var curSongIndex:Int = 0;
