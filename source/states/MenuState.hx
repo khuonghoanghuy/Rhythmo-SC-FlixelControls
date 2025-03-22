@@ -1,12 +1,11 @@
 package states;
 
 class MenuState extends ExtendableState {
+	public static var lockInputs:Bool = false;
+
 	var curSelected:Int = 0;
 	var grpSelection:FlxTypedGroup<FlxSprite>;
 	var selections:Array<String> = [];
-
-	var lockInputs:Bool = false;
-
 	var camFollow:FlxObject;
 
 	override function create() {
@@ -207,7 +206,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, (i * 160) + (108 - (Math.max(selections.length, 4) - 4) * 80));
+			var menuItem:FlxSprite = new GameSprite(0, 230 + (i * 70));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);
@@ -248,6 +247,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 			
 			if (Input.justPressed('exit')) {
 				FlxG.sound.play(Paths.sound('cancel'));
+				MenuState.lockInputs = false;
 				close();
 			}
 		}
