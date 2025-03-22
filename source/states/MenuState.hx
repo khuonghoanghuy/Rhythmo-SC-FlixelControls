@@ -11,6 +11,8 @@ class MenuState extends ExtendableState {
 	override function create() {
 		super.create();
 
+		lockInputs = false;
+
 		var path:String = Paths.txt('menuList');
 		if (Paths.exists(path)) {
 			try {
