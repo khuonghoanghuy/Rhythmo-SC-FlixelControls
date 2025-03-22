@@ -206,7 +206,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, -230 + (i * 95));
+			var menuItem:FlxSprite = new GameSprite(0, 530 + (i * 70));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);
