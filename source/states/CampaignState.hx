@@ -59,6 +59,7 @@ class CampaignState extends ExtendableState {
 
     function startCampaignMode(songs:String) {
         songList = songs.split(",").map(s -> StringTools.trim(s));
+        PlayState.campaignMode = true;
         PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songList[curSongIndex]));
         ExtendableState.switchState(new PlayState());
 		if (FlxG.sound.music != null)
