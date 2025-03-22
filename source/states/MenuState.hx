@@ -206,7 +206,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, 230 + (i * 70));
+			var menuItem:FlxSprite = new GameSprite(0, -230 + (i * 95));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);
@@ -232,14 +232,12 @@ class ModeSelectSubstate extends ExtendableSubState {
 			if (Input.justPressed('up') || Input.justPressed('down'))
 				changeSelection(Input.justPressed('up') ? -1 : 1);
 			
-			if (Input.justPressed('accept')) {
+			if (Input.justPressed('accept') && selections[curSelected] != 'campaign') {
 				lockInputs = true;
 				FlxG.sound.play(Paths.sound('select'));
 				if (SaveData.settings.flashing)
 					FlxG.camera.flash(FlxColor.WHITE, 1);
 				switch (selections[curSelected]) {
-					case 'campaign':
-						trace('campaign mode unfinished!');
 					case 'freeplay':
 						ExtendableState.switchState(new SongSelectState());
 				}
