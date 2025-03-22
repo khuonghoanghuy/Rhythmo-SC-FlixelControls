@@ -9,6 +9,7 @@ class PlayState extends ExtendableState {
 	public static var songMultiplier:Float = 1;
 	public static var chartingMode:Bool = false;
 	public static var gotAchievement:Bool = false;
+	public static var campaignMode:Bool = false;
 
 	public var konami:Int = 0;
 	public var didKonami:Bool = false;
@@ -18,6 +19,7 @@ class PlayState extends ExtendableState {
 
 	public var ratingDisplay:Rating;
 	public var accuracy:Float = 0;
+	public var campaignScore:Int = 0;
 	public var score:Int = 0;
 	public var combo:Int = 0;
 	public var misses:Int = 0;
@@ -736,10 +738,29 @@ class PlayState extends ExtendableState {
 
 			if (!SaveData.settings.botPlay)
 				HighScore.saveScore(song.song, score);
-			new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
-				persistentUpdate = true;
-				openSubState(new ResultsSubState(rank, score, accuracy));
-			});
+			
+			if (campaignMode) {
+				var songIndex:Int = CampaignState.curSongIndex;
+				var songs:Array<String> = CampaignState.songList;
+				campaignScore += score;
+				songIndex++;
+				if (songIndex < songs.length) {
+					var songName:String = songs[songIndex];
+					PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songName));
+					ExtendableState.switchState(new PlayState());
+				} else {
+					HighScore.saveCampaignScore(campaignScore);
+					new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
+						persistentUpdate = true;
+						openSubState(new ResultsSubState(rank, campaignScore, accuracy));
+					});
+				}
+			} else {
+				new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
+					persistentUpdate = true;
+					openSubState(new ResultsSubState(rank, score, accuracy));
+				});
+			}
 		}
 	}
 

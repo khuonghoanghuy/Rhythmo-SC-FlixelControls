@@ -2,6 +2,7 @@ package backend;
 
 class HighScore {
 	public static var songScores:Map<String, Int> = new Map();
+	public static var campaignScoreSave:Int = 0;
 
 	public static function saveScore(song:String, score:Int = 0):Void {
 		if (songScores.exists(song)) {
@@ -24,6 +25,13 @@ class HighScore {
 		return songScores.get(song);
 	}
 
+	public static function saveCampaignScore(score:Int = 0):Void {
+		if (campaignScoreSave < score)
+			campaignScoreSave = score;
+		FlxG.save.data.campaignScoreSave = score;
+		FlxG.save.flush();
+	}
+
 	public static function resetSong(song:String):Void {
 		setScore(song, 0);
 	}
@@ -31,5 +39,8 @@ class HighScore {
 	public static function load():Void {
 		if (FlxG.save.data.songScores != null)
 			songScores = FlxG.save.data.songScores;
+
+		if (FlxG.save.data.campaignScoreSave != null)
+			campaignScoreSave = FlxG.save.data.campaignScoreSave;
 	}
 }
