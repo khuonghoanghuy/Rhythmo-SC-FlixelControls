@@ -232,7 +232,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 			if (Input.justPressed('up') || Input.justPressed('down'))
 				changeSelection(Input.justPressed('up') ? -1 : 1);
 			
-			if (Input.justPressed('accept') && selections[curSelected] != 'campaign') {
+			if (Input.justPressed('accept')) {
 				lockInputs = true;
 				FlxG.sound.play(Paths.sound('select'));
 				if (SaveData.settings.flashing)
