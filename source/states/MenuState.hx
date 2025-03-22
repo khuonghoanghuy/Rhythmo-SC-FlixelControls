@@ -133,7 +133,7 @@ class MenuState extends ExtendableState {
 					new FlxTimer().start(1, (tmr:FlxTimer) -> {
 						switch (selections[curSelected]) {
 							case 'play':
-								ExtendableState.switchState(new SongSelectState());
+								openSubState(new ModeSelectSubstate());
 							#if FUTURE_POLYMOD
 							case 'mods':
 								if (ModHandler.trackedMods.length > 0) ExtendableState.switchState(new ModsState()); else {
@@ -238,7 +238,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 				FlxG.sound.play(Paths.sound('select'));
 				if (SaveData.settings.flashing)
 					FlxG.camera.flash(FlxColor.WHITE, 1);
-				switch (curSelected) {
+				switch (selections[curSelected]) {
 					case 'campaign':
 						trace('campaign mode unfinished!');
 					case 'freeplay':
