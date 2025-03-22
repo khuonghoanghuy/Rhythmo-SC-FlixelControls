@@ -185,11 +185,99 @@ class MenuState extends ExtendableState {
 }
 
 class ModeSelectSubstate extends ExtendableSubState {
+	var curSelected:Int = 0;
+	var grpSelection:FlxTypedGroup<FlxSprite>;
+	var selections:Array<String> = ["campaign", "freeplay"];
+	var lockInputs:Bool = false;
+
+	var bg:FlxSprite;
+
+	var tweens:Array<FlxTween> = [];
+
 	public function new() {
 		super();
+
+		bg = new FlxSprite().makeGraphic(1280, 720, FlxColor.BLACK);
+		bg.scrollFactor.set();
+		bg.screenCenter();
+		bg.alpha = 0;
+		add(bg);
+
+		grpSelection = new FlxTypedGroup<FlxSprite>();
+		add(grpSelection);
+
+		for (i in 0...selections.length) {
+			var menuItem:FlxSprite = new GameSprite(0, (i * 160) + (108 - (Math.max(selections.length, 4) - 4) * 80));
+			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
+			menuItem.scale.set(0.4, 0.4);
+			menuItem.screenCenter(X);
+			menuItem.alpha = 0;
+			menuItem.ID = i;
+			grpSelection.add(menuItem);
+			tweens.push(FlxTween.tween(menuItem, {alpha: 1}, 1, {ease: FlxEase.quadOut}));
+		}
+
+		changeSelection(0, false, false);
+
+		tweens.push(FlxTween.tween(bg, {alpha: 0.65}, 0.75, {ease: FlxEase.quadOut}));
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		for (i in tweens)
+			if (i != null)
+				i.active = true;
+
+		if (!lockInputs) {
+			if (Input.justPressed('up') || Input.justPressed('down'))
+				changeSelection(Input.justPressed('up') ? -1 : 1);
+			
+			if (Input.justPressed('accept')) {
+				lockInputs = true;
+				FlxG.sound.play(Paths.sound('select'));
+				if (SaveData.settings.flashing)
+					FlxG.camera.flash(FlxColor.WHITE, 1);
+				switch (curSelected) {
+					case 'campaign':
+						trace('campaign mode unfinished!');
+					case 'freeplay':
+						ExtendableState.switchState(new SongSelectState());
+				}
+			}
+			
+			if (Input.justPressed('exit')) {
+				FlxG.sound.play(Paths.sound('cancel'));
+				close();
+			}
+		}
+	}
+
+	function changeSelection(change:Int = 0, ?doZoomThing:Bool = true, ?playSound:Bool = true) {
+		if (playSound)
+			FlxG.sound.play(Paths.sound('scroll'));
+		curSelected = FlxMath.wrap(curSelected + change, 0, selections.length - 1);
+		grpSelection.forEach((spr:FlxSprite) -> {
+			spr.alpha = (spr.ID == curSelected) ? 1 : 0.6;
+			if (spr.ID == curSelected) {
+				if (doZoomThing) {
+					spr.scale.set(0.5, 0.5);
+					FlxTween.cancelTweensOf(spr.scale);
+					FlxTween.tween(spr.scale, {x: 0.4, y: 0.4}, 0.3, {ease: FlxEase.quadOut});
+				}
+			}
+		});
+	}
+
+	override function destroy() {
+		for (i in tweens) {
+			if (i != null) {
+				i.cancel();
+				i.destroy();
+				i = null;
+			}
+		}
+		tweens = FlxDestroyUtil.destroyArray(tweens);
+		super.destroy();
 	}
 }
