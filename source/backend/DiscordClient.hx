@@ -51,7 +51,8 @@ class DiscordClient {
 		trace("Discord Client initialized");
 	}
 
-	public static function changePresence(details:String = 'In the Menus', state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float, ?largeImageKey:String = 'icon'):Void {
+	public static function changePresence(details:String = 'In the Menus', state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool,
+			?endTimestamp:Float, ?largeImageKey:String = 'icon'):Void {
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
 		if (endTimestamp > 0)

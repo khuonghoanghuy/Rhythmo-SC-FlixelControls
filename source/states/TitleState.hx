@@ -39,7 +39,7 @@ class TitleState extends ExtendableState {
 		logo.screenCenter();
 		logo.angle = -4;
 		add(logo);
-		
+
 		FlxTween.tween(logo, {y: logo.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 
 		new FlxTimer().start(0.01, (tmr:FlxTimer) -> {

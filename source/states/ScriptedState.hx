@@ -76,7 +76,7 @@ class ScriptedState extends ExtendableState {
 		scriptExecute('destroy', []);
 		super.destroy();
 	}
-	
+
 	override function onFocus() {
 		scriptExecute('onFocus', []);
 		super.onFocus();

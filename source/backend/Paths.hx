@@ -151,10 +151,10 @@ class Paths {
 
 	inline static public function script(key:String) {
 		var extension:String = '.hxs';
-		
+
 		for (ext in HSCRIPT_EXT)
 			extension = (exists(file(key + ext))) ? ext : extension;
-		
+
 		return file(key + extension);
 	}
 

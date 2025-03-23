@@ -74,7 +74,7 @@ class ChartingState extends ExtendableState {
 		#if FUTURE_DISCORD_RPC
 		DiscordClient.changePresence("Chart Editor", null, null, true);
 		#end
-		
+
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
 
@@ -276,8 +276,8 @@ class ChartingState extends ExtendableState {
 			+ curBeat
 			+ "\nNote Snap: "
 			+ beatSnap
-			+ "\n" + (Input.pressed('shift') ? "(DISABLED)" : "(CONTROL + ARROWS)")
-		);
+			+ "\n"
+			+ (Input.pressed('shift') ? "(DISABLED)" : "(CONTROL + ARROWS)"));
 	}
 
 	function loadSong(daSong:String):Void {

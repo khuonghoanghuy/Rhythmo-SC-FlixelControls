@@ -46,7 +46,8 @@ class CampaignState extends ExtendableState {
 		input.caretColor = 0xFFFFFFFF;
 		add(input);
 
-		var scoreDisplay = ((FlxG.save.data.campaignScoreSave == 0 || FlxG.save.data.campaignScoreSave == null) ? 0 : FlxG.save.data.campaignScoreSave);
+		var scoreDisplay = ((FlxG.save.data.campaignScoreSave == 0
+			|| FlxG.save.data.campaignScoreSave == null) ? 0 : FlxG.save.data.campaignScoreSave);
 		var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${scoreDisplay} // Press R to reset your score.', 12);
 		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(campScoreTxt);
