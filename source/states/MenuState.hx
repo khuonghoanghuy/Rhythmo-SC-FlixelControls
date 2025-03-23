@@ -1,12 +1,12 @@
 package states;
 
 class MenuState extends ExtendableState {
-	public static var lockInputs:Bool = false;
-
 	var curSelected:Int = 0;
 	var grpSelection:FlxTypedGroup<FlxSprite>;
 	var selections:Array<String> = [];
 	var camFollow:FlxObject;
+
+	var lockInputs:Bool = false;
 
 	override function create() {
 		super.create();
@@ -54,6 +54,10 @@ class MenuState extends ExtendableState {
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
+
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Main Menu", null);
+		#end
 
 		if (!FlxG.sound.music.playing #if FUTURE_POLYMOD || ModsState.mustResetMusic #end) {
 			FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
@@ -134,6 +138,7 @@ class MenuState extends ExtendableState {
 					new FlxTimer().start(1, (tmr:FlxTimer) -> {
 						switch (selections[curSelected]) {
 							case 'play':
+								lockInputs = false;
 								openSubState(new ModeSelectSubstate());
 							#if FUTURE_POLYMOD
 							case 'mods':
@@ -208,7 +213,9 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, 220 + (i * 70));
+			var spacing:Int = 70;
+			var startY:Float = (FlxG.height - (selections.length * spacing)) / 2;
+			var menuItem:FlxSprite = new GameSprite(0, startY + (i * spacing));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);

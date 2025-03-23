@@ -15,6 +15,10 @@ class ModsState extends ExtendableState {
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Mods Menu", null);
+		#end
+
 		if (!FlxG.sound.music.playing)
 			FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 

@@ -11,6 +11,13 @@ class CampaignState extends ExtendableState {
 	override function create() {
 		super.create();
 
+        Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
+        #if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Campaign Menu", null);
+		#end
+
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/campaign_bg'));
 		bg.scrollFactor.set();
 		bg.screenCenter();
@@ -20,13 +27,13 @@ class CampaignState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
-		var text:FlxText = new FlxText(0, 180, 0, "Enter the songs use want to play.\n(Be sure to separate them by a comma.)", 32);
+		var text:FlxText = new FlxText(0, 180, 0, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		add(text);
 
 		input = new FlxUIInputText(10, 10, FlxG.width, '', 8);
-		input.setFormat(Paths.font('vcr.ttf'), 96, FlxColor.WHITE, FlxTextAlign.CENTER);
+		input.setFormat(Paths.font('vcr.ttf'), 75, FlxColor.WHITE, FlxTextAlign.CENTER);
 		input.alignment = CENTER;
 		input.setBorderStyle(OUTLINE, 0xFF000000, 5, 1);
 		input.screenCenter(XY);
@@ -36,7 +43,7 @@ class CampaignState extends ExtendableState {
 		input.caretColor = 0xFFFFFFFF;
 		add(input);
 
-        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${FlxG.save.data.campaignScoreSave}', 12);
+        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${Std.string(FlxG.save.data.campaignScoreSave)}', 12);
 		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(campScoreTxt);
 	}

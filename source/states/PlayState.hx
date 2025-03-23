@@ -740,12 +740,10 @@ class PlayState extends ExtendableState {
 				HighScore.saveScore(song.song, score);
 			
 			if (campaignMode) {
-				var songIndex:Int = CampaignState.curSongIndex;
-				var songs:Array<String> = CampaignState.songList;
 				campaignScore += score;
-				songIndex++;
-				if (songIndex < songs.length) {
-					var songName:String = songs[songIndex];
+				CampaignState.curSongIndex++;
+				if (CampaignState.curSongIndex < CampaignState.songList.length) {
+					var songName:String = CampaignState.songList[CampaignState.curSongIndex];
 					PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songName));
 					ExtendableState.switchState(new PlayState());
 				} else {

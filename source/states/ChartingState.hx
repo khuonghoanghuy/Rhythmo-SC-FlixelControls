@@ -70,6 +70,10 @@ class ChartingState extends ExtendableState {
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
+
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Chart Editor", null, null, true);
+		#end
 		
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);

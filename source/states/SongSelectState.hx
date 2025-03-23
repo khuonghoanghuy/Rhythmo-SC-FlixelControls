@@ -43,6 +43,10 @@ class SongSelectState extends ExtendableState {
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Freeplay Menu", null);
+		#end
+
 		songListData = TJSON.parse(Paths.getTextFromFile('songs.json'));
 
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/selector_bg'));

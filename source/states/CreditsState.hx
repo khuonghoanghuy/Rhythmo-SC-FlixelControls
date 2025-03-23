@@ -38,6 +38,10 @@ class CreditsState extends ExtendableState {
 	override function create() {
 		super.create();
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Credits Menu", null);
+		#end
+
 		credData = TJSON.parse(Paths.getTextFromFile('credits.json'));
 
 		camFollow = new FlxObject(80, 0, 0, 0);

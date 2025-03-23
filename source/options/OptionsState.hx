@@ -15,6 +15,10 @@ class OptionsState extends ExtendableState {
 	override function create() {
 		super.create();
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence("Options Menu", null);
+		#end
+
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/options_bg'));
 		bg.scrollFactor.set();
 		bg.screenCenter();
