@@ -42,7 +42,7 @@ class CampaignState extends ExtendableState {
 		input.screenCenter(XY);
 		input.y += 50;
 		input.backgroundColor = 0xFF000000;
-		input.lines = 1;
+		input.lines = 99;
 		input.caretColor = 0xFFFFFFFF;
 		add(input);
 
