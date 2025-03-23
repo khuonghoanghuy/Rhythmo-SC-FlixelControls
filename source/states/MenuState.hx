@@ -256,7 +256,6 @@ class ModeSelectSubstate extends ExtendableSubState {
 			
 			if (Input.justPressed('exit')) {
 				FlxG.sound.play(Paths.sound('cancel'));
-				MenuState.lockInputs = false;
 				close();
 			}
 		}
