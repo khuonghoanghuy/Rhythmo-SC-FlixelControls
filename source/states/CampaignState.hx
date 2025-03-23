@@ -43,7 +43,7 @@ class CampaignState extends ExtendableState {
 		input.caretColor = 0xFFFFFFFF;
 		add(input);
 
-        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${Std.string(FlxG.save.data.campaignScoreSave)}', 12);
+        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${FlxG.save.data.campaignScoreSave}', 12);
 		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(campScoreTxt);
 	}

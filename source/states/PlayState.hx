@@ -747,7 +747,8 @@ class PlayState extends ExtendableState {
 					PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songName));
 					ExtendableState.switchState(new PlayState());
 				} else {
-					HighScore.saveCampaignScore(campaignScore);
+					if (!SaveData.settings.botPlay)
+						HighScore.saveCampaignScore(campaignScore);
 					new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
 						persistentUpdate = true;
 						openSubState(new ResultsSubState(rank, campaignScore, accuracy));
