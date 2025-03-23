@@ -8,6 +8,9 @@ class CampaignState extends ExtendableState {
 
     var input:FlxUIInputText;
 
+	var isResetting:Bool = false;
+	var lockInputs:Bool = false;
+
 	override function create() {
 		super.create();
 
@@ -43,8 +46,9 @@ class CampaignState extends ExtendableState {
 		input.caretColor = 0xFFFFFFFF;
 		add(input);
 
-        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${FlxG.save.data.campaignScoreSave}', 12);
-		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		var scoreDisplay = (FlxG.save.data.campaignScoreSave != 0 ? 0 : FlxG.save.data.campaignScoreSave);
+        var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${scoreDisplay} // Press R to reset your score.', 12);
+		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(campScoreTxt);
 	}
 
@@ -59,7 +63,7 @@ class CampaignState extends ExtendableState {
         }
         
         if (Input.justPressed('exit')) {
-			ExtendableState.switchState(new TitleState());
+			ExtendableState.switchState(new MenuState());
 			FlxG.sound.play(Paths.sound('cancel'));
 		}
 	}

@@ -165,6 +165,7 @@ class Hscript extends FlxBasic {
 		setVariable('Achievements', Achievements);
 		setVariable('Bar', Bar);
 		setVariable('Conductor', Conductor);
+		setVariable('DiscordClient', DiscordClient);
 		setVariable('ExtendableState', ExtendableState);
 		setVariable('ExtendableSubState', ExtendableSubState);
 		setVariable('GameSprite', GameSprite);

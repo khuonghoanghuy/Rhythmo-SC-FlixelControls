@@ -88,6 +88,10 @@ class PlayState extends ExtendableState {
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
+		
+		#if FUTURE_DISCORD_RPC
+		detailsText = (campaignMode) ? 'Campaign Mode' : 'Freeplay';
+		#end
 
 		persistentUpdate = persistentDraw = true;
 
@@ -274,6 +278,10 @@ class PlayState extends ExtendableState {
 
 		if (paused && FlxG.sound.music != null)
 			FlxG.sound.music.pause();
+		
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence(detailsText, song.song, 'icon');
+		#end
 	}
 
 	override function update(elapsed:Float) {
@@ -361,6 +369,10 @@ class PlayState extends ExtendableState {
 
 		lastStepHit = curStep;
 		callOnScripts('stepHit', [curStep]);
+
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
+		#end
 	}
 
 	override function beatHit() {
@@ -381,6 +393,10 @@ class PlayState extends ExtendableState {
 		if (!paused) {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.pause();
+			
+			#if FUTURE_DISCORD_RPC
+			DiscordClient.changePresence('Paused - ' + detailsText, song.song, 'icon');
+			#end
 
 			paused = true;
 		}
@@ -404,6 +420,10 @@ class PlayState extends ExtendableState {
 					twn.active = true;
 			});
 
+			#if FUTURE_DISCORD_RPC
+			DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
+			#end
+
 			paused = false;
 			callOnScripts('resume', []);
 		}
@@ -411,6 +431,28 @@ class PlayState extends ExtendableState {
 
 		Paths.clearUnusedMemory();
 	}
+
+	#if FUTURE_DISCORD_RPC
+	override function onFocus():Void {
+		if (health > 0 && !paused) {
+			if (Conductor.songPosition > 0.0)
+				DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length- Conductor.songPosition);
+			else
+				DiscordClient.changePresence(detailsText, song.song, 'icon');
+		}
+
+		callOnScripts('onFocus', []);
+		super.onFocus();
+	}
+
+	override function onFocusLost():Void {
+		if (health > 0 && !paused)
+			DiscordClient.changePresence('Paused - ' + detailsText, song.song, 'icon');
+
+		callOnScripts('onFocusLost', []);
+		super.onFocusLost();
+	}
+	#end
 
 	function pause() {
 		var ret:Dynamic = callOnScripts('pause', []);
