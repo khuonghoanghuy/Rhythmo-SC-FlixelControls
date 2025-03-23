@@ -10,6 +10,7 @@ class PlayState extends ExtendableState {
 	public static var chartingMode:Bool = false;
 	public static var gotAchievement:Bool = false;
 	public static var campaignMode:Bool = false;
+	public static var campaignScore:Int = 0;
 
 	public var konami:Int = 0;
 	public var didKonami:Bool = false;
@@ -19,7 +20,6 @@ class PlayState extends ExtendableState {
 
 	public var ratingDisplay:Rating;
 	public var accuracy:Float = 0;
-	public var campaignScore:Int = 0;
 	public var score:Int = 0;
 	public var combo:Int = 0;
 	public var misses:Int = 0;
@@ -88,7 +88,7 @@ class PlayState extends ExtendableState {
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-		
+
 		#if FUTURE_DISCORD_RPC
 		detailsText = (campaignMode) ? 'Campaign Mode' : 'Freeplay';
 		#end
@@ -278,7 +278,7 @@ class PlayState extends ExtendableState {
 
 		if (paused && FlxG.sound.music != null)
 			FlxG.sound.music.pause();
-		
+
 		#if FUTURE_DISCORD_RPC
 		DiscordClient.changePresence(detailsText, song.song, 'icon');
 		#end
@@ -393,7 +393,7 @@ class PlayState extends ExtendableState {
 		if (!paused) {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.pause();
-			
+
 			#if FUTURE_DISCORD_RPC
 			DiscordClient.changePresence('Paused - ' + detailsText, song.song, 'icon');
 			#end
@@ -436,7 +436,7 @@ class PlayState extends ExtendableState {
 	override function onFocus():Void {
 		if (health > 0 && !paused) {
 			if (Conductor.songPosition > 0.0)
-				DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length- Conductor.songPosition);
+				DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
 			else
 				DiscordClient.changePresence(detailsText, song.song, 'icon');
 		}
@@ -780,7 +780,7 @@ class PlayState extends ExtendableState {
 
 			if (!SaveData.settings.botPlay)
 				HighScore.saveScore(song.song, score);
-			
+
 			if (campaignMode) {
 				campaignScore += score;
 				CampaignState.curSongIndex++;

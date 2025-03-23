@@ -76,6 +76,16 @@ class ScriptedState extends ExtendableState {
 		scriptExecute('destroy', []);
 		super.destroy();
 	}
+	
+	override function onFocus() {
+		scriptExecute('onFocus', []);
+		super.onFocus();
+	}
+
+	override function onFocusLost() {
+		scriptExecute('onFocusLost', []);
+		super.onFocusLost();
+	}
 
 	override function openSubState(SubState:FlxSubState):Void {
 		scriptExecute('openSubState', []);

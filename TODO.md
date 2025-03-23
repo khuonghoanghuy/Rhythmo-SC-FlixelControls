@@ -2,14 +2,14 @@
 ## Current To-Dos
 ### High Priority
 * [ ] Maybe actually finish the charts??
-* [ ] Discord Rich Presence Support
+* [X] Discord Rich Presence Support
 * [ ] Improve Chart Editor
-* [ ] Silly Visualizer Option
-* [ ] Campaign Mode
-* [ ] Noteskins
+* [X] Campaign Mode
+* [X] Noteskins
 
 ### Low Priority
 * [ ] Gameplay Modifiers
+* [ ] Silly Visualizer Option
 * [ ] Sustain Notes + New song
 * [ ] Improve Note Assets + Fix Notes
 

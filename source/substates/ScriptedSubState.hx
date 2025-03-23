@@ -73,6 +73,16 @@ class ScriptedSubState extends ExtendableSubState {
 		super.destroy();
 	}
 
+	override function onFocus() {
+		scriptExecute('onFocus', []);
+		super.onFocus();
+	}
+
+	override function onFocusLost() {
+		scriptExecute('onFocusLost', []);
+		super.onFocusLost();
+	}
+
 	function scriptSet(key:String, value:Dynamic) {
 		script?.setVariable(key, value);
 	}

@@ -13,7 +13,7 @@ class MenuState extends ExtendableState {
 
 		lockInputs = false;
 
-		var path:String = Paths.txt('menuList');
+		var path:String = Paths.txt('data/menuList');
 		if (Paths.exists(path)) {
 			try {
 				var menuArray:Array<String> = Paths.getTextArray(path);
@@ -198,8 +198,6 @@ class ModeSelectSubstate extends ExtendableSubState {
 
 	var bg:FlxSprite;
 
-	var tweens:Array<FlxTween> = [];
-
 	public function new() {
 		super();
 
@@ -213,32 +211,28 @@ class ModeSelectSubstate extends ExtendableSubState {
 		add(grpSelection);
 
 		for (i in 0...selections.length) {
-			var menuItem:FlxSprite = new GameSprite(0, 100 + (i * 160));
+			var menuItem:FlxSprite = new GameSprite(0, 330 + (i * 160));
 			menuItem.loadGraphic(Paths.image('menu/mainmenu/' + selections[i]));
+			menuItem.scrollFactor.set();
 			menuItem.scale.set(0.4, 0.4);
 			menuItem.screenCenter(X);
 			menuItem.alpha = 0;
 			menuItem.ID = i;
 			grpSelection.add(menuItem);
-			tweens.push(FlxTween.tween(menuItem, {alpha: 1}, 1, {ease: FlxEase.quadOut}));
 		}
 
 		changeSelection(0, false, false);
 
-		tweens.push(FlxTween.tween(bg, {alpha: 0.65}, 0.75, {ease: FlxEase.quadOut}));
+		FlxTween.tween(bg, {alpha: 0.65}, 0.75, {ease: FlxEase.quadOut});
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		for (i in tweens)
-			if (i != null)
-				i.active = true;
-
 		if (!lockInputs) {
 			if (Input.justPressed('up') || Input.justPressed('down'))
 				changeSelection(Input.justPressed('up') ? -1 : 1);
-			
+
 			if (Input.justPressed('accept')) {
 				lockInputs = true;
 				FlxG.sound.play(Paths.sound('select'));
@@ -251,7 +245,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 						ExtendableState.switchState(new SongSelectState());
 				}
 			}
-			
+
 			if (Input.justPressed('exit')) {
 				FlxG.sound.play(Paths.sound('cancel'));
 				close();
@@ -273,17 +267,5 @@ class ModeSelectSubstate extends ExtendableSubState {
 				}
 			}
 		});
-	}
-
-	override function destroy() {
-		for (i in tweens) {
-			if (i != null) {
-				i.cancel();
-				i.destroy();
-				i = null;
-			}
-		}
-		tweens = FlxDestroyUtil.destroyArray(tweens);
-		super.destroy();
 	}
 }

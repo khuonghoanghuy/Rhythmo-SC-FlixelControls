@@ -7,7 +7,7 @@ class NoteSplash extends GameSprite {
 	public function setupSplash(x:Float = 0, y:Float = 0, noteData:Int = 0) {
 		setPosition(x, y);
 
-		loadGraphic(Paths.image('gameplay/noteskins/${SaveData.settings.noteSkinType.toLowerCase()}/splash_${Utilities.getDirection(noteData)}'), true, 200, 200);
+		loadGraphic(Paths.image('gameplay/notesplashes/${SaveData.settings.noteSplashType.toLowerCase()}/splash_${Utilities.getDirection(noteData)}'), true, 200, 200);
 		scale.set(0.6, 0.6);
 		alpha = 0.6;
 

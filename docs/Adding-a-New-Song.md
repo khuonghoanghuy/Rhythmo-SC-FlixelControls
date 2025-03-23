@@ -22,7 +22,7 @@ When you're done charting, simply save it by using `Save Chart` or `Save Chart A
 Denpending on what you choose, it should save in `assets/songs/[song-name]/chart.json` or `./[song-name].json`.
 
 ## Adding your Song to the Song Selection Menu
-To add your song to the Song Selection Menu, go to `assets/songs.json`. <br>
+To add your song to the Song Selection Menu, go to `assets/data/songs.json`. <br>
 Then, to add your song, use this template:
 ```json
 {

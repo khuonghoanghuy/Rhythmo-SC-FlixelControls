@@ -15,10 +15,12 @@ Mostly based on [Friday Night Funkin'](https://github.com/FunkinCrew/Funkin/), g
 * Modding System (using [Polymod](https://github.com/larsiusprime/polymod/))
 * Softcoded Song / Credits Menu
 * Scripting System / Scripted States
+* Discord Rich Presence
 * RGB Note Coloring
 * Language Translations
 * Simple Crash Handler
 * Achievements
+* Noteskins
 * Shaders
 
 Additionally, you can check out the planned features in the [To-Do List](/TODO.md).

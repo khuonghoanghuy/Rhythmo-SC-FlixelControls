@@ -68,8 +68,6 @@ class PauseSubState extends ExtendableSubState {
 				case 1:
 					FlxG.resetState();
 				case 2:
-					if (PlayState.campaignMode)
-						PlayState.campaignMode = false;
 					ExtendableState.switchState(new options.OptionsState(true));
 					FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 				case 3:
@@ -99,7 +97,7 @@ class PauseSubState extends ExtendableSubState {
 
 	function changeText() {
 		var selectedText:String = '';
-		var textArray:Array<String> = Paths.getTextArray(Paths.txt('tipText'));
+		var textArray:Array<String> = Paths.getTextArray(Paths.txt('data/tipText'));
 
 		tipTxt.alpha = 1;
 		isTweening = true;

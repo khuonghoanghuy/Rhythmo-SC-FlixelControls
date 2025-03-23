@@ -35,6 +35,14 @@ class Main extends openfl.display.Sprite {
 		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash,
 			config.startFullscreen));
 
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.initialize();
+
+		Lib.application.onExit.add(function(exitCode:Int) {
+			DiscordClient.shutdown();
+		});
+		#end
+
 		fpsDisplay = new FPS(10, 10, 0xffffff);
 		addChild(fpsDisplay);
 

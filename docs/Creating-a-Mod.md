@@ -36,6 +36,7 @@ Each folder in your mod should be used as follows:
 * `_append` - Modify existing files without actually replacing them.
 * `achievements` - For storing achievement data. Each achievement should be listed in `achList.txt`.
 * `classes` - Scripted States and Substates.
+* `data` - Data files for the game.
 * `fonts` - Font files. Pretty self-explanatory.
 * `images` - All images in your mod.
 	* `images/achievements` - The icons for your achievemnts.
