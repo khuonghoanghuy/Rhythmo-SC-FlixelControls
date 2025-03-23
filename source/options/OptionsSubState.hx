@@ -68,9 +68,14 @@ class OptionsSubState extends ExtendableSubState {
 		option.onChange = (value:Dynamic) -> SaveData.settings.laneUnderlay = value;
 		options.push(option);
 
-		var option:Option = new Option(Localization.get("opNoteskin"), Localization.get("descNoteskin"), OptionType.Choice(['Default', 'Circle']),
+		var option:Option = new Option(Localization.get("opNoteskin"), Localization.get("descNoteskin"), OptionType.Choice(Paths.getTextArray(Paths.txt('data/noteskinsList'))),
 			SaveData.settings.noteSkinType);
 		option.onChange = (value:Dynamic) -> SaveData.settings.noteSkinType = value;
+		options.push(option);
+
+		var option:Option = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"), OptionType.Choice(Paths.getTextArray(Paths.txt('data/notesplashesList'))),
+			SaveData.settings.noteSplashType);
+		option.onChange = (value:Dynamic) -> SaveData.settings.noteSplashType = value;
 		options.push(option);
 
 		var option:Option = new Option(Localization.get("opHitSndT"), Localization.get("descHitSndT"), OptionType.Choice(['Default', 'CD', 'OSU', 'Switch']),
