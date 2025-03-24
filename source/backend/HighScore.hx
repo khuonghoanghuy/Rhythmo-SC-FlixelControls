@@ -28,7 +28,7 @@ class HighScore {
 	public static function saveCampaignScore(score:Int = 0):Void {
 		if (campaignScoreSave < score)
 			campaignScoreSave = score;
-		FlxG.save.data.campaignScoreSave = score;
+		FlxG.save.data.campaignScoreSave = campaignScoreSave;
 		FlxG.save.flush();
 	}
 
