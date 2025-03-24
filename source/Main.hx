@@ -36,11 +36,7 @@ class Main extends openfl.display.Sprite {
 			config.startFullscreen));
 
 		#if FUTURE_DISCORD_RPC
-		DiscordClient.initialize();
-
-		Lib.application.onExit.add(function(exitCode:Int) {
-			DiscordClient.shutdown();
-		});
+		DiscordClient.load();
 		#end
 
 		fpsDisplay = new FPS(10, 10, 0xffffff);
