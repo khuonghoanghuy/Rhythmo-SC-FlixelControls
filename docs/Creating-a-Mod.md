@@ -52,7 +52,7 @@ Each folder in your mod should be used as follows:
 	* `songs/[song-name]/music.ogg` - Your song's music. Can also be a `.wav`.
 	* `songs/[song-name]/[script-name].[script-extension]` - Song-specific script(s).
 * `sounds` - All sound effects.
-* `states` - For scripted States.
+* `states` - For scripted states.
 * `substates` - For scripted substates.
 
 Also, when it's neccessary, delete any folders you don't need.
