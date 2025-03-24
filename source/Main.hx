@@ -9,7 +9,11 @@ import backend.ALSoftConfig;
 #end
 import debug.FPS;
 
-#if linux
+#if (linux || mac)
+import lime.graphics.Image;
+#end
+
+#if (linux && !debug)
 @:cppInclude('./external/gamemode_client.h')
 @:cppFileCode('#define GAMEMODE_AUTO')
 #end
@@ -41,6 +45,11 @@ class Main extends openfl.display.Sprite {
 
 		fpsDisplay = new FPS(10, 10, 0xffffff);
 		addChild(fpsDisplay);
+
+		#if (linux || mac)
+		var icon = Image.fromFile("icon.png");
+		Lib.current.stage.window.setIcon(icon);
+		#end
 
 		#if desktop
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, (e:UncaughtErrorEvent) -> {
@@ -95,7 +104,9 @@ class Main extends openfl.display.Sprite {
 
 			FlxG.sound.play(Paths.sound('error'));
 
+			#if FUTURE_DISCORD_RPC
 			DiscordClient.shutdown();
+			#end
 
 			#if windows
 			WindowsAPI.messageBox('Error!',

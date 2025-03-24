@@ -78,7 +78,8 @@
 
 	<!-- [ Icon ] -->
 
-	<icon path="icon.png" />
+	<assets path="setup/icon.png" rename="icon.png" if="linux || mac" />
+	<icon path="setup/icon.png" />
 
 	<!-- [ Miscellaneous ] -->
 
