@@ -33,7 +33,8 @@ class DiscordClient {
 		initialized = true;
 	}
 
-	public static function changePresence(details:String = 'In the Menus', ?state:String, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float):Void {
+	public static function changePresence(details:String = 'In the Menus', ?state:String, ?smallImageKey:String, ?hasStartTimestamp:Bool,
+			?endTimestamp:Float):Void {
 		final discordPresence:DiscordRichPresence = new DiscordRichPresence();
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
@@ -61,7 +62,7 @@ class DiscordClient {
 		else
 			trace('(Discord) Connected to User "${cast (user.username, String)}"');
 
-		Discord.changePresence('Just Started');
+		changePresence('Just Started');
 	}
 
 	public static function shutdown() {

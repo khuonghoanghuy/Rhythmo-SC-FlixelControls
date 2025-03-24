@@ -6,7 +6,7 @@ Doing this manually isn't a problem, but it would be better and faster if you co
 ![](https://github.com/user-attachments/assets/add932d1-8a09-40c8-ae2a-89d57ca1c9cf?raw=true)
 
 ## Mod Metadata
-The mod metadata comes in two files. Those two files are `_polymod_meta.json` and `_polymod_icon.png`.
+The mod metadata comes in two files, which are `_polymod_meta.json` and `_polymod_icon.png`.
 
 ### `_polymod_meta.json` (Required)
 In `_polymod_meta.json`, you can define the mod name, the name of the author, etc.
@@ -35,7 +35,6 @@ Then, you're basically good to go!
 Each folder in your mod should be used as follows:
 * `_append` - Modify existing files without actually replacing them.
 * `achievements` - For storing achievement data. Each achievement should be listed in `achList.txt`.
-* `classes` - Scripted States and Substates.
 * `data` - Data files for the game.
 * `fonts` - Font files. Pretty self-explanatory.
 * `images` - All images in your mod.
@@ -53,6 +52,8 @@ Each folder in your mod should be used as follows:
 	* `songs/[song-name]/music.ogg` - Your song's music. Can also be a `.wav`.
 	* `songs/[song-name]/[script-name].[script-extension]` - Song-specific script(s).
 * `sounds` - All sound effects.
+* `states` - For scripted States.
+* `substates` - For scripted substates.
 
 Also, when it's neccessary, delete any folders you don't need.
 

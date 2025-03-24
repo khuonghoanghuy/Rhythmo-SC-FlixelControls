@@ -13,10 +13,10 @@ class ScriptedState extends ExtendableState {
 		instance = this;
 
 		try {
-			var folders:Array<String> = [Paths.file('classes/')];
+			var folders:Array<String> = [Paths.file('states/')];
 			#if FUTURE_POLYMOD
 			for (mod in ModHandler.getModIDs())
-				folders.push('mods/$mod/classes/');
+				folders.push('mods/$mod/states/');
 			#end
 			for (folder in folders) {
 				if (FileSystem.exists(folder)) {
