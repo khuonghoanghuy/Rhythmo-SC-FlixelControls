@@ -1,9 +1,11 @@
 {
     "pressEnter": "¡Presiona ENTER para comenzar!",
+
     "prefTxt": "Preferencias",
     "ctrlTxt": "Controles",
     "langTxt": "Idioma",
     "notesTxt": "Colores de las Notas",
+
     "opAnti": "Antialiasing",
     "opFlScrn": "Pantalla Completa",
     "opFlash": "Luces Intermitentes",
@@ -19,6 +21,7 @@
     "opBot": "Botplay",
     "opMSDisp": "Mostrar Milisegundos",
     "opMash": "Anti-Mash",
+
     "descAnti": "Si está desactivado, mejora el rendimiento del juego a costa de gráficos más nítidos.",
     "descFlScrn": "Alterna entre pantalla completa.",
     "descFlash": "Desactiva esto si eres fotosensible.",
@@ -34,8 +37,10 @@
     "descBot": "Si está activado, el juego se juega solo.",
     "descMSDisp": "Si está activado, muestra el tiempo de impacto en milisegundos.",
     "descMash": "Si está activado, obtendrás un fallo al presionar teclas cuando no hay notas presentes.",
+
     "on": "Encendido",
     "off": "Apagado",
+
     "ctrlResetGuide": "Si tus controles no funcionan, presiona R para reiniciarlos.",
     "ctrlGuide": "PRESIONA CUALQUIER TECLA PARA CONTINUAR.",
     "leftKey": "Izquierda",
@@ -49,24 +54,30 @@
     "acceptKey": "Aceptar",
     "exitKey": "Salir",
     "resetKey": "Reiniciar",
+
     "langSelect": "SELECCIONA UN IDIOMA",
     "langNotCompletelyAccurate": "(Las traducciones de idioma pueden no ser 100% precisas.)",
+
     "noteColorGuide": "Usa IZQUIERDA/DERECHA para cambiar la flecha o el color seleccionado.\nUsa ARRIBA/ABAJO para cambiar el valor del color seleccionado.\nUsa ENTER para seleccionar una nota.\nUsa REINICIAR para restablecer el color de una nota.\n",
     "red": "\nRojo: ",
     "green": "\nVerde: ",
     "blue": "\nAzul: ",
+
     "yes": "Sí",
     "no": "No",
+
     "tinyGuide": "R - Reiniciar Puntuación // ESPACIO + R - Canción Aleatoria",
     "youDecide": "¿Estás seguro/a?",
     "confirmReset": "R - Confirmar // ESCAPE - Cancelar",
     "confirmedReset": "DATOS ELIMINADOS",
+
     "diffTxt": "Dificultad: ",
     "scoreTxt": "Puntaje: ",
     "missTxt": "Quiebres de Combo: ",
     "accTxt": "Precisión: ",
     "botplayTxt": "BOTPLAY",
     "resultsTxt": "RESULTADOS\n",
+    
     "pauseTxt": "¿PAUSADO/A?",
     "resumeTxt": "Reanudar",
     "restartTxt": "Reiniciar",

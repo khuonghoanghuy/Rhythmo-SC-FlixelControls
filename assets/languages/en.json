@@ -1,9 +1,11 @@
 {
     "pressEnter": "Press ENTER to Start!",
+
     "prefTxt": "Preferences",
     "ctrlTxt": "Controls",
     "langTxt": "Language",
     "notesTxt": "Note Colors",
+
     "opAnti": "Antialiasing",
     "opFlScrn": "Fullscreen",
     "opFlash": "Flashing Lights",
@@ -19,6 +21,7 @@
     "opBot": "Botplay",
     "opMSDisp": "Millisecond Display",
     "opMash": "Anti-mash",
+
     "descAnti": "If disabled, improves the game's performance at the cost of sharper visuals.",
     "descFlScrn": "Toggles fullscreen.",
     "descFlash": "Turn this off if you're photosensitive.",
@@ -34,8 +37,10 @@
     "descBot": "If enabled, the game plays for you.",
     "descMSDisp": "If enabled, displays your hit time in milliseconds.",
     "descMash": "If enabled, you will get a miss for pressing keys when no notes are present.",
+
     "on": "On",
     "off": "Off",
+
     "ctrlResetGuide": "If your controls don't work, press R to reset them.",
     "ctrlGuide": "PRESS ANY KEY TO CONTINUE.",
     "leftKey": "Left",
@@ -49,24 +54,30 @@
     "acceptKey": "Accept",
     "exitKey": "Exit",
     "resetKey": "Reset",
+
     "langSelect": "SELECT A LANGUAGE",
     "langNotCompletelyAccurate": "(Language translations may not be 100% accurate.)",
+
     "noteColorGuide": "Use LEFT/RIGHT to change the selected arrow or the selected color.\nUse UP/DOWN to change the selected color value.\nUse ENTER to select a note.\nUse RESET to reset a note's color.\n",
     "red": "\nRed: ",
     "green": "\nGreen: ",
     "blue": "\nBlue: ",
+
     "yes": "Yes",
     "no": "No",
+
     "tinyGuide": "R - Reset Song Score // SPACE + R - Random Song",
     "youDecide": "Are you sure?",
     "confirmReset": "R - Confirm // ESCAPE - Cancel",
     "confirmedReset": "DATA DESTROYED",
+    
     "diffTxt": "Difficulty: ",
     "scoreTxt": "Score: ",
     "missTxt": "Misses: ",
     "accTxt": "Accuracy: ",
     "botplayTxt": "BOTPLAY",
     "resultsTxt": "RESULTS\n",
+    
     "pauseTxt": "PAUSED?",
     "resumeTxt": "Resume",
     "restartTxt": "Restart",
