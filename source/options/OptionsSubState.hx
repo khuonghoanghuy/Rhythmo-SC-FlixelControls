@@ -81,7 +81,6 @@ class OptionsSubState extends ExtendableSubState {
 
 		var option:Option = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/notesplashesList'))), SaveData.settings.noteSplashType);
-		option.showNotesplash = true;
 		option.onChange = (value:Dynamic) -> SaveData.settings.noteSplashType = value;
 		options.push(option);
 
