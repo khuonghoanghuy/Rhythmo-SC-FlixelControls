@@ -17,7 +17,7 @@ class Option {
 	public var value:Dynamic;
 	public var showPercentage:Bool = false;
 	public var showSillySprite:Bool = false;
-	public var showVisualizerGuy:Bool = false;
+	public var showNoteskin:Bool = false;
 	public var onChange:Dynamic->Void;
 
 	public function new(name:String, desc:String, type:OptionType, value:Dynamic):Void {

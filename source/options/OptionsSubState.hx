@@ -14,13 +14,15 @@ class OptionsSubState extends ExtendableSubState {
 
 	var testSprite:FlxSprite;
 
+	var note:Note;
+
 	public function new() {
 		super();
 
 		var option:Option = new Option(Localization.get("opAnti"), Localization.get("descAnti"), OptionType.Toggle, SaveData.settings.antialiasing);
 		option.onChange = (value:Dynamic) -> {
 			SaveData.settings.antialiasing = value;
-			reloadTheSprite();
+			reloadSprite('test');
 		};
 		option.showSillySprite = true;
 		options.push(option);
@@ -70,11 +72,16 @@ class OptionsSubState extends ExtendableSubState {
 
 		var option:Option = new Option(Localization.get("opNoteskin"), Localization.get("descNoteskin"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/noteskinsList'))), SaveData.settings.noteSkinType);
-		option.onChange = (value:Dynamic) -> SaveData.settings.noteSkinType = value;
+		option.showNoteskin = true;
+		option.onChange = (value:Dynamic) -> {
+			SaveData.settings.noteSkinType = value;
+			reloadSprite('note');
+		};
 		options.push(option);
 
 		var option:Option = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/notesplashesList'))), SaveData.settings.noteSplashType);
+		option.showNotesplash = true;
 		option.onChange = (value:Dynamic) -> SaveData.settings.noteSplashType = value;
 		options.push(option);
 
@@ -130,7 +137,9 @@ class OptionsSubState extends ExtendableSubState {
 			grpOptions.add(optionTxt);
 
 			if (options[i].showSillySprite)
-				reloadTheSprite();
+				reloadSprite('test');
+			if (options[i].showNoteskin)
+				reloadSprite('note');
 		}
 
 		description = new FlxText(0, FlxG.height * 0.1, FlxG.width * 0.9, '', 28);
@@ -187,6 +196,8 @@ class OptionsSubState extends ExtendableSubState {
 
 		if (testSprite != null)
 			testSprite.visible = option.showSillySprite;
+		if (note != null)
+			note.visible = option.showNoteskin;
 
 		if (option.desc != null) {
 			description.text = option.desc;
@@ -231,17 +242,32 @@ class OptionsSubState extends ExtendableSubState {
 		}
 	}
 
-	private function reloadTheSprite() {
-		if (testSprite != null) {
-			testSprite.kill();
-			remove(testSprite);
-			testSprite.destroy();
+	private function reloadSprite(sprite:String) {
+		switch (sprite) {
+			case 'test':
+				if (testSprite != null) {
+					testSprite.kill();
+					remove(testSprite);
+					testSprite.destroy();
+				}
+				testSprite = new GameSprite(840, 0).loadGraphic(Paths.image('testSpr'));
+				testSprite.scale.set(2, 2);
+				testSprite.scrollFactor.set();
+				testSprite.updateHitbox();
+				testSprite.screenCenter(Y);
+				add(testSprite);
+			case 'note':
+				if (note != null) {
+					note.kill();
+					remove(note);
+					note.destroy();
+				}
+				note = new Note(840, 0, 'up', 'note');
+				note.scale.set(2, 2);
+				note.scrollFactor.set();
+				note.updateHitbox();
+				note.screenCenter(Y);
+				add(note);
 		}
-		testSprite = new GameSprite(840, 0).loadGraphic(Paths.image('testSpr'));
-		testSprite.scale.set(2, 2);
-		testSprite.scrollFactor.set();
-		testSprite.updateHitbox();
-		testSprite.screenCenter(Y);
-		add(testSprite);
 	}
 }
