@@ -315,7 +315,7 @@ class PlayState extends ExtendableState {
 		accuracy = (!SaveData.settings.botPlay) ? Utilities.boundTo(Math.floor((score * 100) / ((hits + misses) * 3.5)) * 0.01, 0, 100) : 0;
 		judgementCounter.text = 'Perfects: ${perfects}\nNices: ${nices}\nOkays: ${okays}\nNos: ${nos}';
 		scoreTxt.text = (SaveData.settings.botPlay) ? Localization.get("botplayTxt") : Localization.get("scoreTxt")
-			+ score
+			+ FlxStringUtil.formatMoney(score, false);
 			+ ' // '
 			+ Localization.get("missTxt")
 			+ misses
