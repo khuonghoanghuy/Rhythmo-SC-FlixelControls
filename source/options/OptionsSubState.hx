@@ -44,7 +44,7 @@ class OptionsSubState extends ExtendableSubState {
 			Std.int(FlxMath.bound(FlxG.stage.application.window.displayMode.refreshRate, 60, 240)));
 		option.onChange = (value:Dynamic) -> {
 			SaveData.settings.framerate = value;
-			Main.updateFramerate(SaveData.settings.framerate);
+			Main.framerate = SaveData.settings.framerate;
 		};
 		options.push(option);
 
@@ -262,7 +262,6 @@ class OptionsSubState extends ExtendableSubState {
 					note.destroy();
 				}
 				note = new Note(840, 0, 'up', 'note');
-				note.scale.set(2, 2);
 				note.scrollFactor.set();
 				note.updateHitbox();
 				note.screenCenter(Y);

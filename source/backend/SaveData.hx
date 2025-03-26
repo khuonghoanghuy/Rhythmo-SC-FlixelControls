@@ -52,7 +52,7 @@ class SaveData {
 			settings.framerate = Std.int(FlxMath.bound(refreshRate, 60, 240));
 		}
 
-		Main.updateFramerate(settings.framerate);
+		Main.framerate = settings.framerate;
 	}
 
 	public static function saveSettings() {

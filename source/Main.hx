@@ -21,13 +21,29 @@ class Main extends openfl.display.Sprite {
 	public final config:Dynamic = {
 		gameDimensions: [1280, 720],
 		initialState: InitialState,
-		defaultFPS: SaveData.settings.framerate,
+		defaultFPS: 60,
 		skipSplash: true,
 		startFullscreen: false
 	};
 
 	public static var fpsDisplay:FPS;
 	public static var toast:ToastCore;
+
+	public static var framerate(get, set):Float;
+	static function set_framerate(cap:Float):Float {
+		if (FlxG.game != null) {
+			var _framerate:Int = Std.int(cap);
+			if (_framerate > FlxG.drawFramerate) {
+				FlxG.updateFramerate = _framerate;
+				FlxG.drawFramerate = _framerate;
+			} else {
+				FlxG.drawFramerate = _framerate;
+				FlxG.updateFramerate = _framerate;
+			}
+		}
+		return Lib.current.stage.frameRate = cap;
+	}
+	static function get_framerate():Float return Lib.current.stage.frameRate;
 
 	public function new() {
 		super();
@@ -36,6 +52,7 @@ class Main extends openfl.display.Sprite {
 		WindowsAPI.darkMode(true);
 		#end
 
+		framerate = 60; // default framerate
 		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash,
 			config.startFullscreen));
 
@@ -47,8 +64,7 @@ class Main extends openfl.display.Sprite {
 		addChild(fpsDisplay);
 
 		#if (linux || mac)
-		var icon = Image.fromFile("icon.png");
-		Lib.current.stage.window.setIcon(icon);
+		Lib.current.stage.window.setIcon(Image.fromFile("icon.png"));
 		#end
 
 		#if desktop
@@ -191,16 +207,6 @@ class Main extends openfl.display.Sprite {
 			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: oldVol}, 0.5);
 
 			FlxG.drawFramerate = config.defaultFPS;
-		}
-	}
-
-	public static function updateFramerate(newFramerate:Int) {
-		if (newFramerate > FlxG.updateFramerate) {
-			FlxG.updateFramerate = newFramerate;
-			FlxG.drawFramerate = newFramerate;
-		} else {
-			FlxG.drawFramerate = newFramerate;
-			FlxG.updateFramerate = newFramerate;
 		}
 	}
 }
