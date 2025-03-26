@@ -25,6 +25,10 @@ class HighScore {
 		return songScores.get(song);
 	}
 
+	public static function resetSong(song:String):Void {
+		setScore(song, 0);
+	}
+
 	public static function saveCampaignScore(score:Int = 0):Void {
 		if (campaignScoreSave < score)
 			campaignScoreSave = score;
@@ -36,10 +40,6 @@ class HighScore {
 		campaignScoreSave = 0;
 		FlxG.save.data.campaignScoreSave = campaignScoreSave;
 		FlxG.save.flush();
-	}
-
-	public static function resetSong(song:String):Void {
-		setScore(song, 0);
 	}
 
 	public static function load():Void {
