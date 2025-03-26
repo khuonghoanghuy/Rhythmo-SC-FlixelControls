@@ -37,6 +37,7 @@ class CampaignState extends ExtendableState {
 
 		text = new FlxText(0, 180, 0, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.scrollFactor.set();
 		text.screenCenter(X);
 		add(text);
 
@@ -60,8 +61,6 @@ class CampaignState extends ExtendableState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
-		input.hasFocus = true;
 
 		if (!isResetting)
 			campScoreTxt.text = 'Campaign Score: ${scoreDisplay} // Press R to reset your score.';
