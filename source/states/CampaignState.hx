@@ -11,6 +11,9 @@ class CampaignState extends ExtendableState {
 	var isResetting:Bool = false;
 	var lockInputs:Bool = false;
 
+	var campScoreTxt:FlxText;
+	var text:FlxText;
+
 	override function create() {
 		super.create();
 
@@ -30,7 +33,7 @@ class CampaignState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
-		var text:FlxText = new FlxText(0, 180, 0, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
+		text = new FlxText(0, 180, 0, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		add(text);
@@ -48,7 +51,7 @@ class CampaignState extends ExtendableState {
 
 		var scoreDisplay = ((FlxG.save.data.campaignScoreSave == 0
 			|| FlxG.save.data.campaignScoreSave == null) ? 0 : FlxG.save.data.campaignScoreSave);
-		var campScoreTxt:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${scoreDisplay} // Press R to reset your score.', 12);
+		campScoreTxt = new FlxText(5, FlxG.height - 24, 0, 'Campaign Score: ${scoreDisplay} // Press R to reset your score.', 12);
 		campScoreTxt.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(campScoreTxt);
 	}
@@ -58,23 +61,61 @@ class CampaignState extends ExtendableState {
 
 		input.hasFocus = true;
 
-		if (Input.justPressed('accept') && input.text != '') {
-			FlxG.sound.play(Paths.sound('select'));
-			startCampaignMode(input.text);
+		if (!isResetting)
+			campScoreTxt.text = 'Campaign Score: ${scoreDisplay} // Press R to reset your score.';
+
+		if (!lockInputs) {
+			if (Input.justPressed('accept') && input.text != '') {
+				FlxG.sound.play(Paths.sound('select'));
+				startCampaignMode(input.text);
+			}
 		}
 
 		if (Input.justPressed('exit')) {
-			ExtendableState.switchState(new MenuState());
+			if (!isResetting)
+				ExtendableState.switchState(new MenuState());
+			else {
+				isResetting = false;
+				lockInputs = false;
+				text.color = FlxColor.WHITE;
+				text.text = "Enter the songs you want to play.\n(Be sure to separate them with a comma.)";
+				campScoreTxt.text = 'Campaign Score: ${scoreDisplay} // Press R to reset your score.';
+			}
 			FlxG.sound.play(Paths.sound('cancel'));
+		}
+
+		if (Input.justPressed('reset')) {
+			if (!isResetting) {
+				isResetting = true;
+				lockInputs = true;
+				text.text = Localization.get("youDecide");
+				text.color = FlxColor.RED;
+				campScoreTxt.text = Localization.get("confirmReset");
+			} else {
+				FlxG.sound.play(Paths.sound('erase'));
+				text.text = Localization.get("confirmedReset");
+				campScoreTxt.text = '';
+				HighScore.resetCampaignScore();
+				isResetting = false;
+				new FlxTimer().start(1, function(tmr:FlxTimer) {
+					lockInputs = false;
+					text.color = FlxColor.WHITE;
+					text.text = "Enter the songs you want to play.\n(Be sure to separate them with a comma.)";
+					campScoreTxt.text = 'Campaign Score: ${scoreDisplay} // Press R to reset your score.';
+				});
+			}
 		}
 	}
 
 	function startCampaignMode(songs:String) {
-		songList = songs.split(",").map(s -> StringTools.trim(s));
-		PlayState.campaignMode = true;
-		PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songList[curSongIndex]));
-		ExtendableState.switchState(new PlayState());
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+		try {
+			songList = songs.split(",").map(s -> StringTools.trim(s));
+			PlayState.campaignMode = true;
+			PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songList[curSongIndex]));
+			ExtendableState.switchState(new PlayState());
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+		} catch (e)
+			trace(e);
 	}
 }

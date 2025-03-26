@@ -32,6 +32,12 @@ class HighScore {
 		FlxG.save.flush();
 	}
 
+	public static function resetCampaignScore():Void {
+		campaignScoreSave = 0;
+		FlxG.save.data.campaignScoreSave = campaignScoreSave;
+		FlxG.save.flush();
+	}
+
 	public static function resetSong(song:String):Void {
 		setScore(song, 0);
 	}
