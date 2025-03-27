@@ -206,7 +206,7 @@ class Main extends openfl.display.Sprite {
 
 			focusMusicTween = FlxTween.tween(FlxG.sound, {volume: oldVol}, 0.5);
 
-			FlxG.drawFramerate = framerate;
+			FlxG.drawFramerate = Std.int(framerate);
 		}
 	}
 }

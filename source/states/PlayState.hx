@@ -508,25 +508,22 @@ class PlayState extends ExtendableState {
 		}
 
 		if (Input.justPressed('left')) {
-			if (konami == 4 || konami == 6) {
+			if (konami == 4 || konami == 6)
 				konami++;
-			} else {
+			else
 				konami = 0;
-			}
 		}
 		if (Input.justPressed('down')) {
-			if (konami == 2 || konami == 3) {
+			if (konami == 2 || konami == 3)
 				konami++;
-			} else {
+			else
 				konami = 0;
-			}
 		}
 		if (Input.justPressed('up')) {
-			if (konami == 0 || konami == 1) {
+			if (konami == 0 || konami == 1)
 				konami++;
-			} else {
+			else
 				konami = 0;
-			}
 		}
 		if (Input.justPressed('right')) {
 			if (konami == 5 || konami == 7) {
@@ -535,9 +532,8 @@ class PlayState extends ExtendableState {
 					FlxG.sound.play(Paths.sound('unlock'));
 					didKonami = true;
 				}
-			} else {
+			} else
 				konami = 0;
-			}
 		}
 
 		for (i in 0...justPressed.length) {

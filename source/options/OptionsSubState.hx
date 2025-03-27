@@ -261,7 +261,7 @@ class OptionsSubState extends ExtendableSubState {
 					remove(note);
 					note.destroy();
 				}
-				note = new Note(840, 0, 'up', 'note');
+				note = new Note(900, 0, 'up', 'note');
 				note.scrollFactor.set();
 				note.updateHitbox();
 				note.screenCenter(Y);
