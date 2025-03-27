@@ -315,7 +315,7 @@ class PlayState extends ExtendableState {
 		accuracy = (!SaveData.settings.botPlay) ? Utilities.boundTo(Math.floor((score * 100) / ((hits + misses) * 3.5)) * 0.01, 0, 100) : 0;
 		judgementCounter.text = 'Perfects: ${perfects}\nNices: ${nices}\nOkays: ${okays}\nNos: ${nos}';
 		scoreTxt.text = (SaveData.settings.botPlay) ? Localization.get("botplayTxt") : Localization.get("scoreTxt")
-			+ FlxStringUtil.formatMoney(score, false)
+			+ score
 			+ ' // '
 			+ Localization.get("missTxt")
 			+ misses
@@ -791,18 +791,18 @@ class PlayState extends ExtendableState {
 				} else {
 					if (!SaveData.settings.botPlay)
 						HighScore.saveCampaignScore(campaignScore);
-					new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
-						persistentUpdate = true;
-						openSubState(new ResultsSubState(rank, campaignScore, accuracy));
-					});
+					goToResults(campaignScore);
 				}
-			} else {
-				new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
-					persistentUpdate = true;
-					openSubState(new ResultsSubState(rank, score, accuracy));
-				});
-			}
+			} else
+				goToResults(score);
 		}
+	}
+
+	function goToResults(finalScore:Int) {
+		new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
+			persistentUpdate = true;
+			openSubState(new ResultsSubState(rank, finalScore, accuracy));
+		});
 	}
 
 	function checkForAchievement(achs:Array<String> = null):String {

@@ -23,6 +23,9 @@
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 
 	<source path="source" />
+
+	<!-- [ Game Assets & Etc. ] -->
+
 	<assets path="assets" />
 	<assets path="mods" if="FUTURE_POLYMOD" />
 	
