@@ -59,6 +59,8 @@ class MenuState extends ExtendableState {
 		DiscordClient.changePresence("Main Menu", null);
 		#end
 
+		persistentUpdate = persistentDraw = true;
+
 		if (!FlxG.sound.music.playing #if FUTURE_POLYMOD || ModsState.mustResetMusic #end) {
 			FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 			#if FUTURE_POLYMOD

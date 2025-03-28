@@ -42,6 +42,8 @@ class CreditsState extends ExtendableState {
 		DiscordClient.changePresence("Credits Menu", null);
 		#end
 
+		persistentUpdate = true;
+
 		credData = TJSON.parse(Paths.getTextFromFile('data/credits.json'));
 
 		camFollow = new FlxObject(80, 0, 0, 0);

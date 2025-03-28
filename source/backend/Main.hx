@@ -56,10 +56,6 @@ class Main extends openfl.display.Sprite {
 		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash,
 			config.startFullscreen));
 
-		#if FUTURE_DISCORD_RPC
-		DiscordClient.load();
-		#end
-
 		fpsDisplay = new FPS(10, 10, 0xffffff);
 		addChild(fpsDisplay);
 
@@ -137,6 +133,10 @@ class Main extends openfl.display.Sprite {
 			#end
 			Sys.exit(1);
 		});
+		#end
+
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.load();
 		#end
 
 		Application.current.window.onFocusOut.add(onWindowFocusOut);

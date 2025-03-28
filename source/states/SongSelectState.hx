@@ -47,6 +47,8 @@ class SongSelectState extends ExtendableState {
 		DiscordClient.changePresence("Freeplay Menu", null);
 		#end
 
+		persistentUpdate = true;
+
 		songListData = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
 
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/selector_bg'));
@@ -127,9 +129,10 @@ class SongSelectState extends ExtendableState {
 		}
 
 		if (Input.justPressed('exit')) {
-			if (!isResetting)
+			if (!isResetting) {
+				persistentUpdate = false;
 				ExtendableState.switchState(new MenuState());
-			else {
+			} else {
 				isResetting = false;
 				lockInputs = false;
 				titleTxt.color = FlxColor.WHITE;
@@ -175,6 +178,7 @@ class SongSelectState extends ExtendableState {
 
 	function openPlayState(index:Int) {
 		try {
+			persistentUpdate = false;
 			PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songListData.songs[index].name));
 			ExtendableState.switchState(new PlayState());
 			if (FlxG.sound.music != null)

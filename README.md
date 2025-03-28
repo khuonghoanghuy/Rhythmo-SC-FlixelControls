@@ -1,4 +1,6 @@
-# Rhythmo [![Build](https://github.com/JoaTH-Team/Rhythmo-SC/actions/workflows/main.yml/badge.svg)](https://github.com/JoaTH-Team/Rhythmo-SC/actions/workflows/main.yml)
+![](./assets/images/menu/title/logo.png)
+
+[![Build](https://github.com/JoaTH-Team/Rhythmo-SC/actions/workflows/main.yml/badge.svg)](https://github.com/JoaTH-Team/Rhythmo-SC/actions/workflows/main.yml)
 ![](https://img.shields.io/github/repo-size/JoaTH-Team/Rhythmo-SC)
 ![](https://img.shields.io/github/issues/JoaTH-Team/Rhythmo-SC)
 ![](https://img.shields.io/badge/balls-in_your_jaws-green)

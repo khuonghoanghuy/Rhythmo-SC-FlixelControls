@@ -19,6 +19,8 @@ class TitleState extends ExtendableState {
 		}
 		#end
 
+		persistentUpdate = persistentDraw = true;
+
 		if (FlxG.sound.music == null)
 			FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 
