@@ -65,7 +65,7 @@ class ControlsSubState extends ExtendableSubState {
 			ctrlGroup.add(bindTxt);
 		}
 
-		curControl = new FlxText(700, 0, 0, "", 12);
+		curControl = new FlxText(700, 0, 0, "LOADING", 12);
 		curControl.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		curControl.scrollFactor.set();
 		curControl.screenCenter(Y);

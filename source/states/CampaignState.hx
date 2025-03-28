@@ -26,6 +26,9 @@ class CampaignState extends ExtendableState {
 		DiscordClient.changePresence("Campaign Menu", null);
 		#end
 
+		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
+		FlxG.mouse.load(mouseSpr.pixels);
+
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/campaign_bg'));
 		bg.scrollFactor.set();
 		bg.screenCenter();
@@ -35,7 +38,7 @@ class CampaignState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
-		text = new FlxText(0, 180, 0, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
+		text = new FlxText(0, 180, FlxG.width, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		text.screenCenter(X);
@@ -85,7 +88,7 @@ class CampaignState extends ExtendableState {
 			FlxG.sound.play(Paths.sound('cancel'));
 		}
 
-		if (Input.justPressed('reset')) {
+		if (Input.justPressed('reset') && !input.hasFocus) {
 			if (!isResetting) {
 				isResetting = true;
 				lockInputs = true;

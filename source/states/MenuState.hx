@@ -141,6 +141,7 @@ class MenuState extends ExtendableState {
 						switch (selections[curSelected]) {
 							case 'play':
 								lockInputs = false;
+								persistentUpdate = false;
 								openSubState(new ModeSelectSubstate());
 							#if FUTURE_POLYMOD
 							case 'mods':
@@ -249,6 +250,7 @@ class ModeSelectSubstate extends ExtendableSubState {
 			}
 
 			if (Input.justPressed('exit')) {
+				persistentUpdate = persistentDraw = true;
 				FlxG.sound.play(Paths.sound('cancel'));
 				close();
 			}
