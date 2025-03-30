@@ -8,6 +8,21 @@ import sys.thread.Thread;
 class DiscordClient {
 	public static var initialized:Bool = false;
 
+	private static final _defaultID:String = "1353181104307306666";
+	public static var clientID(default, set):String = _defaultID;
+
+	private static function set_clientID(newID:String) {
+		var change:Bool = (clientID != newID);
+		clientID = newID;
+
+		if (change && initialized) {
+			shutdown();
+			load();
+			changePresence();
+		}
+		return newID;
+	}
+
 	public static function load():Void {
 		if (initialized)
 			return;
@@ -16,7 +31,7 @@ class DiscordClient {
 		handlers.ready = cpp.Function.fromStaticFunction(onReady);
 		handlers.disconnected = cpp.Function.fromStaticFunction(onDisconnected);
 		handlers.errored = cpp.Function.fromStaticFunction(onError);
-		RichPresence.Initialize("1353181104307306666", cpp.RawPointer.addressOf(handlers), false, null);
+		RichPresence.Initialize(clientID, cpp.RawPointer.addressOf(handlers), false, null);
 
 		Thread.create(function() {
 			while (true) {
@@ -63,6 +78,10 @@ class DiscordClient {
 			trace('(Discord) Connected to User "${cast (user.username, String)}"');
 
 		changePresence('Just Started');
+	}
+
+	public static function resetClientID() {
+		clientID = _defaultID;
 	}
 
 	public static function shutdown() {
