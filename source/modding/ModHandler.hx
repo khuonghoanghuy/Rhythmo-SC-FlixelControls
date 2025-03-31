@@ -3,14 +3,19 @@ package modding;
 #if FUTURE_POLYMOD
 import polymod.Polymod;
 import polymod.backends.PolymodAssets.PolymodAssetType;
+import polymod.fs.PolymodFileSystem;
 import polymod.format.ParseRules;
 #end
 
 class ModHandler {
 	static final MOD_DIR:String = 'mods';
+	static final GLOBAL_MOD_ID:String = 'global';
 	static final CORE_DIR:String = 'assets';
+
 	static final API_VERSION:String = '1.0.5';
 	static final API_VERSION_MATCH:String = '*.*.*';
+
+	static var fs(default, null):IFileSystem;
 
 	#if FUTURE_POLYMOD
 	private static final extensions:Map<String, PolymodAssetType> = [
@@ -40,6 +45,9 @@ class ModHandler {
 			FileSystem.createDirectory('./mods/');
 		if (!FileSystem.exists('mods/mods-go-here.txt'))
 			File.saveContent('mods/mods-go-here.txt', '');
+
+		fs = PolymodFileSystem.makeFileSystem(null, {modRoot: MOD_DIR});
+
 		loadMods(getMods());
 		#else
 		trace("Polymod reloading is not supported on your Platform!");
@@ -80,6 +88,9 @@ class ModHandler {
 		}
 
 		var daList:Array<String> = [];
+		var globalDirPath:String = '$MOD_DIR/$GLOBAL_MOD_ID';
+		if (fs.exists(globalDirPath) && fs.isDirectory(globalDirPath))
+			daList.push(GLOBAL_MOD_ID);
 
 		trace('Searching for Mods...');
 
