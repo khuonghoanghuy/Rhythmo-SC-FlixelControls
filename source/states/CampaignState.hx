@@ -38,17 +38,17 @@ class CampaignState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
-		text = new FlxText(0, 180, FlxG.width, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
+		text = new FlxText(0, 0, FlxG.width, "Enter the songs you want to play.\n(Be sure to separate them with a comma.)", 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		text.screenCenter(X);
 		add(text);
 
-		input = new FlxUIInputText(10, 10, FlxG.width, '', 8);
+		input = new FlxUIInputText(10, text.y + 80, FlxG.width, '', 8);
 		input.setFormat(Paths.font('vcr.ttf'), 75, FlxColor.WHITE, FlxTextAlign.CENTER);
 		input.alignment = CENTER;
 		input.setBorderStyle(OUTLINE, 0xFF000000, 5, 1);
-		input.screenCenter(XY);
+		input.screenCenter(X);
 		input.y += 50;
 		input.backgroundColor = 0xFF000000;
 		input.lines = 99;
