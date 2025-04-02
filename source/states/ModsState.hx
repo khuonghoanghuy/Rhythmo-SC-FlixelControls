@@ -95,12 +95,15 @@ class ModsState extends ExtendableState {
 		});
 
 		if (ModHandler.trackedMods[curSelected].description != null) {
-			@:privateAccess
-			description.text = ModHandler.trackedMods[curSelected].description
-				+ "\nAuthor: "
-				+ ModHandler.trackedMods[curSelected]._author + "\nAPI Version: " + ModHandler.trackedMods[curSelected].apiVersion + "\nMod Version: " +
-					ModHandler.trackedMods[curSelected].modVersion;
-			description.screenCenter(X);
+			@:privateAccess {
+				var author:String = (ModHandler.trackedMods[curSelected]._author != null) ? ModHandler.trackedMods[curSelected]._author : 'None';
+				description.text = ModHandler.trackedMods[curSelected].description
+					+ "\nAuthor: "
+					+ author
+					+ "\nAPI Version: "
+					+ ModHandler.trackedMods[curSelected].apiVersion + "\nMod Version: " + ModHandler.trackedMods[curSelected].modVersion;
+				description.screenCenter(X);
+			}
 		}
 	}
 }
