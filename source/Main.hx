@@ -1,4 +1,4 @@
-package backend;
+package;
 
 #if desktop
 import openfl.events.UncaughtErrorEvent;
