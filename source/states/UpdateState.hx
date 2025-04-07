@@ -12,7 +12,7 @@ class UpdateState extends ExtendableState {
 			+ '\nYour current version is v${Lib.application.meta.get('version')}, while the most recent version is v${daJson.version}!\n
 			What\'s New:\n'
 			+ daJson.description
-			+ '\nPress ENTER to go to GitHub. Otherwise, press ESCAPE to proceed anyways.\n
+			+ '\nPress ENTER to update the game. Otherwise, press ESCAPE to proceed anyways.\n
 			Thanks for playing!', 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(XY);
@@ -43,7 +43,7 @@ class UpdateState extends ExtendableState {
 			ExtendableState.switchState(new TitleState());
 			if (!Input.justPressed('exit')) {
 				FlxG.sound.play(Paths.sound('select'));
-				Utilities.openUrlPlease("https://github.com/Joalor64GH/Rhythmo-SC/releases/latest");
+				AutoUpdater.downloadUpdate();
 			} else
 				FlxG.sound.play(Paths.sound('cancel'));
 		}
