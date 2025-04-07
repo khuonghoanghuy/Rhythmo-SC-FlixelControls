@@ -39,7 +39,6 @@ class AutoUpdater {
 				+ "Error details: Unable to connect to update server.\n"
 				+ "URL: "
 				+ DOWNLOAD_URL;
-			FlxG.state.add(errorText);
 		}
 	}
 
