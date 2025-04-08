@@ -148,6 +148,9 @@ class Paths {
 
 	inline static public function xml(key:String)
 		return file('$key.xml');
+	
+	inline static public function lua(key:String)
+		return file('$key.lua');
 
 	inline static public function script(key:String) {
 		var extension:String = '.hxs';
