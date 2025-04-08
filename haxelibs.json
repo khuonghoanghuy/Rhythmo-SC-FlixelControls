@@ -80,7 +80,7 @@
     },
     {
       "name": "hxluajit-wrapper",
-      "type" "haxelib"
+      "type": "haxelib"
     }
   ]
 }
