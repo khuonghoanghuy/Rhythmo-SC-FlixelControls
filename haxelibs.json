@@ -77,6 +77,10 @@
     {
       "name": "hxdiscord_rpc",
       "type": "haxelib"
+    },
+    {
+      "name": "hxluajit-wrapper",
+      "type" "haxelib"
     }
   ]
 }
