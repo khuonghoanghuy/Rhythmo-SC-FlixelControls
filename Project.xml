@@ -48,6 +48,8 @@
 	<haxelib name="polymod" if="FUTURE_POLYMOD" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
+	<haxelib name="hxluajit-wrapper" if="cpp" />
+	<haxelib name="hxluajit" if="cpp" /> <!-- In case -->
 
 	<!-- [ Defines ] -->
 
