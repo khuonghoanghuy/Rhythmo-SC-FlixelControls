@@ -29,6 +29,7 @@ class ModHandler {
 		'hxs' => TEXT,
 		'hxc' => TEXT,
 		'hscript' => TEXT,
+		'lua' => TEXT,
 		'frag' => TEXT,
 		'vert' => TEXT,
 		'ttf' => FONT,
@@ -120,6 +121,7 @@ class ModHandler {
 		output.addType("hxs", TextFileFormat.PLAINTEXT);
 		output.addType("hxc", TextFileFormat.PLAINTEXT);
 		output.addType("hscript", TextFileFormat.PLAINTEXT);
+		output.addType("lua", TextFileFormat.PLAINTEXT);
 		output.addType("frag", TextFileFormat.PLAINTEXT);
 		output.addType("vert", TextFileFormat.PLAINTEXT);
 		return output != null ? output : null;
