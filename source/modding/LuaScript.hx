@@ -15,17 +15,25 @@ class LuaScript extends FlxBasic
 
         lua = LuaL.newstate();
         LuaL.openlibs(lua);
-		Lua.init_callbacks(lua);
-		var result:Dynamic = LuaL.dofile(lua, file);
-		var resultStr:String = Lua.tostring(lua, result);
-		if (resultStr != null && result != 0)
-		{
-			lime.app.Application.current.window.alert(resultStr, 'Lua Error');
-			trace('Lua Error ' + resultStr);
-			lua = null;
-			return;
-		}
+        Lua.init_callbacks(lua);
+        initCode();
+        var result:Dynamic = LuaL.dofile(lua, file);
+        var resultStr:String = Lua.tostring(lua, result);
+        trace("Script Loaded Successfully: " + file);
+        if (resultStr != null && result != 0)
+        {
+            lime.app.Application.current.window.alert(resultStr, 'Lua Error');
+            trace('Lua Error ' + resultStr);
+            lua = null;
+            return;
+        }
     }    
+
+    function initCode():Void {
+        setCallback("trace", function (text:String) {
+            Sys.println(text);
+        });
+    }
 
 	/**
 	 * Call a function, in script, you will be able to code in lua script like:
@@ -39,14 +47,42 @@ class LuaScript extends FlxBasic
 	 * @param name a function to call back
 	 * @param args a function args, useful for some function need to call a args like `callFunction("onUpdate", [elapsed]);`
 	 */
-	public function callFunction(name:String, args:Array<Dynamic>)
+    public function callFunction(name:String, args:Array<Dynamic>):Bool
     {
+        if (lua == null) return false;
+        
         Lua.getglobal(lua, name);
+        var type = Lua.type(lua, -1);
+        if (type == Lua.LUA_TNIL)
+            return false;
+        if (type != Lua.LUA_TFUNCTION)
+        {
+            #if debug
+            trace('$name is not a function');
+            #end
+            return false;
+        }
+
         for (arg in args)
         {
-            Convert.toLua(lua, arg);
+            switch (Type.typeof(arg)) {
+                case TNull: Lua.pushnil(lua);
+                case TBool: Lua.pushboolean(lua, arg);
+                case TInt: Lua.pushinteger(lua, arg);
+                case TFloat: Lua.pushnumber(lua, arg);
+                case TClass(String): Lua.pushstring(lua, arg);
+                default: Lua.pushnil(lua);
+            }
         }
-        Lua.pcall(lua, args.length, 0, 0);
+        
+        var status:Int = Lua.pcall(lua, args.length, 0, 0);
+        if (status != 0)
+        {
+            var error:String = Lua.tostring(lua, -1);
+            trace('Error calling $name: $error');
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -60,8 +96,8 @@ class LuaScript extends FlxBasic
      * @param func make them how is gonna work, like how `FlxG.resizeWindow(640, 480);`
      * @return Lua_helper.add_callback(lua, name, func)
      */
-    public function setFunction(name:String, func:Dynamic)
-        Lua_helper.add_callback(lua, name, func);
+    public function setCallback(name:String, func:Dynamic)
+        return Lua_helper.add_callback(lua, name, func);
 
     /**
      * Set a variable, in script, you will be able to code in lua script like:
