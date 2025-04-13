@@ -84,7 +84,9 @@
     },
     {
       "name": "linc_luajit",
-      "type": "haxelib"
+      "type": "git",
+      "ref": "1906c4a96f6bb6df66562b3f24c62f4c5bba14a7",
+      "url": "https://github.com/superpowers04/linc_luajit"
     }
   ]
 }

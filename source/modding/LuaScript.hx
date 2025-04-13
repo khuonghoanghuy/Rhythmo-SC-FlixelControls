@@ -4,7 +4,6 @@ import llua.Convert;
 import llua.Lua;
 import llua.LuaL;
 import llua.State;
-import flixel.FlxBasic;
 
 class LuaScript extends FlxBasic
 {
