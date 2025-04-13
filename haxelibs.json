@@ -83,7 +83,7 @@
       "type": "haxelib"
     },
     {
-      "name": "hxluajit-wrapper",
+      "name": "linc_luajit",
       "type": "haxelib"
     }
   ]

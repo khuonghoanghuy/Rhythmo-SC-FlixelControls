@@ -41,6 +41,7 @@ class PlayState extends ExtendableState {
 	public var nos:Int = 0;
 
 	public var scriptArray:Array<Hscript> = [];
+	public var luaArray:Array<LuaScript> = [];
 
 	public var noteDirs:Array<String> = ['left', 'down', 'up', 'right'];
 	public var noteSplashes:FlxTypedGroup<NoteSplash>;
@@ -143,6 +144,9 @@ class PlayState extends ExtendableState {
 					if (Paths.validScriptType(file)) {
 						scriptArray.push(new Hscript(folder + file));
 					}
+					if (file.endsWith('.lua')) {
+						luaArray.push(new LuaScript(folder + file));
+					}
 				}
 			}
 		}
@@ -191,6 +195,9 @@ class PlayState extends ExtendableState {
 				for (file in FileSystem.readDirectory(folder)) {
 					if (Paths.validScriptType(file)) {
 						scriptArray.push(new Hscript(folder + file));
+					}
+					if (file.endsWith('.lua')) {
+						luaArray.push(new LuaScript(folder + file));
 					}
 				}
 			}
@@ -919,6 +926,7 @@ class PlayState extends ExtendableState {
 	}
 
 	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
+		// on Hscript
 		var value:Dynamic = Hscript.Function_Continue;
 
 		for (i in 0...scriptArray.length) {
@@ -926,6 +934,12 @@ class PlayState extends ExtendableState {
 			final bool:Bool = call == Hscript.Function_Continue;
 			if (!bool && call != null)
 				value = call;
+		}
+
+		// on Lua script
+		for (i in 0...luaArray.length) {
+			final lua:LuaScript = luaArray[i];
+			lua.callFunction(funcName, args);
 		}
 
 		return value;

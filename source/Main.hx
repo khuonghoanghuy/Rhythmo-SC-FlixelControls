@@ -131,6 +131,8 @@ class Main extends openfl.display.Sprite {
 				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
 				'Error!');
 			#end
+			Sys.println('Uncaught Error: \n' + msg
+				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues');
 			Sys.exit(1);
 		});
 		#end

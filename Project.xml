@@ -49,8 +49,7 @@
 	<haxelib name="polymod" if="FUTURE_POLYMOD" version="1.8.0" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" version="1.3.0" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" version="1.2.4" />
-	<haxelib name="hxluajit-wrapper" if="cpp" version="1.0.0" />
-	<haxelib name="hxluajit" if="cpp" version="1.0.3" /> <!-- In case -->
+	<haxelib name="linc_luajit" version="0.0.7" />
 
 	<!-- [ Defines ] -->
 
