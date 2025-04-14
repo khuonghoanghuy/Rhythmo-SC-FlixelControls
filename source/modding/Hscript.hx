@@ -1,49 +1,43 @@
 package modding;
 
-import crowplexus.iris.Iris;
-import crowplexus.iris.IrisConfig.RawIrisConfig;
-import crowplexus.hscript.Interp.LocalVar;
+import hscript.*;
 
-class Hscript extends Iris {
-	public var locals(get, set):Map<String, LocalVar>;
+class Hscript extends FlxBasic {
+	public var locals(get, set):Map<String, {r:Dynamic}>;
 
-	function get_locals():Map<String, crowplexus.hscript.LocalVar> {
-		var result:Map<String, crowplexus.hscript.LocalVar> = new Map();
+	function get_locals():Map<String, {r:Dynamic}> {
 		@:privateAccess
-		for (key in interp.locals.keys()) {
-			result.set(key, {r: interp.locals.get(key).r, const: interp.locals.get(key).const});
-		}
-		return result;
+		return interp.locals;
 	}
 
-	function set_locals(local:Map<String, crowplexus.hscript.LocalVar>) {
+	function set_locals(local:Map<String, {r:Dynamic}>) {
 		@:privateAccess
-		interp.locals = local;
-		return local;
+		return interp.locals = local;
 	}
 
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
-	public function new(file:String) {
-		final rawConfig:RawIrisConfig = {
-			name: file,
-			autoPreset: true,
-			autoRun: true
-		}
-		super(Paths.getText(file), rawConfig);
+	public var parser:Parser = new Parser();
+	public var interp:Interp = new Interp();
+
+	public function new(file:String, ?execute:Bool = true) {
+		super();
+
+		parser.allowJSON = parser.allowTypes = parser.allowMetadata = true;
+		parser.preprocesorValues = macros.Macros.getDefines();
 
 		// Default Variables
-		set('this', this);
+		setVariable('this', this);
 
-		set('Function_Stop', Function_Stop);
-		set('Function_Continue', Function_Continue);
+		setVariable('Function_Stop', Function_Stop);
+		setVariable('Function_Continue', Function_Continue);
 
-		set('platform', PlatformUtil.getPlatform());
-		set('version', Lib.application.meta.get('version'));
+		setVariable('platform', PlatformUtil.getPlatform());
+		setVariable('version', Lib.application.meta.get('version'));
 
 		// Default Functions
-		set('import', function(daClass:String, ?asDa:String) { // For backwards compatibility
+		setVariable('import', function(daClass:String, ?asDa:String) {
 			final splitClassName:Array<String> = [for (e in daClass.split('.')) e.trim()];
 			final className:String = splitClassName.join('.');
 			final daClass:Class<Dynamic> = Type.resolveClass(className);
@@ -58,63 +52,63 @@ class Hscript extends Iris {
 						Reflect.setField(daEnumField, daConstructor, daEnum.createByName(daConstructor));
 
 					if (asDa != null && asDa != '')
-						set(asDa, daEnumField);
+						setVariable(asDa, daEnumField);
 					else
-						set(splitClassName[splitClassName.length - 1], daEnumField);
+						setVariable(splitClassName[splitClassName.length - 1], daEnumField);
 				} else {
 					if (asDa != null && asDa != '')
-						set(asDa, daClass);
+						setVariable(asDa, daClass);
 					else
-						set(splitClassName[splitClassName.length - 1], daClass);
+						setVariable(splitClassName[splitClassName.length - 1], daClass);
 				}
 			}
 		});
 
-		set('trace', function(value:Dynamic) {
+		setVariable('trace', function(value:Dynamic) {
 			trace(value);
 		});
 
-		set('importScript', function(source:String) {
+		setVariable('importScript', function(source:String) {
 			var name:String = StringTools.replace(source, '.', '/');
-			var script:Hscript = new Hscript(Paths.script(name));
-			script.execute();
+			var script:Hscript = new Hscript(Paths.script(name), false);
+			script.execute(Paths.script(name), false);
 			return script.getAll();
 		});
 
-		set('stopScript', function() {
+		setVariable('stopScript', function() {
 			this.destroy();
 		});
 
 		// Haxe
-		set('Array', Array);
-		set('Bool', Bool);
-		set('Date', Date);
-		set('DateTools', DateTools);
-		set('Dynamic', Dynamic);
-		set('EReg', EReg);
+		setVariable('Array', Array);
+		setVariable('Bool', Bool);
+		setVariable('Date', Date);
+		setVariable('DateTools', DateTools);
+		setVariable('Dynamic', Dynamic);
+		setVariable('EReg', EReg);
 		#if sys
-		set('File', File);
-		set('FileSystem', FileSystem);
+		setVariable('File', File);
+		setVariable('FileSystem', FileSystem);
 		#end
-		set('Float', Float);
-		set('Int', Int);
-		set('Json', Json);
-		set('Lambda', Lambda);
-		set('Math', Math);
-		set('Path', Path);
-		set('Reflect', Reflect);
-		set('Std', Std);
-		set('StringBuf', StringBuf);
-		set('String', String);
-		set('StringTools', StringTools);
+		setVariable('Float', Float);
+		setVariable('Int', Int);
+		setVariable('Json', Json);
+		setVariable('Lambda', Lambda);
+		setVariable('Math', Math);
+		setVariable('Path', Path);
+		setVariable('Reflect', Reflect);
+		setVariable('Std', Std);
+		setVariable('StringBuf', StringBuf);
+		setVariable('String', String);
+		setVariable('StringTools', StringTools);
 		#if sys
-		set('Sys', Sys);
+		setVariable('Sys', Sys);
 		#end
-		set('TJSON', TJSON);
-		set('Type', Type);
-		set('Xml', Xml);
+		setVariable('TJSON', TJSON);
+		setVariable('Type', Type);
+		setVariable('Xml', Xml);
 
-		set('createThread', function(func:Void->Void) {
+		setVariable('createThread', function(func:Void->Void) {
 			#if sys
 			sys.thread.Thread.create(() -> {
 				func();
@@ -125,94 +119,149 @@ class Hscript extends Iris {
 		});
 
 		// OpenFL
-		set('Assets', Assets);
-		set('BitmapData', BitmapData);
-		set('Lib', Lib);
-		set('ShaderFilter', ShaderFilter);
-		set('Sound', Sound);
+		setVariable('Assets', Assets);
+		setVariable('BitmapData', BitmapData);
+		setVariable('Lib', Lib);
+		setVariable('ShaderFilter', ShaderFilter);
+		setVariable('Sound', Sound);
 
 		// Flixel
-		set('FlxAxes', getFlxAxes());
-		set('FlxBackdrop', FlxBackdrop);
-		set('FlxBasic', FlxBasic);
-		set('FlxCamera', FlxCamera);
-		set('FlxCameraFollowStyle', getFlxCameraFollowStyle());
-		set('FlxColor', getFlxColor());
-		set('FlxEase', FlxEase);
-		set('FlxG', FlxG);
-		set('FlxGroup', FlxGroup);
-		set('FlxKey', getFlxKey());
-		set('FlxMath', FlxMath);
-		set('FlxObject', FlxObject);
-		set('FlxRuntimeShader', FlxRuntimeShader);
-		set('FlxSound', FlxSound);
-		set('FlxSprite', FlxSprite);
-		set('FlxSpriteGroup', FlxSpriteGroup);
-		set('FlxText', FlxText);
-		set('FlxTextAlign', getFlxTextAlign());
-		set('FlxTextBorderStyle', getFlxTextBorderStyle());
-		set('FlxTimer', FlxTimer);
-		set('FlxTween', FlxTween);
-		set('FlxTypedGroup', FlxTypedGroup);
-		set('createTypedGroup', function(?variable) {
+		setVariable('FlxAxes', getFlxAxes());
+		setVariable('FlxBackdrop', FlxBackdrop);
+		setVariable('FlxBasic', FlxBasic);
+		setVariable('FlxCamera', FlxCamera);
+		setVariable('FlxCameraFollowStyle', getFlxCameraFollowStyle());
+		setVariable('FlxColor', getFlxColor());
+		setVariable('FlxEase', FlxEase);
+		setVariable('FlxG', FlxG);
+		setVariable('FlxGroup', FlxGroup);
+		setVariable('FlxKey', getFlxKey());
+		setVariable('FlxMath', FlxMath);
+		setVariable('FlxObject', FlxObject);
+		setVariable('FlxRuntimeShader', FlxRuntimeShader);
+		setVariable('FlxSound', FlxSound);
+		setVariable('FlxSprite', FlxSprite);
+		setVariable('FlxSpriteGroup', FlxSpriteGroup);
+		setVariable('FlxText', FlxText);
+		setVariable('FlxTextAlign', getFlxTextAlign());
+		setVariable('FlxTextBorderStyle', getFlxTextBorderStyle());
+		setVariable('FlxTimer', FlxTimer);
+		setVariable('FlxTween', FlxTween);
+		setVariable('FlxTypedGroup', FlxTypedGroup);
+		setVariable('createTypedGroup', function(?variable) {
 			return variable = new FlxTypedGroup<Dynamic>();
 		});
-		set('createSpriteGroup', function(?variable) {
+		setVariable('createSpriteGroup', function(?variable) {
 			return variable = new FlxSpriteGroup();
 		});
 
 		// State Stuff
-		set('add', FlxG.state.add);
-		set('remove', FlxG.state.remove);
-		set('insert', FlxG.state.insert);
-		set('members', FlxG.state.members);
-		set('state', FlxG.state);
+		setVariable('add', FlxG.state.add);
+		setVariable('remove', FlxG.state.remove);
+		setVariable('insert', FlxG.state.insert);
+		setVariable('members', FlxG.state.members);
+		setVariable('state', FlxG.state);
 
 		// Rhythmo
-		set('Achievements', Achievements);
-		set('Bar', Bar);
-		set('Conductor', Conductor);
+		setVariable('Achievements', Achievements);
+		setVariable('Bar', Bar);
+		setVariable('Conductor', Conductor);
 		#if FUTURE_DISCORD_RPC
-		set('DiscordClient', DiscordClient);
+		setVariable('DiscordClient', DiscordClient);
 		#end
-		set('ExtendableState', ExtendableState);
-		set('ExtendableSubState', ExtendableSubState);
-		set('GameSprite', GameSprite);
-		set('HighScore', HighScore);
-		set('Input', Input);
-		set('Localization', Localization);
-		set('Main', Main);
+		setVariable('ExtendableState', ExtendableState);
+		setVariable('ExtendableSubState', ExtendableSubState);
+		setVariable('GameSprite', GameSprite);
+		setVariable('HighScore', HighScore);
+		setVariable('Input', Input);
+		setVariable('Localization', Localization);
+		setVariable('LuaScript', LuaScript);
+		setVariable('Main', Main);
 		#if FUTURE_POLYMOD
-		set('ModHandler', ModHandler);
+		setVariable('ModHandler', ModHandler);
 		#end
-		set('Note', Note);
-		set('Paths', Paths);
-		set('PlayState', PlayState);
-		set('Rating', Rating);
-		set('SaveData', SaveData);
-		set('ScriptedState', ScriptedState);
-		set('ScriptedSubState', ScriptedSubState);
-		set('Song', Song);
-		set('Utilities', Utilities);
+		setVariable('Note', Note);
+		setVariable('Paths', Paths);
+		setVariable('PlayState', PlayState);
+		setVariable('Rating', Rating);
+		setVariable('SaveData', SaveData);
+		setVariable('ScriptedState', ScriptedState);
+		setVariable('ScriptedSubState', ScriptedSubState);
+		setVariable('Song', Song);
+		setVariable('Utilities', Utilities);
 
-		set('game', PlayState.instance);
+		setVariable('game', PlayState.instance);
 
-		execute();
+		if (execute)
+			this.execute(file);
 	}
 
-	public function callFunction(funcName:String, funcArgs:Array<Dynamic>) {
-		if (funcName == null || !exists(funcName))
-			return null;
-		return call(funcName, funcArgs);
+	public function execute(file:String, ?executeCreate:Bool = true):Void {
+		try {
+			interp.execute(parser.parseString(File.getContent(file)));
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+
+		trace('Script Loaded Succesfully: $file');
+
+		if (executeCreate)
+			executeFunc('create', []);
+	}
+
+	public function setVariable(name:String, val:Dynamic):Void {
+		try {
+			interp?.variables.set(name, val);
+			locals.set(name, {r: val});
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+	}
+
+	public function getVariable(name:String):Dynamic {
+		try {
+			if (locals.exists(name) && locals[name] != null)
+				return locals.get(name).r;
+			else if (interp.variables.exists(name))
+				return interp?.variables.get(name);
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+
+		return null;
+	}
+
+	public function removeVariable(name:String):Void {
+		try {
+			interp?.variables.remove(name);
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+	}
+
+	public function existsVariable(name:String):Bool {
+		try {
+			return interp?.variables.exists(name);
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+
+		return false;
+	}
+
+	public function executeFunc(funcName:String, ?args:Array<Dynamic>):Dynamic {
+		if (existsVariable(funcName)) {
+			try {
+				return Reflect.callMethod(this, getVariable(funcName), args == null ? [] : args);
+			} catch (e:Dynamic)
+				Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+		}
+
+		return null;
 	}
 
 	public function getAll():Dynamic {
 		var balls:Dynamic = {};
 
 		for (i in locals.keys())
-			Reflect.setField(balls, i, get(i));
+			Reflect.setField(balls, i, getVariable(i));
 		for (i in interp.variables.keys())
-			Reflect.setField(balls, i, get(i));
+			Reflect.setField(balls, i, getVariable(i));
 
 		return balls;
 	}
@@ -394,5 +443,11 @@ class Hscript extends Iris {
 			"Y": FlxAxes.Y,
 			"XY": FlxAxes.XY
 		};
+	}
+
+	override function destroy() {
+		super.destroy();
+		parser = null;
+		interp = null;
 	}
 }

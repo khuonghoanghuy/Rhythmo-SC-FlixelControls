@@ -11,4 +11,8 @@ class Macros {
 		} catch (e) {}
 		return macro $v{"-"};
 	}
+
+	public static macro function getDefines():haxe.macro.Expr {
+		return macro $v{haxe.macro.Context.getDefines()};
+	}
 }

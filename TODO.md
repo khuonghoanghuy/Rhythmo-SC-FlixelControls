@@ -7,7 +7,7 @@
 * [ ] Lua Script Support
 * [X] Campaign Mode
 * [X] Noteskins
-* [X] Use `hscript-iris` instead of `hscript`
+* [ ] Use `hscript-iris` instead of `hscript` (broken)
 
 ### Low Priority
 * [ ] Gameplay Modifiers
