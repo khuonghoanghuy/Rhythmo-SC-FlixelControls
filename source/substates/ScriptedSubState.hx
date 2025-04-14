@@ -28,8 +28,8 @@ class ScriptedSubState extends ExtendableSubState {
 				}
 			}
 
-			script = new Hscript(path, false);
-			script.execute(path, false);
+			script = new Hscript(path);
+			script.execute();
 
 			scriptSet('multiAdd', multiAdd);
 			scriptSet('multiRemove', multiRemove);
@@ -84,12 +84,12 @@ class ScriptedSubState extends ExtendableSubState {
 	}
 
 	function scriptSet(key:String, value:Dynamic) {
-		script?.setVariable(key, value);
+		script?.set(key, value);
 	}
 
 	function scriptExecute(func:String, args:Array<Dynamic>) {
 		try {
-			script?.executeFunc(func, args);
+			script?.callFunction(func, args);
 		} catch (e:Dynamic) {
 			trace('Error executing $func!\n$e');
 		}

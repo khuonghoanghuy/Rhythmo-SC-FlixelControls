@@ -45,7 +45,7 @@
 
 	<haxelib name="tjson" />
 	<haxelib name="linc_luajit" />
-	<haxelib name="hscript" if="SIMPLE_SCRIPT" />
+	<haxelib name="hscript" if="debug" />
 	<haxelib name="hscript-iris" if="SIMPLE_SCRIPT" />
 	<haxelib name="polymod" if="FUTURE_POLYMOD" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" />
@@ -60,7 +60,8 @@
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 	<haxedef name="HXCPP_STACK_TRACE" if="release" />
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" />
-	<haxedef name="NO_PRECOMPILED_HEADERS"/>
+	
+	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux"/>
 
 	<haxedef name="hscriptPos" />
 	<haxedef name="analyzer-optimize" />

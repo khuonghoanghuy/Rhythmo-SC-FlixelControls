@@ -83,6 +83,8 @@ class PlayState extends ExtendableState {
 	}
 
 	override function create() {
+		callOnScripts('create', []);
+
 		super.create();
 
 		Paths.clearStoredMemory();
@@ -204,7 +206,7 @@ class PlayState extends ExtendableState {
 		}
 
 		for (script in scriptArray) {
-			script?.setVariable('addScript', function(path:String) {
+			script?.set('addScript', function(path:String) {
 				scriptArray.push(new Hscript(Paths.script(path)));
 			});
 		}
