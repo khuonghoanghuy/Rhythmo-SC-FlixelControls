@@ -30,7 +30,10 @@ jobs:
           key: cache-linux-debug
 
       - name: Installing Libraries
-        run: haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
 
@@ -86,7 +89,10 @@ jobs:
         shell: powershell
 
       - name: Installing Libraries
-        run: haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
+        run: | 
+          haxelib setup C:/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
 
@@ -135,7 +141,10 @@ jobs:
           key: cache-mac-debug
 
       - name: Installing Libraries
-        run: haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          haxe --interp -cp ./actions/libs-installer -D analyzer-optimize -main Main
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
 
