@@ -10,7 +10,7 @@ on:
 
 jobs:
   buildLinux:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@main
@@ -115,7 +115,7 @@ jobs:
           name: windowsBuild
           path: export/debug/windows/bin
   buildMac:
-    runs-on: macos-13
+    runs-on: macos-14
 
     steps:
       - uses: actions/checkout@main
