@@ -14,22 +14,29 @@ class LuaScript extends FlxBasic {
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
 		Lua.init_callbacks(lua);
-		initCode();
-		var result:Dynamic = LuaL.dofile(lua, file);
-		var resultStr:String = Lua.tostring(lua, result);
-		trace("Script Loaded Successfully: " + file);
-		if (resultStr != null && result != 0) {
-			Application.current.window.alert(resultStr, 'Lua Error');
-			trace('Lua Error ' + resultStr);
-			lua = null;
-			return;
-		}
-	}
 
-	function initCode():Void {
 		setCallback("trace", function(value:Dynamic) {
 			trace(value);
 		});
+
+		try {
+			var result:Dynamic = LuaL.dofile(lua, file);
+			var resultStr:String = Lua.tostring(lua, result);
+			if (resultStr != null && result != 0) {
+				trace('Lua Error: ' + resultStr);
+				Lib.application.window.alert(resultStr, "Error!");
+				lua = null;
+				return;
+			}
+		} catch (e) {
+			trace(e.message);
+			Lib.application.window.alert(e.message, "Error!");
+			return;
+		}
+
+		trace('Script Loaded Succesfully: $file');
+
+		callFunction('create', []);
 	}
 
 	/**
@@ -44,45 +51,11 @@ class LuaScript extends FlxBasic {
 	 * @param name a function to call back
 	 * @param args a function args, useful for some function need to call a args like `callFunction("onUpdate", [elapsed]);`
 	 */
-	public function callFunction(name:String, args:Array<Dynamic>):Bool {
-		if (lua == null)
-			return false;
-
+	public function callFunction(name:String, args:Array<Dynamic>) {
 		Lua.getglobal(lua, name);
-		var type = Lua.type(lua, -1);
-		if (type == Lua.LUA_TNIL)
-			return false;
-		if (type != Lua.LUA_TFUNCTION) {
-			#if debug
-			trace('$name is not a function');
-			#end
-			return false;
-		}
-
-		for (arg in args) {
-			switch (Type.typeof(arg)) {
-				case TNull:
-					Lua.pushnil(lua);
-				case TBool:
-					Lua.pushboolean(lua, arg);
-				case TInt:
-					Lua.pushinteger(lua, arg);
-				case TFloat:
-					Lua.pushnumber(lua, arg);
-				case TClass(String):
-					Lua.pushstring(lua, arg);
-				default:
-					Lua.pushnil(lua);
-			}
-		}
-
-		var status:Int = Lua.pcall(lua, args.length, 0, 0);
-		if (status != 0) {
-			var error:String = Lua.tostring(lua, -1);
-			trace('Error calling $name: $error');
-			return false;
-		}
-		return true;
+		for (arg in args)
+			Convert.toLua(lua, arg);
+		Lua.pcall(lua, args.length, 0, 0);
 	}
 
 	/**
