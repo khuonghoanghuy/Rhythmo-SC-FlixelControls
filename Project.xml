@@ -46,7 +46,7 @@
 	<haxelib name="tjson" />
 	<haxelib name="linc_luajit" />
 	<haxelib name="hscript" if="debug" />
-	<haxelib name="hscript-iris" if="SIMPLE_SCRIPT" />
+	<haxelib name="hscript-iris" />
 	<haxelib name="polymod" if="FUTURE_POLYMOD" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />

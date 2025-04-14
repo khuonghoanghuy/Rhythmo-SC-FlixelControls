@@ -932,7 +932,7 @@ class PlayState extends ExtendableState {
 		var value:Dynamic = Hscript.Function_Continue;
 
 		for (i in 0...scriptArray.length) {
-			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
+			final call:Dynamic = scriptArray[i].callFunction(funcName, args);
 			final bool:Bool = call == Hscript.Function_Continue;
 			if (!bool && call != null)
 				value = call;
