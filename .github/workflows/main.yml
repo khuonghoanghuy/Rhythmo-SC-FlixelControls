@@ -38,7 +38,9 @@ jobs:
         run: echo "${{github.run_id}}" > VERSION
 
       - name: Compile
-        run: haxelib run lime build linux -debug
+        run: |
+          rm -rf export/debug/linux/obj/obj || true
+          haxelib run lime build linux -debug
 
       - name: Clear Previous Cache
         uses: actions/github-script@main
@@ -122,7 +124,7 @@ jobs:
           name: windowsBuild
           path: export/debug/windows/bin
   buildMac:
-    runs-on: macos-14
+    runs-on: macos-13
 
     steps:
       - uses: actions/checkout@main
