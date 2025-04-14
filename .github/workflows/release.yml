@@ -38,9 +38,7 @@ jobs:
         run: echo "${{github.run_id}}" > VERSION
 
       - name: Compile
-        run: |
-          rm -rf export/release/linux/obj/obj || true
-          haxelib run lime build linux
+        run: haxelib run lime build linux
 
       - name: Clear Previous Cache
         uses: actions/github-script@main
