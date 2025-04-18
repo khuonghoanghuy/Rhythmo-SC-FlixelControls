@@ -33,10 +33,6 @@
       "type": "haxelib"
     },
     {
-      "name": "hscript-iris",
-      "type": "haxelib"
-    },
-    {
       "name": "tjson",
       "type": "haxelib"
     },
