@@ -61,7 +61,7 @@ class LuaScript extends FlxBasic {
 			this.destroy();
 		});
 
-		if (this.execute)
+		if (execute)
 			callFunction('create', []);
 	}
 
