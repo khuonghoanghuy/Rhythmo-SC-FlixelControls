@@ -30,7 +30,9 @@
     },
     {
       "name": "hscript",
-      "type": "haxelib"
+      "type": "git",
+      "ref": "29237e306b505588f5afcf795bf491b13dd2719c",
+      "url": "https://github.com/HaxeFoundation/hscript.git"
     },
     {
       "name": "tjson",
