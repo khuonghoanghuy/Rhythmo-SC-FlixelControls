@@ -42,7 +42,7 @@ class LuaScript extends FlxBasic {
 		});
 
 		// Default Functions
-		setVariable('import', function(name:String, ?package:String = '') {
+		setCallback('import', function(name:String, ?package:String = '') {
 			try {
 				var str:String = '';
 				if (package.length > 0)
