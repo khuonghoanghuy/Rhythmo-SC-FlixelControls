@@ -209,6 +209,12 @@ class PlayState extends ExtendableState {
 			});
 		}
 
+		for (lua in luaArray) {
+			lua?.setCallback('addScript', function(path:String) {
+				luaArray.push(new LuaScript(Paths.lua(path)));
+			});
+		}
+
 		startingSong = true;
 		startCountdown();
 
@@ -922,11 +928,13 @@ class PlayState extends ExtendableState {
 
 		for (script in scriptArray)
 			script?.destroy();
+		for (lua in luaArray)
+			lua?.destroy();
 		scriptArray = [];
+		luaArray = [];
 	}
 
 	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
-		// on Hscript
 		var value:Dynamic = Hscript.Function_Continue;
 
 		for (i in 0...scriptArray.length) {
@@ -936,10 +944,19 @@ class PlayState extends ExtendableState {
 				value = call;
 		}
 
-		// on Lua script
+		callOnLuas(funcName, args);
+
+		return value;
+	}
+
+	private function callOnLuas(funcName:String, args:Array<Dynamic>):Dynamic {
+		var value:Dynamic = LuaScript.Function_Continue;
+
 		for (i in 0...luaArray.length) {
-			final lua:LuaScript = luaArray[i];
-			lua.callFunction(funcName, args);
+			final call:Dynamic = luaArray[i].callFunction(funcName, args);
+			final bool:Bool = call == LuaScript.Function_Continue;
+			if (!bool && call != null)
+				value = call;
 		}
 
 		return value;

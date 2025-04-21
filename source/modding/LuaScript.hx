@@ -6,37 +6,63 @@ import llua.LuaL;
 import llua.State;
 
 class LuaScript extends FlxBasic {
-	public static var lua:State;
+	public static var lua:State = null;
 
-	public function new(file:String) {
+	public static var Function_Stop:Dynamic = 1;
+	public static var Function_Continue:Dynamic = 0;
+
+	public function new(file:String, ?execute:Bool = true) {
 		super();
 
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
 		Lua.init_callbacks(lua);
 
-		setCallback("trace", function(value:Dynamic) {
-			trace(value);
-		});
-
-		try {
-			var result:Dynamic = LuaL.dofile(lua, file);
-			var resultStr:String = Lua.tostring(lua, result);
-			if (resultStr != null && result != 0) {
-				trace('Lua Error: ' + resultStr);
-				Lib.application.window.alert(resultStr, "Error!");
-				lua = null;
-				return;
-			}
-		} catch (e) {
-			trace(e.message);
-			Lib.application.window.alert(e.message, "Error!");
+		var result:Int = LuaL.dofile(lua, file);
+		if (result != 0) {
+			Lib.application.window.alert(Lua.tostring(lua, result), "Lua Error!");
+			lua = null;
 			return;
 		}
 
 		trace('Script Loaded Succesfully: $file');
 
-		callFunction('create', []);
+		// Default Variables
+		setVar('this', this);
+
+		setVar('Function_Stop', Function_Stop);
+		setVar('Function_Continue', Function_Continue);
+
+		setVar('platform', PlatformUtil.getPlatform());
+		setVar('version', Lib.application.meta.get('version'));
+
+		setVar('lua', {
+			version: Lua.version(),
+			versionJIT: Lua.versionJIT()
+		});
+
+		// Default Functions
+		setVariable('import', function(name:String, ?package:String = '') {
+			try {
+				var str:String = '';
+				if (package.length > 0)
+					str = package + ".";
+
+				setVar(name, Type.resolveClass(str + name));
+			} catch (e:Dynamic)
+				Lib.application.window.alert('Class at $name does not exist.', 'Lua Error!');
+		});
+
+		setCallback('trace', function(value:Dynamic) {
+			trace(value);
+		});
+
+		setCallback('stopScript', function() {
+			this.destroy();
+		});
+
+		if (this.execute)
+			callFunction('create', []);
 	}
 
 	/**
@@ -81,6 +107,9 @@ class LuaScript extends FlxBasic {
 	 * @param value how is gonna be?, like `var version:String = "v999";`
 	 */
 	public function setVar(name:String, value:Dynamic) {
+		if (lua == null)
+			return;
+
 		Convert.toLua(lua, value);
 		Lua.setglobal(lua, name);
 	}
@@ -100,5 +129,12 @@ class LuaScript extends FlxBasic {
 	public function deleteVar(name:String) {
 		Lua.pushnil(lua);
 		Lua.setglobal(lua, name);
+	}
+
+	override public function destroy() {
+		if (lua != null) {
+			Lua.close(lua);
+			lua = null;
+		}
 	}
 }
