@@ -8,7 +8,6 @@ import sys.io.Process;
 import backend.ALSoftConfig;
 #end
 import debug.FPS;
-
 #if (linux || mac)
 import lime.graphics.Image;
 #end
@@ -30,6 +29,7 @@ class Main extends openfl.display.Sprite {
 	public static var toast:ToastCore;
 
 	public static var framerate(get, set):Float;
+
 	static function set_framerate(cap:Float):Float {
 		if (FlxG.game != null) {
 			var _framerate:Int = Std.int(cap);
@@ -43,10 +43,15 @@ class Main extends openfl.display.Sprite {
 		}
 		return Lib.current.stage.frameRate = cap;
 	}
-	static function get_framerate():Float return Lib.current.stage.frameRate;
+
+	static function get_framerate():Float
+		return Lib.current.stage.frameRate;
 
 	public function new() {
 		super();
+
+		Log.haxe_trace = haxe.Log.trace;
+		haxe.Log.trace = Log.haxe_print;
 
 		#if windows
 		WindowsAPI.darkMode(true);
@@ -131,7 +136,8 @@ class Main extends openfl.display.Sprite {
 				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
 				'Error!');
 			#end
-			Sys.println('Uncaught Error: \n' + msg
+			Sys.println('Uncaught Error: \n'
+				+ msg
 				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues');
 			Sys.exit(1);
 		});
