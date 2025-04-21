@@ -944,7 +944,7 @@ class PlayState extends ExtendableState {
 				value = call;
 		}
 
-		for (i in 0...luaArray) {
+		for (i in 0...luaArray.length) {
 			final script:LuaScript = luaArray[i];
 			script.callFunction(funcName, args);
 		}
