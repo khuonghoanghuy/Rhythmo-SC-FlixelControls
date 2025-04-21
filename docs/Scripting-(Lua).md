@@ -1,3 +1,8 @@
+This page is a work in progress! <br>
+It's supposed to be documentation for the Lua Scripting API!
+
+For now, here's a basic template:
+```lua
 -- Called when the script is created.
 function create()
 end
@@ -47,3 +52,4 @@ end
 -- Called when the script is destroyed.
 function destroy()
 end
+```
