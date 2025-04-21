@@ -42,11 +42,11 @@ class LuaScript extends FlxBasic {
 		});
 
 		// Default Functions
-		setCallback('import', function(name:String, ?package:String = '') {
+		setCallback('import', function(name:String, ?packagePath:String = '') {
 			try {
 				var str:String = '';
-				if (package.length > 0)
-					str = package + ".";
+				if (packagePath.length > 0)
+					str = packagePath + ".";
 
 				setVar(name, Type.resolveClass(str + name));
 			} catch (e:Dynamic)
