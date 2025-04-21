@@ -944,19 +944,9 @@ class PlayState extends ExtendableState {
 				value = call;
 		}
 
-		callOnLuas(funcName, args);
-
-		return value;
-	}
-
-	private function callOnLuas(funcName:String, args:Array<Dynamic>):Dynamic {
-		var value:Dynamic = LuaScript.Function_Continue;
-
-		for (i in 0...luaArray.length) {
-			final call = luaArray[i].callFunction(funcName, args);
-			final bool:Bool = call == LuaScript.Function_Continue;
-			if (!bool && call != null)
-				value = call;
+		for (i in 0...luaArray) {
+			final script:LuaScript = luaArray[i];
+			script.callFunction(funcName, args);
 		}
 
 		return value;
