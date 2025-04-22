@@ -71,7 +71,7 @@ class SongSelectState extends ExtendableState {
 			try {
 				newItem.loadGraphic(Paths.image('covers/' + Paths.formatToSongPath(songListData.songs[i].name)));
 			} catch (e:Dynamic) {
-				trace('Error getting song cover: $e');
+				trace('Error getting song cover: $e', WARNING);
 				newItem.loadGraphic(Paths.image('covers/placeholder'));
 			}
 			newItem.scale.set(0.6, 0.6);
@@ -184,7 +184,7 @@ class SongSelectState extends ExtendableState {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 		} catch (e)
-			trace(e);
+			trace(e, ERROR);
 	}
 
 	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {

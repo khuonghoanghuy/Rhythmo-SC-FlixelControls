@@ -33,7 +33,7 @@ class AutoUpdater {
 		if (data != null && data.length > 0)
 			handleDownloadedData(data);
 		else {
-			trace("Download failed");
+			trace("Download failed", ERROR);
 			waitTxt.color = FlxColor.RED;
 			waitTxt.text = "Download failed. Please check your internet connection and try again.\n"
 				+ "Error details: Unable to connect to update server.\n"
@@ -44,7 +44,7 @@ class AutoUpdater {
 
 	private static function downloadWithRedirects(url:String, redirectCount:Int = 0):Bytes {
 		if (redirectCount > 5) {
-			trace("Too many redirects");
+			trace("Too many redirects", ERROR);
 			return null;
 		}
 
@@ -64,7 +64,7 @@ class AutoUpdater {
 				}
 			}
 
-			http.onError = (error:String) -> trace("HTTP Error: " + error);
+			http.onError = (error:String) -> trace("HTTP Error: " + error, ERROR);
 			http.customRequest(false, output);
 
 			if (result == null)
@@ -72,7 +72,7 @@ class AutoUpdater {
 
 			return result;
 		} catch (e:Dynamic) {
-			trace("Error downloading update: " + e);
+			trace("Error downloading update: " + e, ERROR);
 			return null;
 		}
 	}
@@ -91,7 +91,7 @@ class AutoUpdater {
 
 			extractUpdate(tempPath);
 		} catch (e:Dynamic) {
-			trace("Error saving update: " + e);
+			trace("Error saving update: " + e, ERROR);
 			FlxG.state.add(new FlxText(0, 0, FlxG.width, "Update save failed: " + e));
 		}
 	}
@@ -126,7 +126,7 @@ class AutoUpdater {
 			trace("Temporary zip file deleted");
 			finishUpdate();
 		} catch (e:Dynamic) {
-			trace("Error during extraction: " + e);
+			trace("Error during extraction: " + e, ERROR);
 			FlxG.state.add(new FlxText(0, 0, FlxG.width, "Extraction failed: " + e));
 		}
 	}

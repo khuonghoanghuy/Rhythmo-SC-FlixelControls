@@ -17,7 +17,7 @@ class InitialState extends ExtendableState {
 		Achievements.load();
 		HighScore.load();
 
-		trace('current platform: ${PlatformUtil.getPlatform()}');
+		trace('current platform: ${PlatformUtil.getPlatform()}', LOG);
 
 		#if UPDATE_CHECK
 		UpdateState.updateCheck();
@@ -25,7 +25,7 @@ class InitialState extends ExtendableState {
 		#if debug
 		trace('You\'re on a debug build, so no update check is needed.');
 		#else
-		trace('Sorry! No update support on: ${PlatformUtil.getPlatform()}!');
+		trace('Sorry! No update support on: ${PlatformUtil.getPlatform()}!', WARNING);
 		#end
 		#end
 

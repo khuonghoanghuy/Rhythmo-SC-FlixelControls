@@ -94,7 +94,7 @@ class DiscordClient {
 	}
 
 	private static function onError(errorCode:Int, message:cpp.ConstCharStar):Void {
-		trace('(Discord) Error ($errorCode: ${cast (message, String)})');
+		trace('(Discord) Error ($errorCode: ${cast (message, String)})', ERROR);
 	}
 }
 #end
