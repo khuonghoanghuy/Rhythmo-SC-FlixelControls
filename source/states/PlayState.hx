@@ -43,6 +43,9 @@ class PlayState extends ExtendableState {
 	public var scriptArray:Array<Hscript> = [];
 	public var luaArray:Array<LuaScript> = [];
 
+	public static var luaText:Map<String, FlxText> = new Map<String, FlxText>();
+	public static var luaImages:Map<String, FlxSprite> = new Map<String, FlxSprite>();
+
 	public var noteDirs:Array<String> = ['left', 'down', 'up', 'right'];
 	public var noteSplashes:FlxTypedGroup<NoteSplash>;
 	public var strumline:FlxTypedGroup<Note>;
