@@ -120,6 +120,6 @@ class CampaignState extends ExtendableState {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 		} catch (e)
-			trace(e, ERROR);
+			trace(e);
 	}
 }

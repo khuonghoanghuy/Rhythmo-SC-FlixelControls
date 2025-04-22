@@ -117,7 +117,7 @@ class ChartingState extends ExtendableState {
 					FlxTween.tween(savedText, {alpha: 0}, 0.75, {ease: FlxEase.quadOut});
 				});
 			} catch (e:Dynamic) {
-				trace("Error while saving chart: " + e, ERROR);
+				trace("Error while saving chart: " + e);
 			}
 		});
 		add(saveButton);
@@ -489,7 +489,7 @@ class ChartingState extends ExtendableState {
 	function onLoadError(event:IOErrorEvent):Void {
 		_file.removeEventListener(Event.COMPLETE, onLoadComplete);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onLoadError);
-		trace("Error loading song: " + event.text, ERROR);
+		trace("Error loading song: " + event.text);
 	}
 
 	function saveSong():Void {
@@ -523,7 +523,7 @@ class ChartingState extends ExtendableState {
 		_file.removeEventListener(Event.CANCEL, onSaveCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 		_file = null;
-		trace("Problem saving song", ERROR);
+		trace("Problem saving song");
 	}
 }
 
@@ -565,7 +565,7 @@ class LoadSongSubState extends ExtendableSubState {
 				ChartingState.song = Song.loadSongfromJson(Paths.formatToSongPath(input.text));
 				FlxG.resetState();
 			} catch (e:Dynamic) {
-				trace('Error loading chart!\n$e', ERROR);
+				trace('Error loading chart!\n$e');
 			}
 		} else if (Input.justPressed('exit'))
 			close();

@@ -50,9 +50,6 @@ class Main extends openfl.display.Sprite {
 	public function new() {
 		super();
 
-		Log.haxe_trace = haxe.Log.trace;
-		haxe.Log.trace = Log.haxe_print;
-
 		#if windows
 		WindowsAPI.darkMode(true);
 		#end

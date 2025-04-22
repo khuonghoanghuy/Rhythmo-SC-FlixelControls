@@ -25,14 +25,14 @@ class UpdateState extends ExtendableState {
 		http.onData = (data:String) -> {
 			var daRawJson:Dynamic = Json.parse(data);
 			if (daRawJson.version != Lib.application.meta.get('version')) {
-				trace('oh noo outdated!!', WARNING);
+				trace('oh noo outdated!!');
 				daJson = daRawJson;
 				mustUpdate = true;
 			} else
 				mustUpdate = false;
 		}
 
-		http.onError = (error) -> trace('error: $error', ERROR);
+		http.onError = (error) -> trace('error: $error');
 		http.request();
 	}
 

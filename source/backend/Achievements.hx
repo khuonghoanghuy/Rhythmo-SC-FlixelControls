@@ -39,13 +39,13 @@ class Achievements {
 							TJSON.parse(Paths.getText(Paths.json('achievements/$achievementName')));
 							trace("Achievement '" + achievement + "' loaded");
 						} catch (e:Dynamic) {
-							trace('Error loading achievement: $e', ERROR);
+							trace('Error loading achievement: $e');
 						}
 					}
 				}
 			}
 		} catch (e:Dynamic) {
-			trace(e, ERROR);
+			trace(e);
 		}
 	}
 
@@ -59,7 +59,7 @@ class Achievements {
 			FlxG.save.data.achievementStatsMap = achievementStatsMap;
 			FlxG.save.flush();
 
-			trace('achievement earned: $ach!\nmore info:\n $stats', DEBUG);
+			trace('achievement earned: $ach!\nmore info:\n $stats');
 		}
 	}
 
@@ -97,7 +97,7 @@ class Achievements {
 			FlxG.save.data.achievementStatsMap = achievementStatsMap;
 			FlxG.save.flush();
 
-			trace('achievement $ach removed!', DEBUG);
+			trace('achievement $ach removed!');
 		}
 	}
 

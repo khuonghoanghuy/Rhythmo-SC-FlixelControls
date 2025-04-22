@@ -276,7 +276,7 @@ class CreditsIcon extends GameSprite {
 		try {
 			loadGraphic(Paths.image('credits/$icon'));
 		} catch (e:Dynamic) {
-			trace('Error getting credit icon: $e', WARNING);
+			trace('Error getting credit icon: $e');
 			loadGraphic(Paths.image('credits/placeholder'));
 		}
 

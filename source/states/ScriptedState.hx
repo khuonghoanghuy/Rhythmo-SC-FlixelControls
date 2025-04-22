@@ -36,7 +36,7 @@ class ScriptedState extends ExtendableState {
 			scriptSet('openSubState', openSubState);
 		} catch (e:Dynamic) {
 			script = null;
-			trace('Error while getting script: $path!\n$e', ERROR);
+			trace('Error while getting script: $path!\n$e');
 		}
 
 		scriptExecute('new', args);
@@ -105,7 +105,7 @@ class ScriptedState extends ExtendableState {
 		try {
 			script?.executeFunc(func, args);
 		} catch (e:Dynamic) {
-			trace('Error executing $func!\n$e', ERROR);
+			trace('Error executing $func!\n$e');
 		}
 	}
 }

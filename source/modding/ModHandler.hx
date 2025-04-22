@@ -51,7 +51,7 @@ class ModHandler {
 
 		loadMods(getMods());
 		#else
-		trace("Polymod reloading is not supported on your Platform!", WARNING);
+		trace("Polymod reloading is not supported on your Platform!");
 		#end
 	}
 
@@ -138,11 +138,11 @@ class ModHandler {
 			default:
 				switch (error.severity) {
 					case NOTICE:
-						trace(error.message, LOG);
+						trace(error.message);
 					case WARNING:
-						trace(error.message, WARNING);
+						trace(error.message);
 					case ERROR:
-						trace(error.message, ERROR);
+						trace(error.message);
 				}
 		}
 	}

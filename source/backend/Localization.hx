@@ -49,7 +49,7 @@ class Localization {
 		try {
 			jsonContent = Paths.getText(path(language));
 		} catch (e:Dynamic) {
-			trace('language file not found: $e', ERROR);
+			trace('language file not found: $e');
 			jsonContent = Paths.getText(path(DEFAULT_LANGUAGE));
 		}
 

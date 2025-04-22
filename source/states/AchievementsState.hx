@@ -189,7 +189,7 @@ class AchievementIcon extends GameSprite {
 			try {
 				loadGraphic(Paths.image('achievements/$ach'));
 			} catch (e:Dynamic) {
-				trace('Error getting achievement icon: $e', WARNING);
+				trace('Error getting achievement icon: $e');
 				loadGraphic(Paths.image('achievements/unknown'));
 			}
 		} else
