@@ -50,6 +50,13 @@ class Main extends openfl.display.Sprite {
 	public function new() {
 		super();
 
+		#if desktop
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#if cpp
+		untyped __global__.__hxcpp_set_critical_error_handler(onCrash);
+		#end
+		#end
+
 		#if windows
 		WindowsAPI.darkMode(true);
 		#end
@@ -63,81 +70,6 @@ class Main extends openfl.display.Sprite {
 
 		#if (linux || mac)
 		Lib.current.stage.window.setIcon(Image.fromFile("icon.png"));
-		#end
-
-		#if desktop
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, (e:UncaughtErrorEvent) -> {
-			var stack:Array<String> = [];
-			stack.push(e.error);
-
-			for (stackItem in CallStack.exceptionStack(true)) {
-				switch (stackItem) {
-					case CFunction:
-						stack.push('C Function');
-					case Module(m):
-						stack.push('Module ($m)');
-					case FilePos(s, file, line, column):
-						stack.push('$file (line $line)');
-					case Method(classname, method):
-						stack.push('$classname (method $method)');
-					case LocalFunction(name):
-						stack.push('Local Function ($name)');
-				}
-			}
-
-			e.preventDefault();
-			e.stopPropagation();
-			e.stopImmediatePropagation();
-
-			final msg:String = stack.join('\n');
-
-			#if sys
-			try {
-				if (!FileSystem.exists('./crash/'))
-					FileSystem.createDirectory('./crash/');
-
-				File.saveContent('./crash/'
-					+ Lib.application.meta.get('file')
-					+ '-'
-					+ Date.now().toString().replace(' ', '-').replace(':', "'")
-					+ '.txt',
-					msg
-					+ '\n');
-			} catch (e:Dynamic) {
-				Sys.println("Error!\nCouldn't save the crash dump because:\n" + e);
-			}
-			#end
-
-			#if (flixel < "6.0.0")
-			FlxG.bitmap.dumpCache();
-			#end
-			FlxG.bitmap.clearCache();
-
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
-
-			FlxG.sound.play(Paths.sound('error'));
-
-			#if FUTURE_DISCORD_RPC
-			DiscordClient.shutdown();
-			#end
-
-			#if windows
-			WindowsAPI.messageBox('Error!',
-				'Uncaught Error: \n' + msg +
-				'\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
-				MSG_ERROR);
-			#else
-			Lib.application.window.alert('Uncaught Error: \n'
-				+ msg
-				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
-				'Error!');
-			#end
-			Sys.println('Uncaught Error: \n'
-				+ msg
-				+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues');
-			Sys.exit(1);
-		});
 		#end
 
 		#if FUTURE_DISCORD_RPC
@@ -213,5 +145,78 @@ class Main extends openfl.display.Sprite {
 
 			FlxG.drawFramerate = Std.int(framerate);
 		}
+	}
+
+	private function onCrash(e:UncaughtErrorEvent):Void {
+		var stack:Array<String> = [];
+		stack.push(e.error);
+
+		for (stackItem in CallStack.exceptionStack(true)) {
+			switch (stackItem) {
+				case CFunction:
+					stack.push('C Function');
+				case Module(m):
+					stack.push('Module ($m)');
+				case FilePos(s, file, line, column):
+					stack.push('$file (line $line)');
+				case Method(classname, method):
+					stack.push('$classname (method $method)');
+				case LocalFunction(name):
+					stack.push('Local Function ($name)');
+			}
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		final msg:String = stack.join('\n');
+
+		#if sys
+		try {
+			if (!FileSystem.exists('./crash/'))
+				FileSystem.createDirectory('./crash/');
+
+			File.saveContent('./crash/'
+				+ Lib.application.meta.get('file')
+				+ '-'
+				+ Date.now().toString().replace(' ', '-').replace(':', "'")
+				+ '.txt',
+				msg
+				+ '\n');
+		} catch (e:Dynamic) {
+			Sys.println("Error!\nCouldn't save the crash dump because:\n" + e);
+		}
+		#end
+
+		#if (flixel < "6.0.0")
+		FlxG.bitmap.dumpCache();
+		#end
+		FlxG.bitmap.clearCache();
+
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		FlxG.sound.play(Paths.sound('error'));
+
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.shutdown();
+		#end
+
+		#if windows
+		WindowsAPI.messageBox('Error!',
+			'Uncaught Error: \n' + msg +
+			'\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
+			MSG_ERROR);
+		#else
+		Lib.application.window.alert('Uncaught Error: \n'
+			+ msg
+			+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
+			'Error!');
+		#end
+		Sys.println('Uncaught Error: \n'
+			+ msg
+			+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues');
+		Sys.exit(1);
 	}
 }
