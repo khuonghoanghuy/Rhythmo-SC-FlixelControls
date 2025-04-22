@@ -23,7 +23,7 @@ class Log {
 			print(value, null, pos_infos);
 		else {
 			var type:PrintType = pos_infos.customParams.copy()[0];
-			pos_infos.customParams = null; // so no stupid shit in the end of prints :D
+			pos_infos.customParams = null;
 			print(Std.string(value), type, pos_infos);
 		}
 	}
