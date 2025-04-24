@@ -53,6 +53,10 @@ class LuaScript extends FlxBasic {
 			trace(value);
 		});
 
+		setCallback('print', function(value:Dynamic) {
+			trace(value);
+		});
+
 		setCallback('stopScript', function() {
 			this.destroy();
 		});
@@ -384,10 +388,10 @@ class LuaScript extends FlxBasic {
 	 * ```
 	 * @param name a function name
 	 * @param func make them how is gonna work, like how `FlxG.resizeWindow(640, 480);`
-	 * @return Lua_helper.setCallback(lua, name, func)
+	 * @return Lua_helper.add_callback(lua, name, func)
 	 */
 	public function setCallback(name:String, func:Dynamic)
-		return Lua_helper.setCallback(lua, name, func);
+		return Lua_helper.add_callback(lua, name, func);
 
 	/**
 	 * Set a variable, in script, you will be able to code in lua script like:

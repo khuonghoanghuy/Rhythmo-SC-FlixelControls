@@ -966,7 +966,7 @@ class PlayState extends ExtendableState {
 		var value:Dynamic = LuaScript.Function_Continue;
 
 		for (i in 0...luaArray.length) {
-			var ret:Dynamic = luaArray[i].call(funcName, args);
+			var ret:Dynamic = luaArray[i].callFunction(funcName, args);
 			if (ret != LuaScript.Function_Continue)
 				value = ret;
 		}
