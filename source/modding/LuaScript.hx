@@ -40,6 +40,9 @@ class LuaScript extends FlxBasic {
 		trace('Script Loaded Succesfully: $file');
 
 		// Default Variables
+		setVar('Function_Stop', Function_Stop);
+		setVar('Function_Continue', Function_Continue);
+
 		setVar('platform', PlatformUtil.getPlatform());
 		setVar('version', Lib.application.meta.get('version'));
 
@@ -52,7 +55,6 @@ class LuaScript extends FlxBasic {
 		setCallback('trace', function(value:Dynamic) {
 			trace(value);
 		});
-
 		setCallback('print', function(value:Dynamic) {
 			trace(value);
 		});
@@ -64,15 +66,12 @@ class LuaScript extends FlxBasic {
 		setCallback("setVar", function(name:String, value:Dynamic) {
 			return setVar(name, value);
 		});
-
 		setCallback("getVar", function(name:String) {
 			return getVar(name);
 		});
-
 		setCallback("deleteVar", function(name:String) {
 			return deleteVar(name);
 		});
-
 		setCallback("callFunction", function(name:String, args:Array<Dynamic>) {
 			return callFunction(name, args);
 		});
@@ -83,18 +82,24 @@ class LuaScript extends FlxBasic {
 
 		// PlayState Stuff
 		setVar("score", game.score);
+		setVar("combo", game.combo);
 		setVar("misses", game.misses);
+		setVar("health", game.health);
 		setVar("accuracy", game.accuracy);
 
 		setVar("curBPM", Conductor.bpm);
+		setVar("bpm", game.song.bpm);
 		setVar("crochet", Conductor.crochet);
 		setVar("stepCrochet", Conductor.stepCrochet);
 		setVar("songPos", Conductor.songPosition);
 		setVar("curStep", game.curStep);
 		setVar("curBeat", game.curBeat);
 
-		setCallback("setScore", function(score:Int) {
-			game.score = score;
+		setCallback("addScore", function(value:Int = 0) {
+			game.score += value;
+		});
+		setCallback("addMisses", function(value:Int = 0) {
+			game.misses += value;
 		});
 
 		// Text Functions
@@ -173,7 +178,7 @@ class LuaScript extends FlxBasic {
 		// Image Functions
 		setCallback("makeSprite", function(tag:String, x:Float, y:Float, paths:String) {
 			if (!PlayState.luaImages.exists(tag)) {
-				var sprite = new FlxSprite(x, y);
+				var sprite = new GameSprite(x, y);
 				sprite.loadGraphic(Paths.image(paths));
 				sprite.active = true;
 				PlayState.luaImages.set(tag, sprite);
@@ -181,7 +186,7 @@ class LuaScript extends FlxBasic {
 		});
 		setCallback("makeAnimationSprite", function(tag:String, x:Float, y:Float, paths:String) {
 			if (!PlayState.luaImages.exists(tag)) {
-				var sprite = new FlxSprite(x, y);
+				var sprite = new GameSprite(x, y);
 				sprite.frames = Paths.spritesheet(paths, SPARROW);
 				PlayState.luaImages.set(tag, sprite);
 			}
@@ -321,6 +326,11 @@ class LuaScript extends FlxBasic {
 		setCallback("getSaveData", function(name:String) {
 			return FlxG.save.data.get(name);
 		});
+		setCallback("colorFromHex", function(color:String) {
+			if (!color.startsWith('0x'))
+				color = '0xff' + color;
+			return Std.parseInt(color);
+		});
 
 		if (execute)
 			callFunction('create', []);
@@ -430,6 +440,7 @@ class LuaScript extends FlxBasic {
 		if (lua != null) {
 			Lua.close(lua);
 			lua = null;
-		}
+		} else
+			return;
 	}
 }
