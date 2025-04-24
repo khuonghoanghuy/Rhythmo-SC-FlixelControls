@@ -233,11 +233,13 @@ class PlayState extends ExtendableState {
 	function startCountdown() {
 		if (startedCountdown) {
 			callOnScripts('startCountdown', []);
+			callOnLuas('startCountdown', []);
 			return;
 		}
 
 		var ret:Dynamic = callOnScripts('startCountdown', []);
-		if (ret != Hscript.Function_Stop) {
+		var retLua:Dynamic = callOnLuas('startCountdown', []);
+		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			startedCountdown = true;
 			Conductor.songPosition = -Conductor.crochet * 5;
 			FlxG.sound.play(Paths.sound('cDown3'));
@@ -302,6 +304,7 @@ class PlayState extends ExtendableState {
 
 	override function update(elapsed:Float) {
 		callOnScripts('update', [elapsed]);
+		callOnLuas('update', [elapsed]);
 
 		super.update(elapsed);
 
@@ -385,6 +388,7 @@ class PlayState extends ExtendableState {
 
 		lastStepHit = curStep;
 		callOnScripts('stepHit', [curStep]);
+		callOnLuas('stepHit', [curStep]);
 
 		#if FUTURE_DISCORD_RPC
 		DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
@@ -403,6 +407,7 @@ class PlayState extends ExtendableState {
 
 		lastBeatHit = curBeat;
 		callOnScripts('beatHit', [curBeat]);
+		callOnLuas('beatHit', [curBeat]);
 	}
 
 	override function openSubState(SubState:FlxSubState) {
@@ -442,6 +447,7 @@ class PlayState extends ExtendableState {
 
 			paused = false;
 			callOnScripts('resume', []);
+			callOnLuas('resume', []);
 		}
 		super.closeSubState();
 
@@ -458,6 +464,7 @@ class PlayState extends ExtendableState {
 		}
 
 		callOnScripts('onFocus', []);
+		callOnLuas('onFocus', []);
 		super.onFocus();
 	}
 
@@ -466,13 +473,15 @@ class PlayState extends ExtendableState {
 			DiscordClient.changePresence('Paused - ' + detailsText, song.song, 'icon');
 
 		callOnScripts('onFocusLost', []);
+		callOnLuas('onFocusLost', []);
 		super.onFocusLost();
 	}
 	#end
 
 	function pause() {
 		var ret:Dynamic = callOnScripts('pause', []);
-		if (ret != Hscript.Function_Stop) {
+		var retLua:Dynamic = callOnLuas('pause', []);
+		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			persistentUpdate = false;
 			persistentDraw = true;
 
@@ -721,6 +730,7 @@ class PlayState extends ExtendableState {
 		}
 
 		callOnScripts('noteHit', [note, rating]);
+		callOnLuas('noteHit', [note, rating]);
 		destroyNote(note);
 	}
 
@@ -731,6 +741,7 @@ class PlayState extends ExtendableState {
 		health -= 0.1;
 		misses++;
 		callOnScripts('noteMiss', [direction]);
+		callOnLuas('noteMiss', [direction]);
 	}
 
 	function generateRank():String {
@@ -761,7 +772,8 @@ class PlayState extends ExtendableState {
 
 	function endSong() {
 		var ret:Dynamic = callOnScripts('endSong', []);
-		if (ret != Hscript.Function_Stop) {
+		var retLua:Dynamic = callOnLuas('endSong', []);
+		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			timeTxt.visible = timeBar.visible = false;
 			canPause = false;
 
@@ -947,9 +959,16 @@ class PlayState extends ExtendableState {
 				value = call;
 		}
 
+		return value;
+	}
+
+	private function callOnLuas(funcName:String, args:Array<Dynamic>):Dynamic {
+		var value:Dynamic = LuaScript.Function_Continue;
+
 		for (i in 0...luaArray.length) {
-			final script:LuaScript = luaArray[i];
-			script.callFunction(funcName, args);
+			var ret:Dynamic = luaArray[i].call(funcName, args);
+			if (ret != LuaScript.Function_Continue)
+				value = ret;
 		}
 
 		return value;
