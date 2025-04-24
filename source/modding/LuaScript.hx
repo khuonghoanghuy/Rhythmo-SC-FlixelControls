@@ -88,7 +88,6 @@ class LuaScript extends FlxBasic {
 		setVar("accuracy", game.accuracy);
 
 		setVar("curBPM", Conductor.bpm);
-		setVar("bpm", game.song.bpm);
 		setVar("crochet", Conductor.crochet);
 		setVar("stepCrochet", Conductor.stepCrochet);
 		setVar("songPos", Conductor.songPosition);
