@@ -9,7 +9,7 @@ class LuaScript extends FlxBasic {
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
-	public static var lua:State = null;
+	public var lua:State = null;
 
 	private var game:PlayState;
 
@@ -88,6 +88,7 @@ class LuaScript extends FlxBasic {
 		setVar("accuracy", game.accuracy);
 
 		setVar("curBPM", Conductor.bpm);
+		setVar("bpm", PlayState.song.bpm);
 		setVar("crochet", Conductor.crochet);
 		setVar("stepCrochet", Conductor.stepCrochet);
 		setVar("songPos", Conductor.songPosition);
@@ -100,6 +101,10 @@ class LuaScript extends FlxBasic {
 		setCallback("addMisses", function(value:Int = 0) {
 			game.misses += value;
 		});
+
+		// Screen Stuff
+		setVar("screenWidth", FlxG.width);
+		setVar("screenHeight", FlxG.height);
 
 		// Text Functions
 		setCallback("makeText", function(tag:String, x:Float = 0, y:Float = 0, fieldWidth:Int = 0, text:String = "", size:Int = 8) {
@@ -169,8 +174,26 @@ class LuaScript extends FlxBasic {
 			return Reflect.getProperty(getText, splitDot[splitDot.length - 1]);
 		});
 		setCallback("addText", function(tag:String) {
-			if (PlayState.luaText.exists(tag))
+			if (!PlayState.luaText.exists(tag))
 				return PlayState.instance.add(PlayState.luaText.get(tag));
+			return null;
+		});
+		setCallback("removeText", function(tag:String) {
+			if (PlayState.luaText.exists(tag)) {
+				var text:FlxText = PlayState.luaText.get(tag);
+				text.kill();
+				return PlayState.instance.remove(text);
+			}
+			return null;
+		});
+		setCallback("destroyText", function(tag:String) {
+			if (PlayState.luaText.exists(tag))
+				return PlayState.luaText.get(tag).destroy();
+			return null;
+		});
+		setCallback("reviveText", function(tag:String) {
+			if (PlayState.luaText.exists(tag))
+				return PlayState.luaText.get(tag).revive();
 			return null;
 		});
 
@@ -238,12 +261,26 @@ class LuaScript extends FlxBasic {
 				return PlayState.instance.add(PlayState.luaImages.get(tag));
 			return null;
 		});
+		setCallback("removeSprite", function(tag:String) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite:FlxSprite = PlayState.luaImages.get(tag);
+				sprite.kill();
+				return PlayState.instance.remove(sprite);
+			}
+		});
+		setCallback("destroySprite", function(tag:String) {
+			if (PlayState.luaImages.exists(tag))
+				return PlayState.luaImages.get(tag).destroy();
+		});
+		setCallback("reviveSprite", function(tag:String) {
+			if (PlayState.luaImages.exists(tag))
+				return PlayState.luaImages.get(tag).revive();
+		});
 
 		// Sound Functions
 		setCallback("playSound", function(name:String, volume:Float = 1, loop:Bool = false):FlxSound {
 			return FlxG.sound.play(Paths.sound(name), volume, loop);
 		});
-
 		setCallback("playMusic", function(name:String, volume:Float = 1, loop:Bool = false) {
 			return FlxG.sound.playMusic(Paths.music(name), volume, loop);
 		});
