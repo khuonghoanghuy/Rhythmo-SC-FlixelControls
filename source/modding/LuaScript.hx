@@ -189,12 +189,10 @@ class LuaScript extends FlxBasic {
 		setCallback("destroyText", function(tag:String) {
 			if (PlayState.luaText.exists(tag))
 				return PlayState.luaText.get(tag).destroy();
-			return null;
 		});
 		setCallback("reviveText", function(tag:String) {
 			if (PlayState.luaText.exists(tag))
 				return PlayState.luaText.get(tag).revive();
-			return null;
 		});
 
 		// Image Functions
@@ -267,6 +265,7 @@ class LuaScript extends FlxBasic {
 				sprite.kill();
 				return PlayState.instance.remove(sprite);
 			}
+			return null;
 		});
 		setCallback("destroySprite", function(tag:String) {
 			if (PlayState.luaImages.exists(tag))
