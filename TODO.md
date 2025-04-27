@@ -4,7 +4,7 @@
 * [ ] Maybe actually finish the charts??
 * [X] Discord Rich Presence Support
 * [ ] Improve Chart Editor
-* [ ] Lua Script Support
+* [X] Lua Script Support
 * [X] Campaign Mode
 * [X] Noteskins
 * [ ] Use `hscript-iris` instead of `hscript` (broken)

@@ -1,5 +1,6 @@
 Scripts in Rhythmo can be active in only one song, or be applied globally to every song. You can use scripts to make custom backgrounds, add special functions, make cool mechanics, etc.
 
+# HScript
 Your script should either be located in `assets/scripts/[name].hxs`, or in `assets/songs/[song-name]/[name].hxs`. <br>
 However, if your script is a scripted state or substate, it should be located in `assets/classes/[name].hxs`.
 
@@ -76,6 +77,7 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `Assets`
 * `Bar`
 * `Conductor`
+* `DiscordClient`
 * `ExtendableState`
 * `ExtendableSubState`
 * `File`
@@ -107,6 +109,7 @@ Otherwise, here is a list of the current classes you can use that are already im
 * `Json`
 * `Lib`
 * `Localization`
+* `LuaScript`
 * `Main`
 * `ModHandler`
 * `Note`
@@ -266,6 +269,55 @@ function update(elapsed:Float) {
 		FlxG.camera.scroll.y + FlxG.camera.height
 	]);
 }
+```
+
+# Lua
+The Lua scripting documentation is a work in progress! <br>
+For now, here's a basic template:
+```lua
+function create()
+	-- Called when the script is created.
+end
+
+function startCountdown()
+	-- Called when the countdown starts in PlayState.
+end
+
+function update(elapsed)
+	-- Called every frame.
+end
+
+function beatHit(curBeat)
+	-- Called every beat hit in PlayState.
+end
+
+function stepHit(curStep)
+	-- Called every step hit in PlayState.
+end
+
+function pause()
+	-- Called when the game is paused.
+end
+
+function resume()
+	-- Called when the game is resumed.
+end
+
+function noteHit(note, rating)
+	-- Called when a note is hit.
+end
+
+function noteMiss(direction)
+	-- Called when a note is missed.
+end
+
+function endSong()
+	-- Called when the song ends.
+end
+
+function destroy()
+	-- Called when the script is destroyed.
+end
 ```
 
 ## Need Help?

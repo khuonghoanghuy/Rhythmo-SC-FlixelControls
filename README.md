@@ -13,6 +13,14 @@ Mostly based on [Friday Night Funkin'](https://github.com/FunkinCrew/Funkin/), g
 > [!TIP]
 > The latest builds of the game can be found in the [Actions](https://github.com/JoaTH-Team/Rhythmo-SC/actions) tab.
 
+## Compiling
+**USE THE LINK ABOVE IF YOU JUST WANT TO PLAY THE GAME!**
+
+If you want to compile the game, follow the [compilation guide](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Building-the-Game).
+
+## Modding
+Feel free to learn how to mod the game by reading the [documentation](https://github.com/JoaTH-Team/Rhythmo-SC/wiki) and guides to modding.
+
 ## Features
 * Modding System (using [Polymod](https://github.com/larsiusprime/polymod/))
 * Softcoded Song / Credits Menu
@@ -26,9 +34,6 @@ Mostly based on [Friday Night Funkin'](https://github.com/FunkinCrew/Funkin/), g
 * Shaders
 
 Additionally, you can check out the planned features in the [To-Do List](/TODO.md).
-
-## Modding
-Feel free to learn how to mod the game by reading the [documentation](https://github.com/JoaTH-Team/Rhythmo-SC/wiki) and guides to modding.
 
 ## Credits
 ### Main Team
