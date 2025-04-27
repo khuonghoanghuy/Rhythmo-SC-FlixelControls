@@ -320,5 +320,5 @@ function destroy()
 end
 ```
 
-## Need Help?
+# Need Help?
 If you need any general help or something goes wrong with your script, report an issue [here](https://github.com/Joalor64GH/Rhythmo-SC/issues).
