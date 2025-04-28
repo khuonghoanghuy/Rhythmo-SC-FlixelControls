@@ -122,6 +122,7 @@ class LuaScript extends FlxBasic {
 		setCallback("setTextColor", function(tag:String, color:String) {
 			if (PlayState.luaText.exists(tag))
 				return PlayState.luaText.get(tag).color = FlxColor.fromString("0xFF" + color.toUpperCase());
+			return null;
 		});
 		setCallback("setTextVisible", function(tag:String, visible:Bool) {
 			if (PlayState.luaText.exists(tag))
@@ -140,6 +141,7 @@ class LuaScript extends FlxBasic {
 		setCallback("setTextString", function(tag:String, newTxt:String) {
 			if (PlayState.luaText.exists(tag))
 				return PlayState.luaText.get(tag).text = newTxt;
+			return null;
 		});
 		setCallback("setTextFont", function(tag:String, font:String) {
 			if (PlayState.luaText.exists(tag))
@@ -161,6 +163,7 @@ class LuaScript extends FlxBasic {
 				}
 				return PlayState.luaText.get(tag).alignment = align;
 			}
+			return null;
 		});
 		setCallback("setFormat", function(tag:String, font:String, size:Int, color:Int, reAliAsText:String, reBorAsText:String, borColor:Int) {
 			if (PlayState.luaText.exists(tag)) {
