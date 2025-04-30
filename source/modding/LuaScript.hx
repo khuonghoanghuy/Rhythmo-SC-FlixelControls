@@ -1,9 +1,7 @@
 package modding;
 
-import llua.Convert;
-import llua.Lua;
-import llua.LuaL;
-import llua.State;
+import llua.*;
+import llua.Lua.Lua_helper;
 
 class LuaScript extends FlxBasic {
 	public static var Function_Stop:Dynamic = 1;
@@ -106,115 +104,109 @@ class LuaScript extends FlxBasic {
 		setVar("screenWidth", FlxG.width);
 		setVar("screenHeight", FlxG.height);
 
-		// Text Functions
-		setCallback("makeText", function(tag:String, x:Float = 0, y:Float = 0, fieldWidth:Int = 0, text:String = "", size:Int = 8) {
-			if (!PlayState.luaText.exists(tag)) {
-				var text = new FlxText(x, y, fieldWidth, text, size);
-				text.active = true;
-				PlayState.luaText.set(tag, text);
+		// Main Functions
+		setCallback("createObject", function(type:String, name:String, config:Dynamic) {
+			switch (type) {
+				case "sprite":
+					var sprite:FlxSprite = new GameSprite(config.x, config.y);
+					setCodeWithCheckNull(config.image, image -> sprite.loadGraphic(Paths.image(image)));
+					sprite.active = true;
+					PlayState.luaImages.set(name, sprite);
+				case "text":
+					var text:FlxText = new FlxText(config.x, config.y, config.width, config.text, config.size);
+					text.active = true;
+					PlayState.luaText.set(name, text);
+				default:
+					var object:FlxObject = new FlxObject(config.x, config.y, config.width, config.height);
+					object.active = true;
+					PlayState.luaObjects.set(name, object);
 			}
 		});
-		setCallback("setTextSize", function(tag:String, size:Int = 8) {
-			if (PlayState.luaText.exists(tag))
-				return PlayState.luaText.get(tag).size = size;
-			return PlayState.luaText.get(tag).size = size;
+		setCallback("addObject", function(name:String) {
+			if (PlayState.luaImages.exists(name))
+				PlayState.instance.add(PlayState.luaImages.get(name));
+			else if (PlayState.luaText.exists(name))
+				PlayState.instance.add(PlayState.luaText.get(name));
+			else
+				PlayState.instance.add(PlayState.luaObjects.get(name));
 		});
-		setCallback("setTextFont", function(tag:String, font:String) {
-			if (PlayState.luaText.exists(tag))
-				return PlayState.luaText.get(tag).font = Paths.font(font);
-			return null;
+		setCallback("removeObject", function(name:String) {
+			if (PlayState.luaImages.exists(name))
+				PlayState.instance.remove(PlayState.luaImages.get(name));
+			else if (PlayState.luaText.exists(name))
+				PlayState.instance.remove(PlayState.luaText.get(name));
+			else
+				PlayState.instance.remove(PlayState.luaObjects.get(name));
 		});
-		setCallback("setFormat", function(tag:String, font:String, size:Int, color:Int, reAliAsText:String, reBorAsText:String, borColor:Int) {
-			if (PlayState.luaText.exists(tag)) {
-				var reAli:FlxTextAlign;
-				switch (reAliAsText) {
-					case "left":
-						reAli = LEFT;
-					case "center":
-						reAli = CENTER;
-					case "right":
-						reAli = RIGHT;
-					default:
-						reAli = LEFT;
-				}
-				var reBor:FlxTextBorderStyle;
-				switch (reBorAsText) {
-					case "outline":
-						reBor = OUTLINE;
-					case "outline_fast":
-						reBor = OUTLINE_FAST;
-					default:
-						reBor = OUTLINE;
-				}
-				PlayState.luaText.get(tag).setFormat(Paths.font(font), size, color, reAli, reBor, borColor);
-			}
-		});
-		setCallback("setTextProperty", function(tag:String, property:String, value:Dynamic) {
-			if (PlayState.luaText.exists(tag)) {
-				var text = PlayState.luaText.get(tag);
-				var propertyParts:Array<String> = property.split(".");
-				if (propertyParts.length > 1) {
-					var subProperty:String = propertyParts[0];
-					var subValue:String = propertyParts[1];
-					Reflect.setProperty(Reflect.getProperty(text, subProperty), subValue, value);
-				} else
-					Reflect.setProperty(text, property, value);
-			}
-		});
-		setCallback("getTextProperty", function(tag:String, property:String) {
-			var splitDot:Array<String> = property.split('.');
-			var getText:Dynamic = null;
-			if (splitDot.length > 1) {
-				if (PlayState.luaText.exists(splitDot[0]))
-					getText = PlayState.luaText.get(splitDot[0]);
-				for (i in 1...splitDot.length - 1)
-					getText = Reflect.getProperty(getText, splitDot[i]);
-				return Reflect.getProperty(getText, splitDot[splitDot.length - 1]);
-			}
-			return Reflect.getProperty(getText, splitDot[splitDot.length - 1]);
-		});
-		setCallback("addText", function(tag:String) {
-			if (!PlayState.luaText.exists(tag))
-				return PlayState.instance.add(PlayState.luaText.get(tag));
-			return null;
-		});
-		setCallback("removeText", function(tag:String) {
-			if (PlayState.luaText.exists(tag)) {
-				var text:FlxText = PlayState.luaText.get(tag);
-				text.kill();
-				return PlayState.instance.remove(text);
-			}
-			return null;
-		});
-		setCallback("destroyText", function(tag:String) {
-			if (PlayState.luaText.exists(tag))
-				return PlayState.luaText.get(tag).destroy();
-		});
-		setCallback("reviveText", function(tag:String) {
-			if (PlayState.luaText.exists(tag))
-				return PlayState.luaText.get(tag).revive();
+		setCallback("insertObject", function(name:String, pos:Int = 0) {
+			if (PlayState.luaImages.exists(name))
+				PlayState.instance.insert(pos, PlayState.luaImages.get(name));
+			else if (PlayState.luaText.exists(name))
+				PlayState.instance.insert(pos, PlayState.luaText.get(name));
+			else
+				PlayState.instance.insert(pos, PlayState.luaObjects.get(name));
 		});
 
-		// Image Functions
-		setCallback("makeSprite", function(tag:String, x:Float, y:Float, paths:String) {
-			if (!PlayState.luaImages.exists(tag)) {
-				var sprite = new GameSprite(x, y);
-				sprite.loadGraphic(Paths.image(paths));
-				sprite.active = true;
-				PlayState.luaImages.set(tag, sprite);
+		setCallback("configText", function(name:String, config:Dynamic) {
+			if (PlayState.luaText.exists(name)) {
+				var text:FlxText = PlayState.luaText.get(name);
+				setCodeWithCheckNull(config.x, x -> text.x = x);
+				setCodeWithCheckNull(config.y, y -> text.y = y);
+				setCodeWithCheckNull(config.width, width -> text.width = width);
+				setCodeWithCheckNull(config.text, txt -> text.text = txt);
+				setCodeWithCheckNull(config.size, size -> text.size = size);
+				setCodeWithCheckNull(config.color, color -> text.color = getColorName(color));
+				setCodeWithCheckNull(config.alignment, align -> text.alignment = getAlignmentName(align));
+				setCodeWithCheckNull(config.alpha, alpha -> text.alpha = alpha);
+				setCodeWithCheckNull(config.scale, scale -> text.scale.set(scale.x, scale.y));
+				setCodeWithCheckNull(config.angle, angle -> text.angle = angle);
+				setCodeWithCheckNull(config.visible, visible -> text.visible = visible);
+				setCodeWithCheckNull(config.active, active -> text.active = active);
+				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> text.scrollFactor.set(scrollFactor.x, scrollFactor.y));
+				setCodeWithCheckNull(config.antialiasing, antialiasing -> text.antialiasing = antialiasing);
+				setCodeWithCheckNull(config.font, font -> text.font = Paths.font(font));
+				setCodeWithCheckNull(config.borderSize, borderSize -> text.borderSize = borderSize);
+				setCodeWithCheckNull(config.borderColor, borderColor -> text.borderColor = getColorName(borderColor));
+				setCodeWithCheckNull(config.borderStyle, borderStyle -> text.borderStyle = getBorderStyleName(borderStyle));
+				setCodeWithCheckNull(config.borderQuality, borderQuality -> text.borderQuality = borderQuality);
 			}
 		});
+		setCallback("configSprite", function(name:String, config:Dynamic) {
+			if (PlayState.luaImages.exists(name)) {
+				var sprite:FlxSprite = PlayState.luaImages.get(name);
+				setCodeWithCheckNull(config.image, img -> sprite.loadGraphic(Paths.image(img)));
+				setCodeWithCheckNull(config.x, x -> sprite.x = x);
+				setCodeWithCheckNull(config.y, y -> sprite.y = y);
+				setCodeWithCheckNull(config.width, width -> sprite.width = width);
+				setCodeWithCheckNull(config.height, height -> sprite.height = height);
+				setCodeWithCheckNull(config.alpha, alpha -> sprite.alpha = alpha);
+				setCodeWithCheckNull(config.scale, scale -> sprite.scale.set(scale.x, scale.y));
+				setCodeWithCheckNull(config.angle, angle -> sprite.angle = angle);
+				setCodeWithCheckNull(config.visible, visible -> sprite.visible = visible);
+				setCodeWithCheckNull(config.active, active -> sprite.active = active);
+				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> sprite.scrollFactor.set(scrollFactor.x, scrollFactor.y));
+			}
+		});
+		setCallback("configObject", function(name:String, config:Dynamic) {
+			if (PlayState.luaObjects.exists(name)) {
+				var object:FlxObject = PlayState.luaObjects.get(name);
+				setCodeWithCheckNull(config.x, x -> object.x = x);
+				setCodeWithCheckNull(config.y, y -> object.y = y);
+				setCodeWithCheckNull(config.width, width -> object.width = width);
+				setCodeWithCheckNull(config.height, height -> object.height = height);
+				setCodeWithCheckNull(config.angle, angle -> object.angle = angle);
+				setCodeWithCheckNull(config.visible, visible -> object.visible = visible);
+				setCodeWithCheckNull(config.active, active -> object.active = active);
+				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> object.scrollFactor.set(scrollFactor.x, scrollFactor.y));
+			}
+		});
+
 		setCallback("makeAnimationSprite", function(tag:String, x:Float, y:Float, paths:String) {
 			if (!PlayState.luaImages.exists(tag)) {
 				var sprite = new GameSprite(x, y);
 				sprite.frames = Paths.spritesheet(paths, SPARROW);
 				PlayState.luaImages.set(tag, sprite);
 			}
-		});
-		setCallback("setSpriteOffset", function(tag:String, x:Float = 0, y:Float = 0) {
-			if (PlayState.luaImages.exists(tag))
-				return PlayState.luaImages.get(tag).offset.set(x, y);
-			return null;
 		});
 		setCallback("addAnimationByPrefix", function(tag:String, name:String, prefix:String, fps:Int = 24, looped:Bool = false) {
 			if (PlayState.luaImages.exists(tag)) {
@@ -230,53 +222,7 @@ class LuaScript extends FlxBasic {
 			if (PlayState.luaImages.exists(tag))
 				return PlayState.luaImages.get(tag).animation.play(name, force, rev, frames);
 		});
-		setCallback("setSpriteProperty", function(tag:String, property:String, value:Dynamic) {
-			if (PlayState.luaImages.exists(tag)) {
-				var sprite = PlayState.luaImages.get(tag);
-				var propertyParts:Array<String> = property.split(".");
-				if (propertyParts.length > 1) {
-					var subProperty:String = propertyParts[0];
-					var subValue:String = propertyParts[1];
-					Reflect.setProperty(Reflect.getProperty(sprite, subProperty), subValue, value);
-				} else
-					Reflect.setProperty(sprite, property, value);
-			}
-		});
-		setCallback("getSpriteProperty", function(tag:String, property:String) {
-			var splitDot:Array<String> = property.split('.');
-			var getSprite:Dynamic = null;
-			if (splitDot.length > 1) {
-				if (PlayState.luaImages.exists(splitDot[0]))
-					getSprite = PlayState.luaImages.get(splitDot[0]);
-				for (i in 1...splitDot.length - 1)
-					getSprite = Reflect.getProperty(getSprite, splitDot[i]);
-				return Reflect.getProperty(getSprite, splitDot[splitDot.length - 1]);
-			}
-			return Reflect.getProperty(getSprite, splitDot[splitDot.length - 1]);
-		});
-		setCallback("addSprite", function(tag:String) {
-			if (PlayState.luaImages.exists(tag))
-				return PlayState.instance.add(PlayState.luaImages.get(tag));
-			return null;
-		});
-		setCallback("removeSprite", function(tag:String) {
-			if (PlayState.luaImages.exists(tag)) {
-				var sprite:FlxSprite = PlayState.luaImages.get(tag);
-				sprite.kill();
-				return PlayState.instance.remove(sprite);
-			}
-			return null;
-		});
-		setCallback("destroySprite", function(tag:String) {
-			if (PlayState.luaImages.exists(tag))
-				return PlayState.luaImages.get(tag).destroy();
-		});
-		setCallback("reviveSprite", function(tag:String) {
-			if (PlayState.luaImages.exists(tag))
-				return PlayState.luaImages.get(tag).revive();
-		});
 
-		// Sound Functions
 		setCallback("playSound", function(name:String, volume:Float = 1, loop:Bool = false):FlxSound {
 			return FlxG.sound.play(Paths.sound(name), volume, loop);
 		});
@@ -284,102 +230,53 @@ class LuaScript extends FlxBasic {
 			return FlxG.sound.playMusic(Paths.music(name), volume, loop);
 		});
 
-		// Object Functions
-		setCallback("mouseOverlap", function(tag:String):Bool {
-			var gameTag:Dynamic = null;
-			if (PlayState.luaImages.exists(tag))
-				gameTag = PlayState.luaImages.get(tag);
-			else if (PlayState.luaText.exists(tag))
-				gameTag = PlayState.luaText.get(tag);
-			return FlxG.mouse.overlaps(gameTag);
+		setCallback("setProperty", function(name:String, property:String, value:Dynamic) {
+			if (PlayState.luaImages.exists(name)) {
+				var sprite = PlayState.luaImages.get(name);
+				Reflect.setProperty(sprite, property, value);
+			} else if (PlayState.luaText.exists(name)) {
+				var text = PlayState.luaText.get(name);
+				Reflect.setProperty(text, property, value);
+			} else if (PlayState.luaObjects.exists(name)) {
+				var object = PlayState.luaObjects.get(name);
+				Reflect.setProperty(object, property, value);
+			} else {
+				if (game != null)
+					Reflect.setProperty(game, property, value);
+			}
 		});
-		setCallback("setProperty", function(tag:String, property:String, value:Dynamic) {
-			var gameTag:Dynamic = null;
-			if (PlayState.luaImages.exists(tag))
-				gameTag = PlayState.luaImages.get(tag);
-			else if (PlayState.luaText.exists(tag))
-				gameTag = PlayState.luaText.get(tag);
-			Reflect.setProperty(gameTag, property, value);
-			return value;
-		});
-		setCallback("getProperty", function(tag:String, property:String) {
-			var gameTag:Dynamic = null;
-			if (PlayState.luaImages.exists(tag))
-				gameTag = PlayState.luaImages.get(tag);
-			else if (PlayState.luaText.exists(tag))
-				gameTag = PlayState.luaText.get(tag);
-			return Reflect.getProperty(gameTag, property);
-		});
-		setCallback("getTagObject", function(tagVer:String, name:String) {
-			return getTagObject(tagVer, name);
+		setCallback("getProperty", function(name:String, property:String) {
+			if (PlayState.luaImages.exists(name)) {
+				var sprite = PlayState.luaImages.get(name);
+				return Reflect.getProperty(sprite, property);
+			} else if (PlayState.luaText.exists(name)) {
+				var text = PlayState.luaText.get(name);
+				return Reflect.getProperty(text, property);
+			} else if (PlayState.luaObjects.exists(name)) {
+				var object = PlayState.luaObjects.get(name);
+				return Reflect.getProperty(object, property);
+			} else {
+				if (game != null)
+					return Reflect.getProperty(game, property);
+			}
+			return null;
 		});
 
-		// Misc. Functions
-		setCallback("getPropertyFromClass", function(classes:String, value:String) {
-			var splitDot:Array<String> = value.split(".");
-			var getClassProperty:Dynamic = Type.resolveClass(classes);
-			if (splitDot.length > 1) {
-				for (i in 1...splitDot.length)
-					getClassProperty = Reflect.getProperty(getClassProperty, splitDot[i - 1]);
-				return Reflect.getProperty(getClassProperty, splitDot[splitDot.length - 1]);
+		setCallback("getInputPress", function(type:String, keyName:String) {
+			switch (type) {
+				case "justPressed":
+					return FlxG.keys.anyJustPressed([getKeyName(keyName)]);
+				case "justReleased":
+					return FlxG.keys.anyJustReleased([getKeyName(keyName)]);
+				case "pressed":
+					return FlxG.keys.anyPressed([getKeyName(keyName)]);
+				default:
+					return false;
 			}
-			return Reflect.getProperty(getClassProperty, value);
-		});
-		setCallback("setPropertyFromClass", function(classes:String, variable:String, value:Dynamic) {
-			var splitDot:Array<String> = variable.split('.');
-			var getClassProperty:Dynamic = Type.resolveClass(classes);
-			if (splitDot.length > 1) {
-				for (i in 1...splitDot.length - 1)
-					getClassProperty = Reflect.getProperty(getClassProperty, splitDot[i - 1]);
-				return Reflect.setProperty(getClassProperty, splitDot[splitDot.length - 1], value);
-			}
-			return Reflect.setProperty(getClassProperty, variable, value);
-		});
-
-		setCallback("getKeyPress", function(keyName:String) {
-			return FlxG.keys.checkStatus(keyName, PRESSED);
-		});
-		setCallback("getKeyJustPress", function(keyName:String) {
-			return FlxG.keys.checkStatus(keyName, JUST_RELEASED);
-		});
-		setCallback("getKeyJustRelease", function(keyName:String) {
-			return FlxG.keys.checkStatus(keyName, JUST_RELEASED);
-		});
-		setCallback("getMousePress", function() {
-			return FlxG.mouse.pressed;
-		});
-		setCallback("getMouseJustPress", function() {
-			return FlxG.mouse.justPressed;
-		});
-		setCallback("getMouseJustRelease", function() {
-			return FlxG.mouse.justReleased;
-		});
-		setCallback("setSaveData", function(name:String, value:Dynamic) {
-			FlxG.save.data.set(name, value);
-			FlxG.save.flush();
-		});
-		setCallback("getSaveData", function(name:String) {
-			return FlxG.save.data.get(name);
-		});
-		setCallback("colorFromHex", function(color:String) {
-			if (!color.startsWith('0x'))
-				color = '0xff' + color;
-			return Std.parseInt(color);
 		});
 
 		if (execute)
 			callFunction('create', []);
-	}
-
-	function getTagObject(tagVer:String = "luaText", name:String) {
-		var obj:Dynamic = null;
-		switch (tagVer) {
-			case "luaText":
-				obj = PlayState.luaText.get(name);
-			case "luaImages":
-				obj = PlayState.luaImages.get(name);
-		}
-		return obj;
 	}
 
 	/**
@@ -469,6 +366,169 @@ class LuaScript extends FlxBasic {
 	public function deleteVar(name:String) {
 		Lua.pushnil(lua);
 		Lua.setglobal(lua, name);
+	}
+
+	function setCodeWithCheckNull<T>(value:Null<T>, setter:T->Void) {
+		if (value != null)
+			setter(value);
+	}
+
+	public static function getColorName(name:String) {
+		switch (name) {
+			case "white":
+				return FlxColor.WHITE;
+			case "black":
+				return FlxColor.BLACK;
+			case "red":
+				return FlxColor.RED;
+			case "green":
+				return FlxColor.GREEN;
+			case "blue":
+				return FlxColor.BLUE;
+			case "yellow":
+				return FlxColor.YELLOW;
+			case "purple":
+				return FlxColor.PURPLE;
+			case "cyan":
+				return FlxColor.CYAN;
+			case "gray":
+				return FlxColor.GRAY;
+			case "orange":
+				return FlxColor.ORANGE;
+			case "lime":
+				return FlxColor.LIME;
+			case "magenta":
+				return FlxColor.MAGENTA;
+			case "pink":
+				return FlxColor.PINK;
+			case "brown":
+				return FlxColor.BROWN;
+			case "transparent":
+				return FlxColor.TRANSPARENT;
+			case "":
+				return FlxColor.WHITE;
+		}
+		return FlxColor.fromString(name)
+		:FlxColor.WHITE;
+	}
+
+	public static function getAlignmentName(name:String) {
+		switch (name) {
+			case "left":
+				return FlxTextAlign.LEFT;
+			case "center":
+				return FlxTextAlign.CENTER;
+			case "right":
+				return FlxTextAlign.RIGHT;
+		}
+		return FlxTextAlign.LEFT;
+	}
+
+	public static function getBorderStyleName(name:String) {
+		switch (name) {
+			case "none":
+				return FlxTextBorderStyle.NONE;
+			case "shadow":
+				return FlxTextBorderStyle.SHADOW;
+			case "outline":
+				return FlxTextBorderStyle.OUTLINE;
+			case "outlineFast":
+				return FlxTextBorderStyle.OUTLINE_FAST;
+		}
+		return FlxTextBorderStyle.NONE;
+	}
+
+	public static function getKeyName(name:String) {
+		switch (name.toUpperCase()) {
+			case "A":
+				return FlxKey.A;
+			case "B":
+				return FlxKey.B;
+			case "C":
+				return FlxKey.C;
+			case "D":
+				return FlxKey.D;
+			case "E":
+				return FlxKey.E;
+			case "F":
+				return FlxKey.F;
+			case "G":
+				return FlxKey.G;
+			case "H":
+				return FlxKey.H;
+			case "I":
+				return FlxKey.I;
+			case "J":
+				return FlxKey.J;
+			case "K":
+				return FlxKey.K;
+			case "L":
+				return FlxKey.L;
+			case "M":
+				return FlxKey.M;
+			case "N":
+				return FlxKey.N;
+			case "O":
+				return FlxKey.O;
+			case "P":
+				return FlxKey.P;
+			case "Q":
+				return FlxKey.Q;
+			case "R":
+				return FlxKey.R;
+			case "S":
+				return FlxKey.S;
+			case "T":
+				return FlxKey.T;
+			case "U":
+				return FlxKey.U;
+			case "V":
+				return FlxKey.V;
+			case "W":
+				return FlxKey.W;
+			case "X":
+				return FlxKey.X;
+			case "Y":
+				return FlxKey.Y;
+			case "Z":
+				return FlxKey.Z;
+			case "ZERO":
+				return FlxKey.ZERO;
+			case "ONE":
+				return FlxKey.ONE;
+			case "TWO":
+				return FlxKey.TWO;
+			case "THREE":
+				return FlxKey.THREE;
+			case "FOUR":
+				return FlxKey.FOUR;
+			case "FIVE":
+				return FlxKey.FIVE;
+			case "SIX":
+				return FlxKey.SIX;
+			case "SEVEN":
+				return FlxKey.SEVEN;
+			case "EIGHT":
+				return FlxKey.EIGHT;
+			case "NINE":
+				return FlxKey.NINE;
+			case "SPACE":
+				return FlxKey.SPACE;
+			case "ENTER":
+				return FlxKey.ENTER;
+			case "ESCAPE":
+				return FlxKey.ESCAPE;
+			case "UP":
+				return FlxKey.UP;
+			case "DOWN":
+				return FlxKey.DOWN;
+			case "LEFT":
+				return FlxKey.LEFT;
+			case "RIGHT":
+				return FlxKey.RIGHT;
+		}
+
+		return FlxKey.NONE;
 	}
 
 	override public function destroy() {

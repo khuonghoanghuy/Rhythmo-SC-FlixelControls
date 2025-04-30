@@ -45,6 +45,7 @@ class PlayState extends ExtendableState {
 
 	public static var luaText:Map<String, FlxText> = new Map<String, FlxText>();
 	public static var luaImages:Map<String, FlxSprite> = new Map<String, FlxSprite>();
+	public static var luaObjects:Map<String, FlxObject> = new Map<String, FlxObject>();
 
 	public var noteDirs:Array<String> = ['left', 'down', 'up', 'right'];
 	public var noteSplashes:FlxTypedGroup<NoteSplash>;
