@@ -59,8 +59,6 @@
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 	<haxedef name="HXCPP_STACK_TRACE" if="release" />
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" />
-	
-	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux"/>
 
 	<haxedef name="hscriptPos" />
 	<haxedef name="analyzer-optimize" />
@@ -95,5 +93,8 @@
 	<target id="haxe" tool="linker" if="macos">
 		<lib name="/lib64/libX11.a" if="HXCPP_M64" /> <!-- mac support -->
 	</target>
+
+	<!-- For Lua -->
+	<haxedef name="NO_PRECOMPILED_HEADERS"/>
 
 </project>
