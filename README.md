@@ -14,7 +14,7 @@ Mostly based on [Friday Night Funkin'](https://github.com/FunkinCrew/Funkin/), g
 > The latest builds of the game can be found in the [Actions](https://github.com/JoaTH-Team/Rhythmo-SC/actions) tab.
 
 ## Compiling
-**USE THE LINK ABOVE IF YOU JUST WANT TO PLAY THE GAME!**
+**USE THE LINKS ABOVE IF YOU JUST WANT TO PLAY THE GAME!**
 
 If you want to compile the game, follow the [compilation guide](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Building-the-Game).
 
