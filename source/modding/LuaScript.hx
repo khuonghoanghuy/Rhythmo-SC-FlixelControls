@@ -408,8 +408,7 @@ class LuaScript extends FlxBasic {
 			case "":
 				return FlxColor.WHITE;
 		}
-		return FlxColor.fromString(name)
-		:FlxColor.WHITE;
+		return FlxColor.fromString(name) ?? FlxColor.WHITE;
 	}
 
 	public static function getAlignmentName(name:String) {
