@@ -272,8 +272,23 @@ function update(elapsed:Float) {
 ```
 
 # Lua
-The Lua scripting documentation is a work in progress! <br>
-For now, here's a basic template:
+Similar to HScript, your script should either be located in `assets/scripts/[name].lua`, or in `assets/songs/[song-name]/[name].lua`.
+
+## Default Variables
+* `Function_Stop` - Cancels functions (e.g., startCountdown, endSong).
+* `Function_Continue` - Continues the game like normal.
+* `platform` - Returns the current platform (e.g., Windows, Linux).
+* `version` - Returns the current game version.
+* `lua.version` - Returns the current lua version.
+* `lua.versionJIT` - Returns the current luajit version.
+
+## Default Functions
+* `trace(value:Dynamic)` - The equivalent of `trace` in normal Haxe.
+	* Additionally, you can also use `print` instead.
+* `stopScript()` - Stops the current script.
+* `stdInt(x:Float)` - Converts a floating point number into an integer.
+
+Basic template:
 ```lua
 function create()
 	-- Called when the script is created.
