@@ -29,6 +29,8 @@ class CampaignState extends ExtendableState {
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
 
+		FlxG.mouse.visible = true;
+
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/campaign_bg'));
 		bg.scrollFactor.set();
 		bg.screenCenter();
@@ -76,9 +78,10 @@ class CampaignState extends ExtendableState {
 		}
 
 		if (Input.justPressed('exit')) {
-			if (!isResetting)
+			if (!isResetting) {
+				FlxG.mouse.visible = false;
 				ExtendableState.switchState(new MenuState());
-			else {
+			} else {
 				isResetting = false;
 				lockInputs = false;
 				text.color = FlxColor.WHITE;
