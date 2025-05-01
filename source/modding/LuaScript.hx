@@ -218,10 +218,6 @@ class LuaScript extends FlxBasic {
 			if (PlayState.luaImages.exists(tag))
 				return PlayState.luaImages.get(tag).animation.play(name, force, rev, frames);
 		});
-		setCallback("playAnim", function(tag:String, name:String, force:Bool = false, rev:Bool = false, frames:Int = 0) {
-			if (PlayState.luaImages.exists(tag))
-				return PlayState.luaImages.get(tag).animation.play(name, force, rev, frames);
-		});
 
 		setCallback("playSound", function(name:String, volume:Float = 1, loop:Bool = false):FlxSound {
 			return FlxG.sound.play(Paths.sound(name), volume, loop);
@@ -262,6 +258,28 @@ class LuaScript extends FlxBasic {
 			return null;
 		});
 
+		setCallback("setPosition", function(name:String, x:Float, y:Float) {
+			if (PlayState.luaImages.exists(name)) {
+				var sprite = PlayState.luaImages.get(name);
+				sprite.setPosition(x, y);
+			} else if (PlayState.luaText.exists(name)) {
+				var text = PlayState.luaText.get(name);
+				text.setPosition(x, y);
+			} else if (PlayState.luaObjects.exists(name)) {
+				var object = PlayState.luaObjects.get(name);
+				object.setPosition(x, y);
+			}
+		});
+		setCallback("setScale", function(name:String, x:Float, y:Float) {
+			if (PlayState.luaImages.exists(name)) {
+				var sprite = PlayState.luaImages.get(name);
+				sprite.scale.set(x, y);
+			} else if (PlayState.luaText.exists(name)) {
+				var text = PlayState.luaText.get(name);
+				text.scale.set(x, y);
+			}
+		});
+
 		setCallback("getInputPress", function(type:String, keyName:String) {
 			switch (type) {
 				case "justPressed":
@@ -278,19 +296,7 @@ class LuaScript extends FlxBasic {
 		if (execute)
 			callFunction('create', []);
 	}
-
-	/**
-	 * Call a function, in script, you will be able to code in lua script like:
-	 * 
-	 * ```lua
-	 * -- onCreate is from where you source code like `callFunction("onCreate", []);`
-	 * function onCreate()
-	 * -- your lua code here...
-	 * end
-	 * ```
-	 * @param name a function to call back
-	 * @param args a function args, useful for some function need to call a args like `callFunction("onUpdate", [elapsed]);`
-	 */
+	
 	public function callFunction(name:String, args:Array<Dynamic>) {
 		if (lua == null)
 			return Function_Continue;
@@ -321,28 +327,9 @@ class LuaScript extends FlxBasic {
 		return false;
 	}
 
-	/**
-	 * Set a function, in script, you will be able to code in lua script like:
-	 * ```lua
-	 * function onCreate()
-	 *      makeAText(90, 0, "Hi", 32); -- when on source, `makeAText` is being called by `setCallback("makeAText", <your function code>);`
-	 * end
-	 * ```
-	 * @param name a function name
-	 * @param func make them how is gonna work, like how `FlxG.resizeWindow(640, 480);`
-	 * @return Lua_helper.add_callback(lua, name, func)
-	 */
 	public function setCallback(name:String, func:Dynamic)
 		return Lua_helper.add_callback(lua, name, func);
 
-	/**
-	 * Set a variable, in script, you will be able to code in lua script like:
-	 * ```lua
-	 * print("version" ... VERSION) -- when `VERSION` is on source, it will be like `setVar("VERSION", "v999");`
-	 * ```
-	 * @param name a variable name
-	 * @param value how is gonna be?, like `var version:String = "v999";`
-	 */
 	public function setVar(name:String, value:Dynamic) {
 		if (lua == null)
 			return;
@@ -351,18 +338,9 @@ class LuaScript extends FlxBasic {
 		Lua.setglobal(lua, name);
 	}
 
-	/**
-	 * Get a variable if that exists
-	 * @param name a variable you think that already exists
-	 * @return return Lua.getglobal(lua, name)
-	 */
 	public function getVar(name:String)
 		return Lua.getglobal(lua, name);
 
-	/**
-	 * Delete a variable if that exists
-	 * @param name a variable you think that already exists
-	 */
 	public function deleteVar(name:String) {
 		Lua.pushnil(lua);
 		Lua.setglobal(lua, name);

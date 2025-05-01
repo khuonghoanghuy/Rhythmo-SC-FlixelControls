@@ -148,7 +148,7 @@ class Paths {
 
 	inline static public function xml(key:String)
 		return file('$key.xml');
-	
+
 	inline static public function lua(key:String)
 		return file('$key.lua');
 
@@ -247,14 +247,11 @@ class Paths {
 
 				localTrackedAssets.push(path);
 				return currentTrackedSounds.get(path);
-			} else if (beepOnNull) {
-				trace('oops! sound $key returned null');
-				return FlxAssets.getSound('flixel/sounds/beep');
 			}
 		}
 
 		trace('oops! sound $key returned null');
-		return null;
+		return (beepOnNull) ? FlxAssets.getSound('flixel/sounds/beep') : null;
 	}
 }
 
