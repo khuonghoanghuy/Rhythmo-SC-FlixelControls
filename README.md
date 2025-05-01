@@ -38,7 +38,7 @@ Additionally, you can check out the planned features in the [To-Do List](/TODO.m
 ## Credits
 ### Main Team
 * Joalor64 - Creator / Main Programmer / Composer / Artist
-* Huy1234Th - Additional Programmer / Vietnamese Translation
+* Huy1234Th - Additional Programmer / Vietnamese Translation / Lua Code
 * Moxie - Additional Programmer
 
 ### Special Thanks
