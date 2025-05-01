@@ -189,7 +189,6 @@ import('backend.ExtendableState');
 import('flixel.text.FlxText');
 import('flixel.FlxSprite');
 import('backend.Input');
-import('flixel.FlxG');
 
 function create() {
 	var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, FlxColor.WHITE);
@@ -219,7 +218,6 @@ Script 1:
 // assets/helpers/spriteHandler.hxs
 import('flixel.FlxSprite');
 import('backend.Paths');
-import('flixel.FlxG');
 
 function createSprite(x:Float, y:Float, graphic:String) {
 	var spr:FlxSprite = new FlxSprite(x, y);
@@ -288,7 +286,63 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 * `stopScript()` - Stops the current script.
 * `stdInt(x:Float)` - Converts a floating point number into an integer.
 
-Basic template:
+## Basic Object Functions
+* `createObject(type:String, name:String, config:Dynamic)` - Creates an object with a specific configuration.
+* `addObject(name:String)` - Adds an object.
+* `removeObject(name:String)` - Removes an object.
+* `insertObject(name:String, pos:Int = 0)` - Inserts an object at a specific position.
+* `setPosition(name:String, x:Float, y:Float)` - Sets an object's position.
+* `setScale(name:String, x:Float, y:Float)` - Sets the scaling of an object.
+* `setProperty(name:String, property:String, value:Dynamic)` - Sets the property of an object.
+* `getProperty(name:String, property:String)` - Gets the property of an object.
+
+### Text
+* `createObject("text", "name", {x = 0, y = 0, width = 0, text = "Text goes here.", size = 16})` - Creates a text.
+* `configText(name:String, config:Dynamic)` - Configures a text object with various properties.
+	* `x`, `y`: Position
+    * `width`: Text width
+    * `text`: Text content
+    * `size`: Font size
+    * `color`: Text color
+    * `alignment`: Text alignment
+    * `alpha`: Transparency
+    * `scale`: Scaling
+    * `angle`: Rotation angle
+    * `visible`: Visibility
+    * `active`: Active
+    * `scrollFactor`: Scroll speed
+    * `antialiasing`: Anti-aliasing
+    * `font`: Custom font
+    * `borderSize`: Text border size
+    * `borderColor`: Border color
+    * `borderStyle`: Border style
+    * `borderQuality`: Border quality
+
+### Sprites
+* `createObject("sprite", "name", {x = 0, y = 0, image = "image"})` - Creates a sprite.
+* `makeAnimationSprite(tag:String, x:Float, y:Float, paths:String)` - Creates an animated sprite.
+* `addAnimationByPrefix(tag:String, name:String, prefix:String, fps:Int, looped:Bool)` - Adds an animation to an animated sprite.
+* `playAnimation(tag:String, name:String, force:Bool = false, rev:Bool = false, frames:Int = 0)` - Plays an animation for an animated sprite.
+* `configSprite(name:String, config:Dynamic)` - Configures a sprite with various properties.
+	* `image`: Image path
+    * `x`, `y`: Position
+    * `width`, `height`: Dimensions
+    * `alpha`: Transparency
+    * `scale`: Scaling
+    * `angle`: Rotation angle
+    * `visible`: Visibility
+    * `active`: Active
+    * `scrollFactor`: Scroll speed
+
+## Sound Functions
+* `playSound(name:String, volume:Float, loop:Bool)` - Plays a sound.
+* `playMusic(name:String, volume:Float, loop:Bool)` - Plays music.
+
+## Misc. Functions
+* `getInputPress(type:String, keyName:String)` - Checks for a specific input.
+
+## Templates
+### Basic Template
 ```lua
 function create()
 	-- Called when the script is created.
