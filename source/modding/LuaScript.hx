@@ -24,7 +24,7 @@ class LuaScript extends FlxBasic {
 			var result:Dynamic = LuaL.dofile(lua, file);
 			var resultStr:String = Lua.tostring(lua, result);
 			if (resultStr != null && result != 0) {
-				trace('lua error!!! ' + resultStr);
+				trace('lua error!!! $resultStr');
 				Lib.application.window.alert(resultStr, "Lua Error!");
 				lua = null;
 				return;
@@ -38,26 +38,25 @@ class LuaScript extends FlxBasic {
 		trace('Script Loaded Succesfully: $file');
 
 		// Default Variables
-		setVar('Function_Stop', Function_Stop);
-		setVar('Function_Continue', Function_Continue);
+		setVar("Function_Stop", Function_Stop);
+		setVar("Function_Continue", Function_Continue);
 
-		setVar('platform', PlatformUtil.getPlatform());
-		setVar('version', Lib.application.meta.get('version'));
+		setVar("platform", PlatformUtil.getPlatform());
+		setVar("version", Lib.application.meta.get('version'));
 
-		setVar('lua', {
+		setVar("lua", {
 			version: Lua.version(),
 			versionJIT: Lua.versionJIT()
 		});
 
 		// Default Functions
-		setCallback('trace', function(value:Dynamic) {
+		setCallback("trace", function(value:Dynamic) {
 			trace(value);
 		});
-		setCallback('print', function(value:Dynamic) {
+		setCallback("print", function(value:Dynamic) {
 			trace(value);
 		});
-
-		setCallback('stopScript', function() {
+		setCallback("stopScript", function() {
 			this.destroy();
 		});
 
@@ -74,7 +73,7 @@ class LuaScript extends FlxBasic {
 			return callFunction(name, args);
 		});
 
-		setCallback("stdInt", function(x:Int) {
+		setCallback("stdInt", function(x:Float) {
 			return Std.int(x);
 		});
 
@@ -104,52 +103,118 @@ class LuaScript extends FlxBasic {
 		setVar("screenWidth", FlxG.width);
 		setVar("screenHeight", FlxG.height);
 
-		// Main Functions
-		setCallback("createObject", function(type:String, name:String, config:Dynamic) {
+		// Basic Object Functions
+		setCallback("createObject", function(type:String, tag:String, config:Dynamic) {
 			switch (type) {
 				case "sprite":
 					var sprite:FlxSprite = new GameSprite(config.x, config.y);
 					setCodeWithCheckNull(config.image, image -> sprite.loadGraphic(Paths.image(image)));
 					sprite.active = true;
-					PlayState.luaImages.set(name, sprite);
+					PlayState.luaImages.set(tag, sprite);
 				case "text":
 					var text:FlxText = new FlxText(config.x, config.y, config.width, config.text, config.size);
 					text.active = true;
-					PlayState.luaText.set(name, text);
+					PlayState.luaText.set(tag, text);
 				default:
 					var object:FlxObject = new FlxObject(config.x, config.y, config.width, config.height);
 					object.active = true;
-					PlayState.luaObjects.set(name, object);
+					PlayState.luaObjects.set(tag, object);
 			}
 		});
-		setCallback("addObject", function(name:String) {
-			if (PlayState.luaImages.exists(name))
-				PlayState.instance.add(PlayState.luaImages.get(name));
-			else if (PlayState.luaText.exists(name))
-				PlayState.instance.add(PlayState.luaText.get(name));
+		setCallback("addObject", function(tag:String) {
+			if (PlayState.luaImages.exists(tag))
+				PlayState.instance.add(PlayState.luaImages.get(tag));
+			else if (PlayState.luaText.exists(tag))
+				PlayState.instance.add(PlayState.luaText.get(tag));
 			else
-				PlayState.instance.add(PlayState.luaObjects.get(name));
+				PlayState.instance.add(PlayState.luaObjects.get(tag));
 		});
-		setCallback("removeObject", function(name:String) {
-			if (PlayState.luaImages.exists(name))
-				PlayState.instance.remove(PlayState.luaImages.get(name));
-			else if (PlayState.luaText.exists(name))
-				PlayState.instance.remove(PlayState.luaText.get(name));
+		setCallback("removeObject", function(tag:String) {
+			if (PlayState.luaImages.exists(tag))
+				PlayState.instance.remove(PlayState.luaImages.get(tag));
+			else if (PlayState.luaText.exists(tag))
+				PlayState.instance.remove(PlayState.luaText.get(tag));
 			else
-				PlayState.instance.remove(PlayState.luaObjects.get(name));
+				PlayState.instance.remove(PlayState.luaObjects.get(tag));
 		});
-		setCallback("insertObject", function(name:String, pos:Int = 0) {
-			if (PlayState.luaImages.exists(name))
-				PlayState.instance.insert(pos, PlayState.luaImages.get(name));
-			else if (PlayState.luaText.exists(name))
-				PlayState.instance.insert(pos, PlayState.luaText.get(name));
+		setCallback("insertObject", function(tag:String, pos:Int = 0) {
+			if (PlayState.luaImages.exists(tag))
+				PlayState.instance.insert(pos, PlayState.luaImages.get(tag));
+			else if (PlayState.luaText.exists(tag))
+				PlayState.instance.insert(pos, PlayState.luaText.get(tag));
 			else
-				PlayState.instance.insert(pos, PlayState.luaObjects.get(name));
+				PlayState.instance.insert(pos, PlayState.luaObjects.get(tag));
+		});
+		setCallback("configObject", function(tag:String, config:Dynamic) {
+			if (PlayState.luaObjects.exists(tag)) {
+				var object:FlxObject = PlayState.luaObjects.get(tag);
+				setCodeWithCheckNull(config.x, x -> object.x = x);
+				setCodeWithCheckNull(config.y, y -> object.y = y);
+				setCodeWithCheckNull(config.width, width -> object.width = width);
+				setCodeWithCheckNull(config.height, height -> object.height = height);
+				setCodeWithCheckNull(config.angle, angle -> object.angle = angle);
+				setCodeWithCheckNull(config.visible, visible -> object.visible = visible);
+				setCodeWithCheckNull(config.active, active -> object.active = active);
+				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> object.scrollFactor.set(scrollFactor.x, scrollFactor.y));
+			}
+		});
+		setCallback("setProperty", function(tag:String, property:String, value:Dynamic) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite = PlayState.luaImages.get(tag);
+				Reflect.setProperty(sprite, property, value);
+			} else if (PlayState.luaText.exists(tag)) {
+				var text = PlayState.luaText.get(tag);
+				Reflect.setProperty(text, property, value);
+			} else if (PlayState.luaObjects.exists(tag)) {
+				var object = PlayState.luaObjects.get(tag);
+				Reflect.setProperty(object, property, value);
+			} else {
+				if (game != null)
+					Reflect.setProperty(game, property, value);
+			}
+		});
+		setCallback("getProperty", function(tag:String, property:String) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite = PlayState.luaImages.get(tag);
+				return Reflect.getProperty(sprite, property);
+			} else if (PlayState.luaText.exists(tag)) {
+				var text = PlayState.luaText.get(tag);
+				return Reflect.getProperty(text, property);
+			} else if (PlayState.luaObjects.exists(tag)) {
+				var object = PlayState.luaObjects.get(tag);
+				return Reflect.getProperty(object, property);
+			} else {
+				if (game != null)
+					return Reflect.getProperty(game, property);
+			}
+			return null;
+		});
+		setCallback("setPosition", function(tag:String, x:Float, y:Float) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite = PlayState.luaImages.get(tag);
+				sprite.setPosition(x, y);
+			} else if (PlayState.luaText.exists(tag)) {
+				var text = PlayState.luaText.get(tag);
+				text.setPosition(x, y);
+			} else if (PlayState.luaObjects.exists(tag)) {
+				var object = PlayState.luaObjects.get(tag);
+				object.setPosition(x, y);
+			}
+		});
+		setCallback("setScale", function(tag:String, x:Float, y:Float) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite = PlayState.luaImages.get(tag);
+				sprite.scale.set(x, y);
+			} else if (PlayState.luaText.exists(tag)) {
+				var text = PlayState.luaText.get(tag);
+				text.scale.set(x, y);
+			}
 		});
 
-		setCallback("configText", function(name:String, config:Dynamic) {
-			if (PlayState.luaText.exists(name)) {
-				var text:FlxText = PlayState.luaText.get(name);
+		// Text Functions
+		setCallback("configText", function(tag:String, config:Dynamic) {
+			if (PlayState.luaText.exists(tag)) {
+				var text:FlxText = PlayState.luaText.get(tag);
 				setCodeWithCheckNull(config.x, x -> text.x = x);
 				setCodeWithCheckNull(config.y, y -> text.y = y);
 				setCodeWithCheckNull(config.width, width -> text.width = width);
@@ -171,9 +236,17 @@ class LuaScript extends FlxBasic {
 				setCodeWithCheckNull(config.borderQuality, borderQuality -> text.borderQuality = borderQuality);
 			}
 		});
-		setCallback("configSprite", function(name:String, config:Dynamic) {
-			if (PlayState.luaImages.exists(name)) {
-				var sprite:FlxSprite = PlayState.luaImages.get(name);
+		setCallback("setText", function(tag:String, newText:String) {
+			if (PlayState.luaText.exists(tag)) {
+				var text:FlxText = PlayState.luaText.get(tag);
+				text.text = newText;
+			}
+		});
+
+		// Sprite Functions
+		setCallback("configSprite", function(tag:String, config:Dynamic) {
+			if (PlayState.luaImages.exists(tag)) {
+				var sprite:FlxSprite = PlayState.luaImages.get(tag);
 				setCodeWithCheckNull(config.image, img -> sprite.loadGraphic(Paths.image(img)));
 				setCodeWithCheckNull(config.x, x -> sprite.x = x);
 				setCodeWithCheckNull(config.y, y -> sprite.y = y);
@@ -187,24 +260,17 @@ class LuaScript extends FlxBasic {
 				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> sprite.scrollFactor.set(scrollFactor.x, scrollFactor.y));
 			}
 		});
-		setCallback("configObject", function(name:String, config:Dynamic) {
-			if (PlayState.luaObjects.exists(name)) {
-				var object:FlxObject = PlayState.luaObjects.get(name);
-				setCodeWithCheckNull(config.x, x -> object.x = x);
-				setCodeWithCheckNull(config.y, y -> object.y = y);
-				setCodeWithCheckNull(config.width, width -> object.width = width);
-				setCodeWithCheckNull(config.height, height -> object.height = height);
-				setCodeWithCheckNull(config.angle, angle -> object.angle = angle);
-				setCodeWithCheckNull(config.visible, visible -> object.visible = visible);
-				setCodeWithCheckNull(config.active, active -> object.active = active);
-				setCodeWithCheckNull(config.scrollFactor, scrollFactor -> object.scrollFactor.set(scrollFactor.x, scrollFactor.y));
+		setCallback("makeGraphic", function(tag:String, x:Float, y:Float, config:Dynamic) {
+			if (!PlayState.luaImages.exists(tag)) {
+				var sprite:FlxSprite = new FlxSprite(x, y);
+				sprite.makeGraphic(config.width, config.height, getColorName(config.color));
+				PlayState.luaImages.set(tag, sprite);
 			}
 		});
-
-		setCallback("makeAnimationSprite", function(tag:String, x:Float, y:Float, paths:String) {
+		setCallback("makeAnimationSprite", function(tag:String, x:Float, y:Float, path:String) {
 			if (!PlayState.luaImages.exists(tag)) {
-				var sprite = new GameSprite(x, y);
-				sprite.frames = Paths.spritesheet(paths, SPARROW);
+				var sprite:FlxSprite = new GameSprite(x, y);
+				sprite.frames = Paths.spritesheet(path, SPARROW);
 				PlayState.luaImages.set(tag, sprite);
 			}
 		});
@@ -219,6 +285,7 @@ class LuaScript extends FlxBasic {
 				return PlayState.luaImages.get(tag).animation.play(name, force, rev, frames);
 		});
 
+		// Sound Functions
 		setCallback("playSound", function(name:String, volume:Float = 1, loop:Bool = false):FlxSound {
 			return FlxG.sound.play(Paths.sound(name), volume, loop);
 		});
@@ -226,68 +293,15 @@ class LuaScript extends FlxBasic {
 			return FlxG.sound.playMusic(Paths.music(name), volume, loop);
 		});
 
-		setCallback("setProperty", function(name:String, property:String, value:Dynamic) {
-			if (PlayState.luaImages.exists(name)) {
-				var sprite = PlayState.luaImages.get(name);
-				Reflect.setProperty(sprite, property, value);
-			} else if (PlayState.luaText.exists(name)) {
-				var text = PlayState.luaText.get(name);
-				Reflect.setProperty(text, property, value);
-			} else if (PlayState.luaObjects.exists(name)) {
-				var object = PlayState.luaObjects.get(name);
-				Reflect.setProperty(object, property, value);
-			} else {
-				if (game != null)
-					Reflect.setProperty(game, property, value);
-			}
-		});
-		setCallback("getProperty", function(name:String, property:String) {
-			if (PlayState.luaImages.exists(name)) {
-				var sprite = PlayState.luaImages.get(name);
-				return Reflect.getProperty(sprite, property);
-			} else if (PlayState.luaText.exists(name)) {
-				var text = PlayState.luaText.get(name);
-				return Reflect.getProperty(text, property);
-			} else if (PlayState.luaObjects.exists(name)) {
-				var object = PlayState.luaObjects.get(name);
-				return Reflect.getProperty(object, property);
-			} else {
-				if (game != null)
-					return Reflect.getProperty(game, property);
-			}
-			return null;
-		});
-
-		setCallback("setPosition", function(name:String, x:Float, y:Float) {
-			if (PlayState.luaImages.exists(name)) {
-				var sprite = PlayState.luaImages.get(name);
-				sprite.setPosition(x, y);
-			} else if (PlayState.luaText.exists(name)) {
-				var text = PlayState.luaText.get(name);
-				text.setPosition(x, y);
-			} else if (PlayState.luaObjects.exists(name)) {
-				var object = PlayState.luaObjects.get(name);
-				object.setPosition(x, y);
-			}
-		});
-		setCallback("setScale", function(name:String, x:Float, y:Float) {
-			if (PlayState.luaImages.exists(name)) {
-				var sprite = PlayState.luaImages.get(name);
-				sprite.scale.set(x, y);
-			} else if (PlayState.luaText.exists(name)) {
-				var text = PlayState.luaText.get(name);
-				text.scale.set(x, y);
-			}
-		});
-
-		setCallback("getInputPress", function(type:String, keyName:String) {
-			switch (type) {
+		// Misc. Functions
+		setCallback("getInput", function(key:String, state:String) {
+			switch (state) {
 				case "justPressed":
-					return FlxG.keys.anyJustPressed([getKeyName(keyName)]);
+					return FlxG.keys.anyJustPressed([getKeyName(key)]);
 				case "justReleased":
-					return FlxG.keys.anyJustReleased([getKeyName(keyName)]);
+					return FlxG.keys.anyJustReleased([getKeyName(key)]);
 				case "pressed":
-					return FlxG.keys.anyPressed([getKeyName(keyName)]);
+					return FlxG.keys.anyPressed([getKeyName(key)]);
 				default:
 					return false;
 			}
@@ -296,7 +310,7 @@ class LuaScript extends FlxBasic {
 		if (execute)
 			callFunction('create', []);
 	}
-	
+
 	public function callFunction(name:String, args:Array<Dynamic>) {
 		if (lua == null)
 			return Function_Continue;
