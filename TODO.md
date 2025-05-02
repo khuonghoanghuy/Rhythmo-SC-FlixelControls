@@ -6,14 +6,15 @@
 * [ ] Improve Chart Editor
 * [X] Lua Script Support
 * [X] Campaign Mode
+* [ ] Note Sustains
+* [ ] Improve + Fix Notes
 * [X] Noteskins
-* [ ] Use `hscript-iris` instead of `hscript` (broken)
 
 ### Low Priority
+* [ ] New song
 * [ ] Gameplay Modifiers
 * [ ] Silly Visualizer Option
-* [ ] Sustain Notes + New song
-* [ ] Improve Note Assets + Fix Notes
+* [ ] Use `hscript-iris` instead of `hscript` (might scrap cause it's broken)
 
 ## Future To-Dos
 Nothing yet...

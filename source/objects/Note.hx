@@ -15,6 +15,7 @@ class Note extends GameSprite {
 	public var rawNoteData:Int = 0;
 
 	public var strum:Float = 0.0;
+	public var sustainLength:Float = 0;
 
 	public var colorSwap:ColorSwap;
 
