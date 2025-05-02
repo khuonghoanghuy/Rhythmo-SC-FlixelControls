@@ -316,10 +316,12 @@ class ChartingState extends ExtendableState {
 
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
 		var noteData = Math.floor((gridBG.x + (FlxG.mouse.x / gridSize)) - 2);
+		var noteSus = 0;
 
 		song.notes[curSection].sectionNotes.push({
 			noteStrum: noteStrum,
-			noteData: noteData
+			noteData: noteData,
+			noteSus: noteSus
 		});
 
 		updateGrid();
