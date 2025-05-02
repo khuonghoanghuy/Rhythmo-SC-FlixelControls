@@ -144,7 +144,8 @@ class ChartingState extends ExtendableState {
 			for (note in notesCopied) {
 				var clonedNote = {
 					noteStrum: note.noteStrum + Conductor.stepCrochet * (4 * 4 * (curSection - sectionToCopy)),
-					noteData: note.noteData
+					noteData: note.noteData,
+					noteSus: note.noteSus
 				};
 				song.notes[curSection].sectionNotes.push(clonedNote);
 			}
