@@ -918,10 +918,23 @@ class PlayState extends ExtendableState {
 					oldNote = null;
 
 				var swagNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "note");
+				swagNote.sustainLength = note.noteSus;
 				swagNote.lastNote = oldNote;
 				swagNote.strum = daStrumTime;
 				swagNote.animation.play('note');
+
+				var susLength:Float = swagNote.sustainLength;
+				susLength = susLength / Conductor.stepCrochet;
+
 				spawnNotes.push(swagNote);
+
+				for (susNote in 0...Math.floor(susLength)) {
+					oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
+
+					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
+					sustainNote.strum = daStrumTime;
+					spawnNotes.push(sustainNote);
+				}
 			}
 		}
 

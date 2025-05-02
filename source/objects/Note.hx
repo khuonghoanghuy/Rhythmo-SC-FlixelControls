@@ -31,8 +31,26 @@ class Note extends GameSprite {
 		animation.add("note", [0], 1);
 		animation.add("press", [1], 1);
 		animation.add("receptor", [2], 1);
+		animation.add("hold", [0], 1); // placeholder for now
+		animation.add("hold-end", [0], 1); // placeholder for now
 
 		animation.play((type == 'receptor') ? "receptor" : "note");
+
+		if (type == "sustain" && lastNote != null) {
+			alpha = 0.6;
+			x += width / 2;
+
+			animation.play("hold-end");
+			updateHitbox();
+
+			x -= width / 2;
+
+			if (lastNote.type == "sustain") {
+				lastNote.animation.play("hold");
+				lastNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.instance.speed;
+				lastNote.updateHitbox();
+			}
+		}
 
 		colorSwap = new ColorSwap();
 		shader = colorSwap.shader;
