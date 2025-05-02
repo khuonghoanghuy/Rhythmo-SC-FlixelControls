@@ -2,7 +2,7 @@ package objects;
 
 class Note extends GameSprite {
 	public var dir:String = ''; // note direction
-	public var type:String = ''; // receptor or plain note
+	public var type:String = ''; // receptor, plain, or sustain
 
 	public var shouldHit:Bool = true;
 
