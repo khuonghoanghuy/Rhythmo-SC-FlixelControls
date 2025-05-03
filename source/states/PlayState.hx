@@ -582,7 +582,7 @@ class PlayState extends ExtendableState {
 		for (note in notes) {
 			note.calculateCanBeHit();
 			if (!SaveData.settings.botPlay) {
-				if (note.canBeHit && !note.tooLate)
+				if (note.canBeHit && note.type != "sustain" && !note.tooLate)
 					possibleNotes.push(note);
 			} else {
 				if (note.strum <= Conductor.songPosition)
@@ -933,6 +933,14 @@ class PlayState extends ExtendableState {
 
 					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
 					sustainNote.strum = daStrumTime;
+
+					if (susNote == Math.floor(susLength) - 1) {
+						sustainNote.isEndNote = true;
+						sustainNote.animation.play('hold-end');
+					} else
+						sustainNote.animation.play('hold');
+
+					oldNote.nextNote = sustainNote;
 					spawnNotes.push(sustainNote);
 				}
 			}

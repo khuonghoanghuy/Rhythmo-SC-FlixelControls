@@ -11,8 +11,10 @@ class Note extends GameSprite {
 	public var wasGoodHit:Bool = false;
 
 	public var lastNote:Note;
-	public var nextNote:Note;
+	public var nextNote:Note = null;
 	public var rawNoteData:Int = 0;
+
+	public var isEndNote:Bool = false;
 
 	public var strum:Float = 0.0;
 	public var sustainLength:Float = 0;
@@ -82,17 +84,34 @@ class Note extends GameSprite {
 
 	public function calculateCanBeHit() {
 		if (this != null) {
-			if (shouldHit) {
-				if (strum > Conductor.songPosition - Conductor.safeZoneOffset && strum < Conductor.songPosition + Conductor.safeZoneOffset)
-					canBeHit = true;
-				else
-					canBeHit = false;
+			if (isSustainNote) {
+				if (shouldHit) {
+					if (strum > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
+						&& strum < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+						canBeHit = true;
+					else
+						canBeHit = false;
+				} else {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				}
 			} else {
-				if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
-					&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
-					canBeHit = true;
-				else
-					canBeHit = false;
+				if (shouldHit) {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				} else {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				}
 			}
 
 			if (strum < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
