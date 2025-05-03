@@ -942,7 +942,8 @@ class PlayState extends ExtendableState {
 						} else
 							sustainNote.animation.play("hold");
 
-						lastSustain?.nextNote = sustainNote;
+						if (lastSustain != null)
+							lastSustain.nextNote = sustainNote;
 
 						spawnNotes.push(sustainNote);
 						lastSustain = sustainNote;
