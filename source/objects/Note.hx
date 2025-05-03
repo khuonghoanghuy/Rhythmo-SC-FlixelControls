@@ -40,12 +40,7 @@ class Note extends GameSprite {
 
 		if (type == "sustain" && lastNote != null) {
 			alpha = 0.6;
-			x += width / 2;
-
-			animation.play("hold-end");
-			updateHitbox();
-
-			x -= width / 2;
+			animation.play(isEndNote ? "hold-end" : "hold");
 
 			if (lastNote.type == "sustain") {
 				lastNote.animation.play("hold");

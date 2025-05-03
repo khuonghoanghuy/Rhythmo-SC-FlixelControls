@@ -932,8 +932,13 @@ class PlayState extends ExtendableState {
 					oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
 
 					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
-					sustainNote.strum = daStrumTime;
+					sustainNote.strum = daStrumTime + (susNote + 1) * Conductor.stepCrochet;
 					sustainNote.lastNote = oldNote;
+
+					var holdLength:Float = Conductor.stepCrochet / 100 * 1.5 * speed;
+					sustainNote.scale.y = holdLength;
+					sustainNote.updateHitbox();
+					sustainNote.y -= sustainNote.height * 0.5;
 
 					if (susNote == Math.floor(susLength) - 1) {
 						sustainNote.isEndNote = true;
