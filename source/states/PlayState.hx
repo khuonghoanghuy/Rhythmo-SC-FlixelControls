@@ -582,7 +582,7 @@ class PlayState extends ExtendableState {
 		for (note in notes) {
 			note.calculateCanBeHit();
 			if (!SaveData.settings.botPlay) {
-				if (note.canBeHit && note.type != "sustain" && !note.tooLate)
+				if (note.canBeHit && !note.tooLate)
 					possibleNotes.push(note);
 			} else {
 				if (note.strum <= Conductor.songPosition)
@@ -918,37 +918,10 @@ class PlayState extends ExtendableState {
 					oldNote = null;
 
 				var swagNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "note");
-				swagNote.sustainLength = note.noteSus;
 				swagNote.lastNote = oldNote;
 				swagNote.strum = daStrumTime;
 				swagNote.animation.play('note');
-
-				var susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
-				var totalSustains:Int = Math.floor(susLength);
-
 				spawnNotes.push(swagNote);
-
-				if (totalSustains > 0) {
-					var lastSustain:Note = swagNote;
-
-					for (i in 0...totalSustains) {
-						var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
-						sustainNote.strum = daStrumTime;
-						sustainNote.lastNote = lastSustain;
-
-						if (i == totalSustains - 1) {
-							sustainNote.isEndNote = true;
-							sustainNote.animation.play("hold-end");
-						} else
-							sustainNote.animation.play("hold");
-
-						if (lastSustain != null)
-							lastSustain.nextNote = sustainNote;
-
-						spawnNotes.push(sustainNote);
-						lastSustain = sustainNote;
-					}
-				}
 			}
 		}
 

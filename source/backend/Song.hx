@@ -21,7 +21,6 @@ typedef SectionData = {
 typedef NoteData = {
 	var noteStrum:Float;
 	var noteData:Int;
-	var noteSus:Float;
 }
 
 class Song {
