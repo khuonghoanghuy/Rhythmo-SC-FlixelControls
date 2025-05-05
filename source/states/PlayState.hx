@@ -582,10 +582,10 @@ class PlayState extends ExtendableState {
 		for (note in notes) {
 			note.calculateCanBeHit();
 			if (!SaveData.settings.botPlay) {
-				if (note.canBeHit && !note.tooLate)
+				if (note.canBeHit && !note.tooLate && note.type != "sustain")
 					possibleNotes.push(note);
 			} else {
-				if (note.strum <= Conductor.songPosition)
+				if ((note.type != "sustain" ? note.strum : note.strum - 1) <= Conductor.songPosition)
 					possibleNotes.push(note);
 			}
 		}

@@ -2,16 +2,16 @@ package objects;
 
 class Note extends GameSprite {
 	public var dir:String = ''; // note direction
-	public var type:String = ''; // receptor or plain note
+	public var type:String = ''; // receptor, plain, or sustain
 
 	public var shouldHit:Bool = true;
+	public var isEndNote:Bool = false;
 
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 
 	public var lastNote:Note;
-	public var nextNote:Note;
 	public var rawNoteData:Int = 0;
 
 	public var strum:Float = 0.0;
@@ -64,17 +64,34 @@ class Note extends GameSprite {
 
 	public function calculateCanBeHit() {
 		if (this != null) {
-			if (shouldHit) {
-				if (strum > Conductor.songPosition - Conductor.safeZoneOffset && strum < Conductor.songPosition + Conductor.safeZoneOffset)
-					canBeHit = true;
-				else
-					canBeHit = false;
+			if (type == "sustain") {
+				if (shouldHit) {
+					if (strum > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
+						&& strum < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+						canBeHit = true;
+					else
+						canBeHit = false;
+				} else {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				}
 			} else {
-				if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
-					&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
-					canBeHit = true;
-				else
-					canBeHit = false;
+				if (shouldHit) {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				} else {
+					if (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
+						&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2)
+						canBeHit = true;
+					else
+						canBeHit = false;
+				}
 			}
 
 			if (strum < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
