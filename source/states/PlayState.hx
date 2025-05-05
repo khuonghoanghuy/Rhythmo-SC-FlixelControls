@@ -934,7 +934,6 @@ class PlayState extends ExtendableState {
 					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
 					sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 					sustainNote.lastNote = oldNote;
-					sustainNote.isSustainNote = true;
 					
 					if (susNote == Math.floor(susLength) - 1) {
 						sustainNote.isEndNote = true;
