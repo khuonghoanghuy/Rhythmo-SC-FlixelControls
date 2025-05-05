@@ -580,6 +580,8 @@ class PlayState extends ExtendableState {
 		var possibleNotes:Array<Note> = [];
 
 		for (note in notes) {
+			if (note == null)
+				continue;
 			note.calculateCanBeHit();
 			if (!SaveData.settings.botPlay) {
 				if (note.canBeHit && !note.tooLate && note.type != "sustain")
