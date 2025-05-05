@@ -25,6 +25,7 @@ class ChartingState extends ExtendableState {
 	var beatSnap:Int = 16;
 
 	var renderedNotes:FlxTypedGroup<Note>;
+	var renderedSustains:FlxTypedGroup<FlxSprite>;
 	var curSelectedNote:NoteData;
 
 	var songInfoText:FlxText;
@@ -97,6 +98,9 @@ class ChartingState extends ExtendableState {
 
 		renderedNotes = new FlxTypedGroup<Note>();
 		add(renderedNotes);
+
+		renderedSustains = new FlxTypedGroup<FlxSprite>();
+		add(renderedSustains);
 
 		addSection();
 		updateGrid();
@@ -222,6 +226,11 @@ class ChartingState extends ExtendableState {
 				FlxG.sound.music.play();
 		}
 
+		if (Input.justPressed('e'))
+			changeNoteSustain(Conductor.stepCrochet);
+		if (Input.justPressed('q'))
+			changeNoteSustain(-Conductor.stepCrochet);
+
 		if (FlxG.mouse.x > gridBG.x
 			&& FlxG.mouse.x < gridBG.x + gridBG.width
 			&& FlxG.mouse.y > gridBG.y
@@ -341,6 +350,15 @@ class ChartingState extends ExtendableState {
 		updateGrid();
 	}
 
+	function changeNoteSustain(value:Float):Void {
+		if (curSelectedNote != null) {
+			curSelectedNote.noteSus += value;
+			curSelectedNote.noteSus = Math.max(curSelectedNote.noteSus, 0);
+		}
+
+		updateGrid();
+	}
+
 	function updateGrid() {
 		renderedNotes.forEach(function(note:Note) {
 			note.kill();
@@ -349,7 +367,11 @@ class ChartingState extends ExtendableState {
 
 		renderedNotes.clear();
 
+		while (renderedSustains.members.length > 0)
+			renderedSustains.remove(renderedSustains.members[0], true);
+
 		for (sectionNote in song.notes[curSection].sectionNotes) {
+			var daSus = sectionNote.noteSus;
 			var direction:String = Utilities.getDirection(sectionNote.noteData % 4);
 			var note:Note = new Note(0, 0, direction, "note");
 
@@ -360,9 +382,16 @@ class ChartingState extends ExtendableState {
 			note.y = Math.floor(getYfromStrum((sectionNote.noteStrum - sectionStartTime())));
 
 			note.strum = sectionNote.noteStrum;
+			note.sustainLength = daSus;
 			note.rawNoteData = sectionNote.noteData;
 
 			renderedNotes.add(note);
+
+			if (daSus > 0) {
+				var sustainVis:FlxSprite = new FlxSprite(note.x + (gridSize / 2),
+					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
+				renderedSustains.add(sustainVis);
+			}
 		}
 	}
 
