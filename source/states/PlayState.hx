@@ -628,7 +628,8 @@ class PlayState extends ExtendableState {
 					if (!SaveData.settings.botPlay)
 						strumline.members[Utilities.getNoteIndex(note.dir)].press();
 
-					noteHit(note, curRating);
+					if (note.type != "sustain")
+						noteHit(note, curRating);
 				}
 			}
 
@@ -734,7 +735,8 @@ class PlayState extends ExtendableState {
 
 		callOnScripts('noteHit', [note, rating]);
 		callOnLuas('noteHit', [note, rating]);
-		destroyNote(note);
+		if (note.type != "sustain")
+			destroyNote(note);
 	}
 
 	function noteMiss(direction:String) {
@@ -923,28 +925,23 @@ class PlayState extends ExtendableState {
 				swagNote.lastNote = oldNote;
 				swagNote.strum = daStrumTime;
 				swagNote.sustainLength = note.noteSus;
+				if (swagNote.sustainLength > 0)
+					swagNote.sustainLength = Math.round(swagNote.sustainLength / Conductor.stepCrochet) * Conductor.stepCrochet;
 				swagNote.animation.play('note');
-
-				var susLength:Float = swagNote.sustainLength;
-				susLength = susLength / Conductor.stepCrochet;
-
 				spawnNotes.push(swagNote);
 
-				for (susNote in 0...Math.floor(susLength)) {
-					oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
+				if (swagNote.sustainLength > 0) {
+					var susLength:Int = Math.round(swagNote.sustainLength / Conductor.stepCrochet);
+					if (susLength > 0) {
+						for (susNote in 0...Std.int(Math.max(susLength, 2))) {
+							oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
-					sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-					sustainNote.lastNote = oldNote;
-					
-					if (susNote == Math.floor(susLength) - 1) {
-						sustainNote.isEndNote = true;
-						sustainNote.animation.play('holdend');
-					} else
-						sustainNote.animation.play('hold');
-					
-					oldNote.nextNote = sustainNote;
-					spawnNotes.push(sustainNote);
+							var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
+							sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+							sustainNote.lastNote = oldNote;
+							spawnNotes.push(sustainNote);
+						}
+					}
 				}
 			}
 		}
