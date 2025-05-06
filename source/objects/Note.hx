@@ -72,6 +72,9 @@ class Note extends GameSprite {
 	}
 
 	override function update(elapsed:Float) {
+		scaleX = scale.x;
+		scaleY = scale.y;
+
 		super.update(elapsed);
 
 		if (tooLate && alpha > 0.3)

@@ -374,6 +374,8 @@ class ChartingState extends ExtendableState {
 			var daSus = sectionNote.noteSus;
 			var direction:String = Utilities.getDirection(sectionNote.noteData % 4);
 			var note:Note = new Note(0, 0, direction, "note");
+			note.strum = sectionNote.noteStrum;
+			note.sustainLength = daSus;
 
 			note.setGraphicSize(gridSize, gridSize);
 			note.updateHitbox();
@@ -381,8 +383,6 @@ class ChartingState extends ExtendableState {
 			note.x = gridBG.x + Math.floor((sectionNote.noteData % 4) * gridSize);
 			note.y = Math.floor(getYfromStrum((sectionNote.noteStrum - sectionStartTime())));
 
-			note.strum = sectionNote.noteStrum;
-			note.sustainLength = daSus;
 			note.rawNoteData = sectionNote.noteData;
 
 			renderedNotes.add(note);
