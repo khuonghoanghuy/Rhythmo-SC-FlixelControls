@@ -363,7 +363,7 @@ class PlayState extends ExtendableState {
 			else
 				note.y = strum.y - (0.45 * (Conductor.songPosition - note.strum) * FlxMath.roundDecimal(speed, 2));
 
-			if (Conductor.songPosition > note.strum + (120 * songMultiplier) && note != null) {
+			if (Conductor.songPosition > note.strum + (120 * songMultiplier) && note != null && note.type != "sustain") {
 				noteMiss(note.dir);
 				destroyNote(note);
 			}
