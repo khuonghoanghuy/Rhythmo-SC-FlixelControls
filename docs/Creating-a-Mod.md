@@ -46,7 +46,7 @@ Each folder in your mod should be used as follows:
 * `languages` - For storing language data.
 * `music` - Non-gameplay related music.
 * `scripts` - Scripts that run on every song.
-* `shaders` - `.frag` or `.vert` shader files that create cool immersive visuals.
+* `shaders` - `.frag` or `.vert` shader files.
 * `songs` - Songs used for gameplay.
 	* `songs/[song-name]/chart.json` - Your song's chart.
 	* `songs/[song-name]/music.ogg` - Your song's music. Can also be a `.wav`.

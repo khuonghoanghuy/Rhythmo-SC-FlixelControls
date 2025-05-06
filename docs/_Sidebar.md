@@ -9,3 +9,5 @@
 * [Adding a New Language](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Adding-a-New-Language)
 * [Adding a New Song](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Adding-a-New-Song)
 * [Scripting](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Scripting)
+    * [HScript](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Scripting#hscript)
+    * [Lua](https://github.com/JoaTH-Team/Rhythmo-SC/wiki/Scripting#lua)

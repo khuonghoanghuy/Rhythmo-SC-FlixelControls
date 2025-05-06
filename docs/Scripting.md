@@ -222,7 +222,7 @@ import('backend.Paths');
 function createSprite(x:Float, y:Float, graphic:String) {
 	var spr:FlxSprite = new FlxSprite(x, y);
 	spr.loadGraphic(Paths.image(graphic));
-	state.add(spr);
+	add(spr);
 
 	trace("sprite " + sprite + " created");
 }
@@ -287,18 +287,19 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 * `stdInt(x:Float)` - Converts a floating point number into an integer.
 
 ## Basic Object Functions
-* `createObject(type:String, name:String, config:Dynamic)` - Creates an object with a specific configuration.
-* `addObject(name:String)` - Adds an object.
-* `removeObject(name:String)` - Removes an object.
-* `insertObject(name:String, pos:Int = 0)` - Inserts an object at a specific position.
-* `setPosition(name:String, x:Float, y:Float)` - Sets an object's position.
-* `setScale(name:String, x:Float, y:Float)` - Sets the scaling of an object.
-* `setProperty(name:String, property:String, value:Dynamic)` - Sets the property of an object.
-* `getProperty(name:String, property:String)` - Gets the property of an object.
+* `createObject(type:String, tag:String, config:Dynamic)` - Creates an object with a specific configuration.
+* `addObject(tag:String)` - Adds an object.
+* `removeObject(tag:String)` - Removes an object.
+* `insertObject(tag:String, pos:Int = 0)` - Inserts an object at a specific position.
+* `setPosition(tag:String, x:Float, y:Float)` - Sets an object's position.
+* `setScale(tag:String, x:Float, y:Float)` - Sets the scaling of an object.
+* `setProperty(tag:String, property:String, value:Dynamic)` - Sets the property of an object.
+* `getProperty(tag:String, property:String)` - Gets the property of an object.
 
 ### Text
-* `createObject("text", "name", {x = 0, y = 0, width = 0, text = "Text goes here.", size = 16})` - Creates a text.
-* `configText(name:String, config:Dynamic)` - Configures a text object with various properties.
+* `createObject("text", "tag", {x = 0, y = 0, width = 0, text = "Text goes here.", size = 16})` - Creates a text object.
+* `setText(tag:String, newText:String)` - Changes the current text for a text object.
+* `configText(tag:String, config:Dynamic)` - Configures a text object with various properties.
 	* `x`, `y`: Position
     * `width`: Text width
     * `text`: Text content
@@ -319,11 +320,11 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
     * `borderQuality`: Border quality
 
 ### Sprites
-* `createObject("sprite", "name", {x = 0, y = 0, image = "image"})` - Creates a sprite.
+* `createObject("sprite", "tag", {x = 0, y = 0, image = "image"})` - Creates a sprite.
 * `makeAnimationSprite(tag:String, x:Float, y:Float, paths:String)` - Creates an animated sprite.
 * `addAnimationByPrefix(tag:String, name:String, prefix:String, fps:Int, looped:Bool)` - Adds an animation to an animated sprite.
 * `playAnimation(tag:String, name:String, force:Bool = false, rev:Bool = false, frames:Int = 0)` - Plays an animation for an animated sprite.
-* `configSprite(name:String, config:Dynamic)` - Configures a sprite with various properties.
+* `configSprite(tag:String, config:Dynamic)` - Configures a sprite with various properties.
 	* `image`: Image path
     * `x`, `y`: Position
     * `width`, `height`: Dimensions
@@ -339,7 +340,7 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 * `playMusic(name:String, volume:Float, loop:Bool)` - Plays music.
 
 ## Misc. Functions
-* `getInputPress(type:String, keyName:String)` - Checks for a specific input.
+* `getInputPress(key:String, state:String)` - Checks for a specific input.
 
 ## Templates
 ### Basic Template

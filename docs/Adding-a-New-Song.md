@@ -2,6 +2,8 @@
 First of all, you need your song's audio. You only need an audio file with your music called `music.ogg`. <br>
 It should be located in `assets/songs/[song-name]/music.ogg`.
 
+Additionally, it can also be a `.wav` file.
+
 ## Song Data
 Now, you need your chart. <br>
 For your chart, copy this empty template:
