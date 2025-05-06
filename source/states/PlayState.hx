@@ -922,26 +922,31 @@ class PlayState extends ExtendableState {
 					oldNote = null;
 
 				var swagNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "note");
-				swagNote.lastNote = oldNote;
 				swagNote.strum = daStrumTime;
 				swagNote.sustainLength = note.noteSus;
-				if (swagNote.sustainLength > 0)
-					swagNote.sustainLength = Math.round(swagNote.sustainLength / Conductor.stepCrochet) * Conductor.stepCrochet;
+				swagNote.lastNote = oldNote;
 				swagNote.animation.play('note');
+
+				var susLength:Float = swagNote.sustainLength;
+				susLength = susLength / Conductor.stepCrochet;
+
 				spawnNotes.push(swagNote);
 
-				if (swagNote.sustainLength > 0) {
-					var susLength:Int = Math.round(swagNote.sustainLength / Conductor.stepCrochet);
-					if (susLength > 0) {
-						for (susNote in 0...Std.int(Math.max(susLength, 2))) {
-							oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
+				for (susNote in 0...Math.floor(susLength)) {
+					oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
 
-							var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
-							sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-							sustainNote.lastNote = oldNote;
-							spawnNotes.push(sustainNote);
-						}
-					}
+					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
+					sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+					sustainNote.lastNote = oldNote;
+
+					if (susNote == Math.floor(susLength) - 1) {
+						sustainNote.isEndNote = true;
+						sustainNote.animation.play('holdend');
+					} else
+						sustainNote.animation.play('hold');
+
+					oldNote.nextNote = sustainNote;
+					spawnNotes.push(sustainNote);
 				}
 			}
 		}
