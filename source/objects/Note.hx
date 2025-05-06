@@ -20,6 +20,9 @@ class Note extends GameSprite {
 
 	public var colorSwap:ColorSwap;
 
+	public var scaleX:Float = 0;
+	public var scaleY:Float = 0;
+
 	public function new(x:Float, y:Float, dir:String, type:String) {
 		super(x, y);
 
