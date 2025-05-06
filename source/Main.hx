@@ -5,7 +5,6 @@ import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
 import sys.io.Process;
-import backend.ALSoftConfig;
 #end
 import debug.FPS;
 #if (linux || mac)
@@ -46,6 +45,23 @@ class Main extends openfl.display.Sprite {
 
 	static function get_framerate():Float
 		return Lib.current.stage.frameRate;
+
+	#if desktop
+	static function __init__():Void {
+		var origin:String = #if hl Sys.getCwd() #else Sys.programPath() #end;
+
+		var configPath:String = Path.directory(Path.withoutExtension(origin));
+		#if windows
+		configPath += "/alsoft.ini";
+		#elseif mac
+		configPath = Path.directory(configPath) + "/Resources/alsoft.conf";
+		#else
+		configPath += "/alsoft.conf";
+		#end
+
+		Sys.putEnv("ALSOFT_CONF", configPath);
+	}
+	#end
 
 	public function new() {
 		super();

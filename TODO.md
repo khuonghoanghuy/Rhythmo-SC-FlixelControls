@@ -6,7 +6,7 @@
 * [ ] Improve Chart Editor
 * [X] Lua Script Support
 * [X] Campaign Mode
-* [ ] Note Sustains
+* [ ] Note Sustains (broken, need to fix)
 * [ ] Improve + Fix Notes
 * [X] Noteskins
 
