@@ -37,13 +37,13 @@ class Note extends GameSprite {
 
 		animation.play((type == 'receptor') ? "receptor" : "note");
 
-		if (type == "sustain" && lastNote != null) {
+		if (type == "sustain" && Utilities.getNoteIndex(dir) <= 0 && lastNote != null) {
 			alpha = 0.6;
 
 			animation.play("holdend");
 			updateHitbox();
 
-			if (lastNote.type == "sustain") {
+			if (lastNote.type == "sustain" && Utilities.getNoteIndex(dir) <= 0) {
 				lastNote.animation.play("hold");
 				lastNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.instance.speed;
 				lastNote.updateHitbox();
