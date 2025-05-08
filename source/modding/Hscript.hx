@@ -21,7 +21,7 @@ class Hscript extends FlxBasic {
 	public var parser:Parser = new Parser();
 	public var interp:Interp = new Interp();
 
-	public function new(file:String, ?execute:Bool = true) {
+	public function new(?file:String, ?execute:Bool = true) {
 		super();
 
 		parser.allowJSON = parser.allowTypes = parser.allowMetadata = true;
@@ -192,7 +192,7 @@ class Hscript extends FlxBasic {
 
 		setVariable('game', PlayState.instance);
 
-		if (execute)
+		if (execute && file != null)
 			this.execute(file);
 	}
 
@@ -203,6 +203,18 @@ class Hscript extends FlxBasic {
 			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
 
 		trace('Script Loaded Succesfully: $file');
+
+		if (executeCreate)
+			executeFunc('create', []);
+	}
+
+	public function executeStr(code:String, ?executeCreate:Bool = true):Void {
+		try {
+			@:privateAccess
+			parser.line = 1;
+			interp.execute(parser.parseString(code));
+		} catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
 
 		if (executeCreate)
 			executeFunc('create', []);

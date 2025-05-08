@@ -7,6 +7,7 @@ class LuaScript extends FlxBasic {
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
+	public var hscript:Hscript = null;
 	public var lua:State = null;
 
 	private var game:PlayState;
@@ -34,6 +35,8 @@ class LuaScript extends FlxBasic {
 			Lib.application.window.alert(e.message, "Lua Error!");
 			return;
 		}
+
+		initHaxeModule();
 
 		trace('Script Loaded Succesfully: $file');
 
@@ -293,6 +296,41 @@ class LuaScript extends FlxBasic {
 			return FlxG.sound.playMusic(Paths.music(name), volume, loop);
 		});
 
+		// Language Functions
+		setCallback("switchLanguage", function(lang:String) {
+			Localization.switchLanguage(lang);
+		});
+		setCallback("getLangKey", function(key:String, ?lang:String) {
+			Localization.get(key, lang);
+		});
+
+		// HScript Support
+		setCallback("runHaxeCode", function(code:String) {
+			var ret:Dynamic = null;
+
+			initHaxeModule();
+			try {
+				ret = hscript.executeStr(code);
+			} catch (e:Dynamic)
+				Lib.application.window.alert(e, "Lua Error!");
+
+			if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
+				ret = null;
+			if (ret == null)
+				Lua.pushnil(lua);
+			return ret;
+		});
+		setCallback("importHaxeLibrary", function(lib:String, ?packageName:String) {
+			initHaxeModule();
+			try {
+				var str:String = '';
+				if (packageName != null)
+					str = packageName + '.';
+				hscript.setVariable(lib, Type.resolveClass(str + packageName));
+			} catch (e:Dynamic)
+				Lib.application.window.alert(e, "Lua Error!");
+		});
+
 		// Misc. Functions
 		setCallback("getInput", function(key:String, state:String) {
 			switch (state) {
@@ -520,6 +558,11 @@ class LuaScript extends FlxBasic {
 		}
 
 		return FlxKey.NONE;
+	}
+
+	public function initHaxeModule() {
+		if (hscript == null)
+			hscript = new Hscript();
 	}
 
 	override public function destroy() {
