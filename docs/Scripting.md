@@ -399,7 +399,7 @@ end
 function create()
 	importHaxeLibrary("FlxG", "flixel")
 	runHaxeCode([[
-		FlxG.openURL("https://github.com/JoaTH-Team/Rhythmo-SC")
+		FlxG.openURL("https://github.com/JoaTH-Team/Rhythmo-SC");
 	]])
 end
 ```

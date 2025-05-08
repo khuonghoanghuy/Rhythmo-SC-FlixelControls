@@ -104,7 +104,7 @@ class LuaScript extends FlxBasic {
 
 		setCallback("unlockAchievement", function(name:String) {
 			Achievements.unlock(name, {
-				date: Date.now();
+				date: Date.now(),
 				song: PlayState.song.song
 			}, () -> {
 				trace('Achievement $name unlocked!');

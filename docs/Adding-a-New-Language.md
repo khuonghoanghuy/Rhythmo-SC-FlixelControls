@@ -7,7 +7,7 @@ For its data, copy [this](https://raw.githubusercontent.com/Joalor64GH/Rhythmo-S
 ## Loading your Language
 Now, you need to edit these two main text files:
 * `assets/languages/languagesList.txt` - Your list of languages. (e.g., `de`, `en`, `es`, `fr`)
-* `assets/languages/languagesData.txt` - This is so that your language can be pushed into `LanguagesState.hx`.
+* `assets/languages/languagesData.txt` - This is so that your language can be selected in `LanguagesState.hx`.
 
 To add your language into `languagesData.txt`, use this format:
 ```

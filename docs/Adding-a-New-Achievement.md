@@ -51,7 +51,7 @@ function endSong() {
 Lua:
 ```lua
 function update(elapsed)
-	if combo >= 100 and misses == 0 then 
+	if combo >= 100 and misses == 0 then
 		unlockAchievement("pro_gaming")
 	end
 end
