@@ -102,6 +102,15 @@ class LuaScript extends FlxBasic {
 			game.misses += value;
 		});
 
+		setCallback("unlockAchievement", function(name:String) {
+			Achievements.unlock(name, {
+				date: Date.now();
+				song: PlayState.song.song
+			}, () -> {
+				trace('Achievement $name unlocked!');
+			});
+		});
+
 		// Screen Stuff
 		setVar("screenWidth", FlxG.width);
 		setVar("screenHeight", FlxG.height);
@@ -312,7 +321,7 @@ class LuaScript extends FlxBasic {
 			try {
 				ret = hscript.executeStr(code);
 			} catch (e:Dynamic)
-				Lib.application.window.alert(e, "HScript Lua Error!");
+				Lib.application.window.alert(e, "Lua Error!");
 
 			if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 				ret = null;

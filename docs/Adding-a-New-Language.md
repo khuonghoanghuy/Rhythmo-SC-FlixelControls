@@ -23,15 +23,27 @@ Deutsch (Deutschland):de
 Like most functions, these can be accessed through [scripting](https://github.com/Joalor64GH/Rhythmo-SC/wiki/Scripting).
 
 ### Switching to Another Language
+HScript:
 ```hx
 Localization.switchLanguage('language-code');
+```
+
+Lua:
+```lua
+switchLanguage('language-code');
 ```
 
 If that language is already selected, the change will not happen.
 
 ### Retrieving a Key
+HScript:
 ```hx
 Localization.get('key', 'language-code');
+```
+
+Lua:
+```lua
+getLangKey('key', 'language-code');
 ```
 
 If the second parameter is empty, defaults to current language.

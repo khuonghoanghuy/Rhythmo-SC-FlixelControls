@@ -321,7 +321,7 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 
 ### Sprites
 * `createObject("sprite", "tag", {x = 0, y = 0, image = "image"})` - Creates a sprite.
-* `makeAnimationSprite(tag:String, x:Float, y:Float, paths:String)` - Creates an animated sprite.
+* `makeAnimationSprite(tag:String, x:Float, y:Float, path:String)` - Creates an animated sprite.
 * `addAnimationByPrefix(tag:String, name:String, prefix:String, fps:Int, looped:Bool)` - Adds an animation to an animated sprite.
 * `playAnimation(tag:String, name:String, force:Bool = false, rev:Bool = false, frames:Int = 0)` - Plays an animation for an animated sprite.
 * `configSprite(tag:String, config:Dynamic)` - Configures a sprite with various properties.
@@ -339,54 +339,68 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 * `playSound(name:String, volume:Float, loop:Bool)` - Plays a sound.
 * `playMusic(name:String, volume:Float, loop:Bool)` - Plays music.
 
+## Using Haxe in Lua
+* `runHaxeCode(code:String)` - Runs Haxe code.
+* `importHaxeLibrary(lib:String, ?packageName:String)` - Imports a Haxe library.
+
 ## Misc. Functions
 * `getInputPress(key:String, state:String)` - Checks for a specific input.
 
 ## Templates
-### Basic Template
+For the default template, use [this](https://raw.githubusercontent.com/JoaTH-Team/Rhythmo-SC/main/assets/scripts/template.lua).
+
+### Making a Sprite
 ```lua
 function create()
-	-- Called when the script is created.
+	createObject("sprite", "sun", {x = 0, y = 0, image = "sun"})
+	addObject("sun")
 end
+```
 
-function startCountdown()
-	-- Called when the countdown starts in PlayState.
+#### Making an Animated Sprite
+```lua
+function create()
+	makeAnimationSprite("player", 500, 0, "example")
+	addAnimationByPrefix("player", "idle", "Idle", 24, false)
+	addAnimationByPrefix("player", "singUP", "Up", 24, true)
+	addAnimationByPrefix("player", "singDOWN", "Down", 24, true)
+	addAnimationByPrefix("player", "singLEFT", "Left", 24, true)
+	addAnimationByPrefix("player", "singRIGHT", "Right", 24, true)
+	playAnimation("player", "idle", false, false, 0)
+	addObject("player")
 end
 
 function update(elapsed)
-	-- Called every frame.
+	if getInputPress("pressed", "LEFT") then
+		playAnimation("player", "singLEFT", true, false, 0)
+	elseif getInputPress("pressed", "RIGHT") then
+		playAnimation("player", "singRIGHT", true, false, 0)
+	elseif getInputPress("pressed", "UP") then
+		playAnimation("player", "singUP", true, false, 0)
+	elseif getInputPress("pressed", "DOWN") then
+		playAnimation("player", "singDOWN", true, false, 0)
+	else
+		playAnimation("player", "idle", false, false, 0)
+	end
 end
+```
 
-function beatHit(curBeat)
-	-- Called every beat hit in PlayState.
+### Making Text
+```lua
+function create()
+	createObject("text", "tutoText", {x = screenWidth / 2, y = screenHeight / 2, width = 0, text = "Press the notes!", size = 64})
+	configText("tutoText", {font = "vcr"})
+	addObject("tutoText")
 end
+```
 
-function stepHit(curStep)
-	-- Called every step hit in PlayState.
-end
-
-function pause()
-	-- Called when the game is paused.
-end
-
-function resume()
-	-- Called when the game is resumed.
-end
-
-function noteHit(note, rating)
-	-- Called when a note is hit.
-end
-
-function noteMiss(direction)
-	-- Called when a note is missed.
-end
-
-function endSong()
-	-- Called when the song ends.
-end
-
-function destroy()
-	-- Called when the script is destroyed.
+### Using Haxe in Lua
+```lua
+function create()
+	importHaxeLibrary("FlxG", "flixel")
+	runHaxeCode([[
+		FlxG.openURL("https://github.com/JoaTH-Team/Rhythmo-SC")
+	]])
 end
 ```
 

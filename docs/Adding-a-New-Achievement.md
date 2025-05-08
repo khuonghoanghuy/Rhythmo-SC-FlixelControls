@@ -17,7 +17,9 @@ I recommend that the image's size should be a square, preferably `150 x 150`.
 ## Unlocking your Achievement
 To actually be able to unlock your custom achievement, you can do it through [scripting](https://github.com/Joalor64GH/Rhythmo-SC/wiki/Scripting).
 
-Example:
+Examples:
+
+HScript:
 ```hx
 import('states.PlayState');
 import('backend.Achievements');
@@ -44,4 +46,13 @@ function endSong() {
 	} else
 		return Function_Continue;
 }
+```
+
+Lua:
+```lua
+function update(elapsed)
+	if combo >= 100 and misses == 0 then 
+		unlockAchievement("pro_gaming")
+	end
+end
 ```
