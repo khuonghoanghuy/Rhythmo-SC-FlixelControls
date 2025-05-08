@@ -35,4 +35,4 @@ Then, to add your song, use this template:
 
 Now, for your song's cover, it should be in `assets/images/covers/[song-name].png`. <br>
 Keep in mind, your song's name should be lowercase and any spaces should be replaced with a dash. <br>
-Also, the size of your cover should be a square, preferably `720 by 720`.
+Also, the size of your cover should be a square, preferably `720 x 720`.
