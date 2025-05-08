@@ -208,16 +208,15 @@ class Hscript extends FlxBasic {
 			executeFunc('create', []);
 	}
 
-	public function executeStr(code:String, ?executeCreate:Bool = true):Void {
+	public function executeStr(code:String):Dynamic {
 		try {
 			@:privateAccess
 			parser.line = 1;
-			interp.execute(parser.parseString(code));
+			return interp.execute(parser.parseString(code));
 		} catch (e:Dynamic)
 			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
-
-		if (executeCreate)
-			executeFunc('create', []);
+		
+		return null;
 	}
 
 	public function setVariable(name:String, val:Dynamic):Void {
