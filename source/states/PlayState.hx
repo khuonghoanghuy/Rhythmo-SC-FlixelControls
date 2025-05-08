@@ -40,7 +40,7 @@ class PlayState extends ExtendableState {
 	public var okays:Int = 0;
 	public var nos:Int = 0;
 
-	public var scriptArray:Array<Hscript> = [];
+	public var scriptArray:Array<HScript> = [];
 	public var luaArray:Array<LuaScript> = [];
 
 	public static var luaText:Map<String, FlxText> = new Map<String, FlxText>();
@@ -146,7 +146,7 @@ class PlayState extends ExtendableState {
 			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
 					if (Paths.validScriptType(file)) {
-						scriptArray.push(new Hscript(folder + file));
+						scriptArray.push(new HScript(folder + file));
 					}
 					if (file.endsWith('.lua')) {
 						luaArray.push(new LuaScript(folder + file));
@@ -198,7 +198,7 @@ class PlayState extends ExtendableState {
 			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
 				for (file in FileSystem.readDirectory(folder)) {
 					if (Paths.validScriptType(file)) {
-						scriptArray.push(new Hscript(folder + file));
+						scriptArray.push(new HScript(folder + file));
 					}
 					if (file.endsWith('.lua')) {
 						luaArray.push(new LuaScript(folder + file));
@@ -209,7 +209,7 @@ class PlayState extends ExtendableState {
 
 		for (script in scriptArray) {
 			script?.setVariable('addScript', function(path:String) {
-				scriptArray.push(new Hscript(Paths.script(path)));
+				scriptArray.push(new HScript(Paths.script(path)));
 			});
 		}
 
@@ -240,7 +240,7 @@ class PlayState extends ExtendableState {
 
 		var ret:Dynamic = callOnScripts('startCountdown', []);
 		var retLua:Dynamic = callOnLuas('startCountdown', []);
-		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			startedCountdown = true;
 			Conductor.songPosition = -Conductor.crochet * 5;
 			FlxG.sound.play(Paths.sound('cDown3'));
@@ -482,7 +482,7 @@ class PlayState extends ExtendableState {
 	function pause() {
 		var ret:Dynamic = callOnScripts('pause', []);
 		var retLua:Dynamic = callOnLuas('pause', []);
-		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			persistentUpdate = false;
 			persistentDraw = true;
 
@@ -778,7 +778,7 @@ class PlayState extends ExtendableState {
 	function endSong() {
 		var ret:Dynamic = callOnScripts('endSong', []);
 		var retLua:Dynamic = callOnLuas('endSong', []);
-		if (ret != Hscript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
 			timeTxt.visible = timeBar.visible = false;
 			canPause = false;
 
@@ -977,11 +977,11 @@ class PlayState extends ExtendableState {
 	}
 
 	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
-		var value:Dynamic = Hscript.Function_Continue;
+		var value:Dynamic = HScript.Function_Continue;
 
 		for (i in 0...scriptArray.length) {
 			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
-			final bool:Bool = call == Hscript.Function_Continue;
+			final bool:Bool = call == HScript.Function_Continue;
 			if (!bool && call != null)
 				value = call;
 		}

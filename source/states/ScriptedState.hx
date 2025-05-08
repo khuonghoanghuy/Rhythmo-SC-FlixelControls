@@ -2,7 +2,7 @@ package states;
 
 class ScriptedState extends ExtendableState {
 	public var path:String = "";
-	public var script:Hscript = null;
+	public var script:HScript = null;
 
 	public static var instance:ScriptedState = null;
 
@@ -28,7 +28,7 @@ class ScriptedState extends ExtendableState {
 				}
 			}
 
-			script = new Hscript(path, false);
+			script = new HScript(path, false);
 			script.execute(path, false);
 
 			scriptSet('multiAdd', multiAdd);

@@ -7,7 +7,7 @@ class LuaScript extends FlxBasic {
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
-	public var hscript:Hscript = null;
+	public var hscript:HScript = null;
 	public var lua:State = null;
 
 	private var game:PlayState;
@@ -312,7 +312,7 @@ class LuaScript extends FlxBasic {
 			try {
 				ret = hscript.executeStr(code);
 			} catch (e:Dynamic)
-				Lib.application.window.alert(e, "Lua Error!");
+				Lib.application.window.alert(e, "HScript Lua Error!");
 
 			if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 				ret = null;
@@ -570,7 +570,7 @@ class LuaScript extends FlxBasic {
 
 	public function initHaxeModule() {
 		if (hscript == null)
-			hscript = new Hscript();
+			hscript = new HScript();
 	}
 
 	override public function destroy() {

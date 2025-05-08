@@ -2,7 +2,7 @@ package substates;
 
 class ScriptedSubState extends ExtendableSubState {
 	public var path:String = "";
-	public var script:Hscript = null;
+	public var script:HScript = null;
 
 	public static var instance:ScriptedSubState = null;
 
@@ -28,7 +28,7 @@ class ScriptedSubState extends ExtendableSubState {
 				}
 			}
 
-			script = new Hscript(path, false);
+			script = new HScript(path, false);
 			script.execute(path, false);
 
 			scriptSet('multiAdd', multiAdd);

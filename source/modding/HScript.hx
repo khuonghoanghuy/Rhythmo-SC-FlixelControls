@@ -2,7 +2,7 @@ package modding;
 
 import hscript.*;
 
-class Hscript extends FlxBasic {
+class HScript extends FlxBasic {
 	public var locals(get, set):Map<String, {r:Dynamic}>;
 
 	function get_locals():Map<String, {r:Dynamic}> {
@@ -44,7 +44,7 @@ class Hscript extends FlxBasic {
 			final daEnum:Enum<Dynamic> = Type.resolveEnum(className);
 
 			if (daClass == null && daEnum == null)
-				Lib.application.window.alert('Class / Enum at $className does not exist.', 'Hscript Error!');
+				Lib.application.window.alert('Class / Enum at $className does not exist.', 'HScript Error!');
 			else {
 				if (daEnum != null) {
 					var daEnumField = {};
@@ -70,7 +70,7 @@ class Hscript extends FlxBasic {
 
 		setVariable('importScript', function(source:String) {
 			var name:String = StringTools.replace(source, '.', '/');
-			var script:Hscript = new Hscript(Paths.script(name), false);
+			var script:HScript = new HScript(Paths.script(name), false);
 			script.execute(Paths.script(name), false);
 			return script.getAll();
 		});
@@ -200,7 +200,7 @@ class Hscript extends FlxBasic {
 		try {
 			interp.execute(parser.parseString(File.getContent(file)));
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 
 		trace('Script Loaded Succesfully: $file');
 
@@ -214,8 +214,8 @@ class Hscript extends FlxBasic {
 			parser.line = 1;
 			return interp.execute(parser.parseString(code));
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
-		
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
+
 		return null;
 	}
 
@@ -224,7 +224,7 @@ class Hscript extends FlxBasic {
 			interp?.variables.set(name, val);
 			locals.set(name, {r: val});
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 	}
 
 	public function getVariable(name:String):Dynamic {
@@ -234,7 +234,7 @@ class Hscript extends FlxBasic {
 			else if (interp.variables.exists(name))
 				return interp?.variables.get(name);
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 
 		return null;
 	}
@@ -243,14 +243,14 @@ class Hscript extends FlxBasic {
 		try {
 			interp?.variables.remove(name);
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 	}
 
 	public function existsVariable(name:String):Bool {
 		try {
 			return interp?.variables.exists(name);
 		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 
 		return false;
 	}
@@ -260,7 +260,7 @@ class Hscript extends FlxBasic {
 			try {
 				return Reflect.callMethod(this, getVariable(funcName), args == null ? [] : args);
 			} catch (e:Dynamic)
-				Lib.application.window.alert(Std.string(e), 'Hscript Error!');
+				Lib.application.window.alert(Std.string(e), 'HScript Error!');
 		}
 
 		return null;
