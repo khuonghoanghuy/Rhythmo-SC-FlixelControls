@@ -398,6 +398,14 @@ class LuaScript extends FlxBasic {
 		Lua.setglobal(lua, name);
 	}
 
+	public static function isOfTypes(value:Any, types:Array<Dynamic>) {
+		for (type in types) {
+			if (Std.isOfType(value, type))
+				return true;
+		}
+		return false;
+	}
+
 	function setCodeWithCheckNull<T>(value:Null<T>, setter:T->Void) {
 		if (value != null)
 			setter(value);
