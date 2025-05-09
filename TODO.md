@@ -10,11 +10,7 @@
 * [X] Noteskins
 
 ### Low Priority
-* [ ] New song
-* [ ] Gameplay Modifiers
-* [ ] Silly Visualizer Option
 * [ ] Improve Chart Editor
-* [ ] Use `hscript-iris` instead of `hscript` (might scrap cause it's broken)
 
 ## Future To-Dos
-Nothing yet...
+* [ ] New Song
