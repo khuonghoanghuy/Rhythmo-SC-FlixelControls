@@ -390,10 +390,6 @@ class PlayState extends ExtendableState {
 		lastStepHit = curStep;
 		callOnScripts('stepHit', [curStep]);
 		callOnLuas('stepHit', [curStep]);
-
-		#if FUTURE_DISCORD_RPC
-		DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
-		#end
 	}
 
 	override function beatHit() {
