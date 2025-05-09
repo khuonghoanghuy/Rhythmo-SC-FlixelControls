@@ -48,6 +48,9 @@ class ChartingState extends ExtendableState {
 
 	var strumLine:FlxSprite;
 
+	var topNavBar:Array<FlxText> = [];
+	var dropDowns:Map<String, FlxGroup> = new Map();
+
 	var _file:FileReference;
 
 	override public function new() {
@@ -192,10 +195,48 @@ class ChartingState extends ExtendableState {
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.scrollFactor.set();
 		add(charterVer);
+
+		var menuItems = ["File", "Edit", "View"];
+		var xPos = 10;
+
+		for (item in menuItems) {
+			var label = new FlxText(xPos, 5, 0, item, 16);
+			label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+			label.color = FlxColor.WHITE;
+			label.ID = topNavBar.length;
+			label.screenCenter(X);
+			label.y = 5;
+			add(label);
+			topNavBar.push(label);
+
+			var dropGroup = new FlxGroup();
+			var options = (item == "File") ? ["New", "Open", "Save"] :
+					(item == "Edit") ? ["Undo", "Redo"] :
+					["Zoom In", "Zoom Out"];
+
+			for (i in 0...options.length) {
+				var opt = new FlxText(label.x, label.y + 25 + i * 20, 0, options[i], 14);
+				opt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+				opt.color = FlxColor.GRAY;
+				opt.visible = false;
+				opt.ID = i;
+				dropGroup.add(opt);
+			}
+			dropDowns.set(item, dropGroup);
+			add(dropGroup);
+
+			xPos += 70;
+		}
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		for (label in topNavBar) {
+			if (FlxG.mouse.overlaps(label) && FlxG.mouse.justPressed) {
+				toggleDropdown(label.text);
+			}
+		}
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * song.notes[curSection].stepsPerSection));
 
@@ -288,6 +329,15 @@ class ChartingState extends ExtendableState {
 			+ beatSnap
 			+ "\n"
 			+ (Input.pressed('shift') ? "(DISABLED)" : "(CONTROL + ARROWS)"));
+	}
+
+	function toggleDropdown(label:String) {
+		for (key in dropDowns.keys()) {
+			var group = dropDowns.get(key);
+			for (item in group.members) {
+				item.visible = (key == label) ? !item.visible : false;
+			}
+		}
 	}
 
 	function loadSong(daSong:String):Void {
