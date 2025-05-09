@@ -40,7 +40,7 @@ class Note extends GameSprite {
 
 		animation.play((type == 'receptor') ? "receptor" : "note");
 
-		if (type == "sustain" && Utilities.getNoteIndex(dir) <= 0 && lastNote != null) {
+		if (type == "sustain" && lastNote != null) {
 			alpha = 0.4;
 			scale.set(0.4, 0.4);
 

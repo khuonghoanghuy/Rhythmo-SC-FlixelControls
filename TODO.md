@@ -5,7 +5,7 @@
 * [X] Discord Rich Presence Support
 * [X] Lua Script Support
 * [X] Campaign Mode
-* [X] Note Sustains (Really need to fix a crash)
+* [X] Note Sustains
 * [ ] Improve + Fix Notes
 * [X] Noteskins
 
