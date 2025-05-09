@@ -1,16 +1,16 @@
 # To-Dos
 ## Current To-Dos
 ### High Priority
-* [ ] Maybe actually finish the charts??
+* [ ] Actually finish the charts
+* [ ] Improve Chart Editor
 * [X] Discord Rich Presence Support
 * [X] Lua Script Support
 * [X] Campaign Mode
 * [X] Note Sustains
-* [ ] Improve + Fix Notes
 * [X] Noteskins
 
 ### Low Priority
-* [ ] Improve Chart Editor
+* [ ] Improve + Fix Notes
 
 ## Future To-Dos
 * [ ] New Song

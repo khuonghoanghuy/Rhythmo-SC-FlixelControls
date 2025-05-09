@@ -188,7 +188,7 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var charterVer:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Charter v0.2-rc2 // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Charter v0.3-ALPHA // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.scrollFactor.set();
 		add(charterVer);
@@ -388,8 +388,10 @@ class ChartingState extends ExtendableState {
 			renderedNotes.add(note);
 
 			if (daSus > 0) {
+				var rgb = SaveData.settings.notesRGB[sectionNote.noteData % 4];
 				var sustainVis:FlxSprite = new FlxSprite(note.x + (gridSize / 2),
-					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
+					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height))
+					, FlxColor.fromRGB(rgb[0], rgb[1], rgb[2]));
 				renderedSustains.add(sustainVis);
 			}
 		}
