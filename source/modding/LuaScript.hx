@@ -329,6 +329,21 @@ class LuaScript extends FlxBasic {
 				Lua.pushnil(lua);
 			return ret;
 		});
+		setCallback("runHaxeFunction", function(func:String, ?args:Array<Dynamic>) {
+			var ret:Dynamic = null;
+
+			initHaxeModule();
+			try {
+				ret = hscript.executeFunc(func, args);
+			} catch (e:Dynamic)
+				Lib.application.window.alert(e, "Lua Error!");
+
+			if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
+				ret = null;
+			if (ret == null)
+				Lua.pushnil(lua);
+			return ret;
+		});
 		setCallback("importHaxeLibrary", function(lib:String, ?packageName:String) {
 			initHaxeModule();
 			try {
