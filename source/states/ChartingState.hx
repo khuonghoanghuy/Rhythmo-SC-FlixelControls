@@ -36,43 +36,17 @@ class ChartingState extends ExtendableState {
 
 	var songInfoText:FlxText;
 
-	var saveButton:FlxButton;
-	var saveAsButton:FlxButton;
-
-	var clearSectionButton:FlxButton;
-	var clearSongButton:FlxButton;
-
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic> = [];
-	var copySectionButton:FlxButton;
-	var pasteSectionButton:FlxButton;
 
 	var bpmInput:FlxInputText;
-	var setBPMButton:FlxButton;
-	var loadSongButton:FlxButton;
-	var loadSongFromButton:FlxButton;
 
 	var strumLine:FlxSprite;
 
 	var topNavBar:Array<FlxText> = [];
 	var dropDowns:Map<String, Array<FlxText>> = [];
-
+	var menuStructure:Map<String, Array<DropdownMenuItem>> = [];
 	var activeDropdown:String = "";
-
-	var menuStructure:Map<String, Array<DropdownMenuItem>> = [
-		"Edit" => [
-			{name: "Copy Section", func: function() trace("Undo")},
-			{name: "Paste Section", func: function() trace("Redo")},
-			{name: "Clear Section", func: function() trace("Redo")},
-			{name: "Clear Song", func: function() trace("Redo")}
-		],
-		"File" => [
-			{name: "Load Song", func: function() trace("New file")},
-			{name: "Load JSON", func: function() trace("Open file")},
-			{name: "Save Chart", func: function() trace("Save file")},
-			{name: "Save Chart As", func: function() trace("Save file")}
-		]
-	];
 
 	var _file:FileReference;
 
@@ -101,6 +75,87 @@ class ChartingState extends ExtendableState {
 		#if FUTURE_DISCORD_RPC
 		DiscordClient.changePresence("Chart Editor", null, null, true);
 		#end
+
+		menuStructure = [
+			"Edit" => [
+				{
+					name: "Copy Section",
+					func: () -> {
+						notesCopied = [];
+						sectionToCopy = curSection;
+						for (i in 0...song.notes[curSection].sectionNotes.length)
+							notesCopied.push(song.notes[curSection].sectionNotes[i]);
+					}
+				},
+				{
+					name: "Paste Section",
+					func: () -> {
+						if (notesCopied == null || notesCopied.length < 1)
+							return;
+
+						for (note in notesCopied) {
+							var clonedNote = {
+								noteStrum: note.noteStrum + Conductor.stepCrochet * (4 * 4 * (curSection - sectionToCopy)),
+								noteData: note.noteData,
+								noteSus: note.noteSus
+							};
+							song.notes[curSection].sectionNotes.push(clonedNote);
+						}
+
+						updateGrid();
+					}
+				},
+				{
+					name: "Clear Section",
+					func: () -> {
+						song.notes[curSection].sectionNotes = [];
+						updateGrid();
+					}
+				},
+				{
+					name: "Clear Song",
+					func: () -> {
+						openSubState(new PromptSubState(Localization.get("youDecide"), () -> {
+							for (daSection in 0...song.notes.length)
+								song.notes[daSection].sectionNotes = [];
+							updateGrid();
+						}));
+					}
+				},
+				{name: "Set BPM", func: setBPM}
+			],
+			"File" => [
+				{name: "Load Song", func: () -> openSubState(new LoadSongSubState())},
+				{name: "Load JSON", func: loadSongFromFile},
+				{
+					name: "Save Chart",
+					func: () -> {
+						try {
+							var chart:String = Json.stringify(song);
+							File.saveContent(Paths.chart(Paths.formatToSongPath(song.song)), chart);
+							trace("chart saved!\nsaved path: " + Paths.chart(Paths.formatToSongPath(song.song)));
+							var savedText:FlxText = new FlxText(0, 0, 0, "Chart saved! Saved path:\n" + Paths.chart(Paths.formatToSongPath(song.song)), 12);
+							savedText.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+							savedText.screenCenter();
+							add(savedText);
+							new FlxTimer().start(2.25, (tmr:FlxTimer) -> {
+								FlxTween.tween(savedText, {alpha: 0}, 0.75, {
+									ease: FlxEase.quadOut,
+									onComplete: (twn:FlxTween) -> {
+										remove(savedText);
+										savedText.destroy();
+									}
+								});
+							});
+						} catch (e:Dynamic) {
+							trace("Error while saving chart: " + e);
+						}
+					}
+				},
+				{name: "Save Chart As", func: saveSong}
+			]
+
+		];
 
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
@@ -131,82 +186,12 @@ class ChartingState extends ExtendableState {
 		addSection();
 		updateGrid();
 
-		songInfoText = new FlxText(10, 10, 0, 18);
+		songInfoText = new FlxText(10, 20, 0, 18);
 		add(songInfoText);
-
-		saveButton = new FlxButton(FlxG.width - 110, 10, "Save Chart", () -> {
-			try {
-				var chart:String = Json.stringify(song);
-				File.saveContent(Paths.chart(Paths.formatToSongPath(song.song)), chart);
-				trace("chart saved!\nsaved path: " + Paths.chart(Paths.formatToSongPath(song.song)));
-				var savedText:FlxText = new FlxText(0, 0, 0, "Chart saved! Saved path:\n" + Paths.chart(Paths.formatToSongPath(song.song)), 12);
-				savedText.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-				savedText.screenCenter();
-				add(savedText);
-				new FlxTimer().start(2.25, (tmr:FlxTimer) -> {
-					FlxTween.tween(savedText, {alpha: 0}, 0.75, {ease: FlxEase.quadOut});
-				});
-			} catch (e:Dynamic) {
-				trace("Error while saving chart: " + e);
-			}
-		});
-		add(saveButton);
-
-		saveAsButton = new FlxButton(FlxG.width - 110, 40, "Save Chart As", saveSong);
-		add(saveAsButton);
-
-		copySectionButton = new FlxButton(FlxG.width - 110, 70, "Copy Section", () -> {
-			notesCopied = [];
-			sectionToCopy = curSection;
-			for (i in 0...song.notes[curSection].sectionNotes.length)
-				notesCopied.push(song.notes[curSection].sectionNotes[i]);
-		});
-		add(copySectionButton);
-
-		pasteSectionButton = new FlxButton(FlxG.width - 110, 100, "Paste Section", () -> {
-			if (notesCopied == null || notesCopied.length < 1)
-				return;
-
-			for (note in notesCopied) {
-				var clonedNote = {
-					noteStrum: note.noteStrum + Conductor.stepCrochet * (4 * 4 * (curSection - sectionToCopy)),
-					noteData: note.noteData,
-					noteSus: note.noteSus
-				};
-				song.notes[curSection].sectionNotes.push(clonedNote);
-			}
-
-			updateGrid();
-		});
-		add(pasteSectionButton);
-
-		clearSectionButton = new FlxButton(FlxG.width - 110, 130, "Clear Section", () -> {
-			song.notes[curSection].sectionNotes = [];
-			updateGrid();
-		});
-		add(clearSectionButton);
-
-		clearSongButton = new FlxButton(FlxG.width - 110, 160, "Clear Song", () -> {
-			openSubState(new PromptSubState(Localization.get("youDecide"), () -> {
-				for (daSection in 0...song.notes.length)
-					song.notes[daSection].sectionNotes = [];
-				updateGrid();
-			}));
-		});
-		add(clearSongButton);
-
-		loadSongButton = new FlxButton(FlxG.width - 110, 190, "Load Song", () -> openSubState(new LoadSongSubState()));
-		add(loadSongButton);
-
-		loadSongFromButton = new FlxButton(FlxG.width - 110, 220, "Load JSON", loadSongFromFile);
-		add(loadSongFromButton);
 
 		bpmInput = new FlxInputText(FlxG.width - 110, 280, 50);
 		bpmInput.text = Std.string(song.bpm);
 		add(bpmInput);
-
-		setBPMButton = new FlxButton(FlxG.width - 110, 250, "Set BPM", setBPM);
-		add(setBPMButton);
 
 		var gridBlackLine:FlxSprite = new FlxSprite(gridBG.x + gridBG.width / 2, gridBG.y).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
 		add(gridBlackLine);
@@ -214,22 +199,28 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var charterVer:FlxText = new FlxText(5, FlxG.height - 24, 0, 'Charter v0.3-ALPHA // Functionality is subject to change.', 12);
-		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		var controlsTxt:FlxText = new FlxText(5, FlxG.height - 24, FlxG.width,
+			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
+			18);
+		controlsTxt.scrollFactor.set();
+		add(controlsTxt);
+
+		var charterVer:FlxText = new FlxText(-5, FlxG.height - 24, 0, 'Charter v0.3-ALPHA // Functionality is subject to change.', 12);
+		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 35, FlxColor.GRAY);
+		var dropdownBar:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 30, FlxColor.GRAY);
 		add(dropdownBar);
 
-		var xPos = 10;
+		var xPos:Int = 10;
 
 		for (menuName in menuStructure.keys()) {
 			var label:FlxText = new FlxText(xPos, 5, 0, menuName, 16);
 			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			label.textField.background = true;
 			label.textField.backgroundColor = FlxColor.GRAY;
-			FlxMouseEvent.add(label, null, null, (_) -> {
+			FlxMouseEvent.add(label, toggleDropdown(label.text), null, (_) -> {
 				label.textField.backgroundColor = FlxColor.WHITE;
 				label.color = FlxColor.BLACK;
 			}, (_) -> {
@@ -240,11 +231,11 @@ class ChartingState extends ExtendableState {
 			add(label);
 			topNavBar.push(label);
 
-			var items = [];
-			var yOffset = 30;
+			var items:Array<FlxText> = [];
+			var yOffset:Int = 30;
 
 			for (item in menuStructure.get(menuName)) {
-				var text = new FlxText(xPos, yOffset, 150, item.name, 14);
+				var text:FlxText = new FlxText(xPos, yOffset, 150, item.name, 14);
 				text.setFormat(Paths.font('vcr.ttf'), 14, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				text.textField.background = true;
 				text.textField.backgroundColor = FlxColor.GRAY;
@@ -271,11 +262,6 @@ class ChartingState extends ExtendableState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
-		for (label in topNavBar) {
-			if (FlxG.mouse.overlaps(label) && FlxG.mouse.justPressed)
-				toggleDropdown(label.text);
-		}
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * song.notes[curSection].stepsPerSection));
 
@@ -382,7 +368,8 @@ class ChartingState extends ExtendableState {
 
 	function hideAllDropdowns() {
 		for (group in dropDowns)
-			for (item in group) item.visible = false;
+			for (item in group)
+				item.visible = false;
 		activeDropdown = "";
 	}
 
@@ -486,8 +473,8 @@ class ChartingState extends ExtendableState {
 			if (daSus > 0) {
 				var rgb = SaveData.settings.notesRGB[sectionNote.noteData % 4];
 				var sustainVis:FlxSprite = new FlxSprite(note.x + (gridSize / 2),
-					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height))
-					, FlxColor.fromRGB(rgb[0], rgb[1], rgb[2]));
+					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)),
+						FlxColor.fromRGB(rgb[0], rgb[1], rgb[2]));
 				renderedSustains.add(sustainVis);
 			}
 		}
