@@ -216,18 +216,23 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var dropdownBar = new FlxSprite(xPos, yOffset).makeGraphic(FlxG.width, 18, FlxColor.GRAY);
+		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 18, FlxColor.GRAY);
 		add(dropdownBar);
 
 		var xPos = 10;
 
-		menuStructure.reverse();
+		var reversedMenuStructure = new Map<String, Array<DropdownMenuItem>>();
+		var keys = [for (k in menuStructure.keys()) k];
+		keys.reverse();
+
+		for (key in keys)
+			reversedMenuStructure.set(key, menuStructure.get(key));
 		for (menuName in menuStructure.keys()) {
 			var label:FlxText = new FlxText(xPos, 5, 0, menuName, 16);
 			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			label.textField.background = true;
 			label.textField.backgroundColor = FlxColor.GRAY;
-			FlxMouseEvent.add(text, (_) -> {
+			FlxMouseEvent.add(label, (_) -> {
 				label.textField.backgroundColor = FlxColor.WHITE;
 			}, (_) -> {
 				label.textField.backgroundColor = FlxColor.GRAY;
