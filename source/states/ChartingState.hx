@@ -60,14 +60,17 @@ class ChartingState extends ExtendableState {
 	var activeDropdown:String = "";
 
 	var menuStructure:Map<String, Array<DropdownMenuItem>> = [
-		"File" => [
-			{name: "New", func: function() trace("New file")},
-			{name: "Open", func: function() trace("Open file")},
-			{name: "Save", func: function() trace("Save file")}
-		],
 		"Edit" => [
-			{name: "Undo", func: function() trace("Undo")},
-			{name: "Redo", func: function() trace("Redo")}
+			{name: "Copy Section", func: function() trace("Undo")},
+			{name: "Paste Section", func: function() trace("Redo")},
+			{name: "Clear Section", func: function() trace("Redo")},
+			{name: "Clear Song", func: function() trace("Redo")}
+		],
+		"File" => [
+			{name: "Load Song", func: function() trace("New file")},
+			{name: "Load JSON", func: function() trace("Open file")},
+			{name: "Save Chart", func: function() trace("Save file")},
+			{name: "Save Chart As", func: function() trace("Save file")}
 		]
 	];
 
@@ -216,7 +219,7 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 45, FlxColor.GRAY);
+		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 35, FlxColor.GRAY);
 		add(dropdownBar);
 
 		var xPos = 10;
@@ -238,7 +241,7 @@ class ChartingState extends ExtendableState {
 			topNavBar.push(label);
 
 			var items = [];
-			var yOffset = 25;
+			var yOffset = 30;
 
 			for (item in menuStructure.get(menuName)) {
 				var text = new FlxText(xPos, yOffset, 150, item.name, 14);
