@@ -200,7 +200,7 @@ class ChartingState extends ExtendableState {
 		add(strumLine);
 
 		var controlsTxt:FlxText = new FlxText(5, FlxG.height - 24, FlxG.width,
-			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
+			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
 			18);
 		controlsTxt.scrollFactor.set();
 		add(controlsTxt);
@@ -220,7 +220,7 @@ class ChartingState extends ExtendableState {
 			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			label.textField.background = true;
 			label.textField.backgroundColor = FlxColor.GRAY;
-			FlxMouseEvent.add(label, toggleDropdown(label.text), null, (_) -> {
+			FlxMouseEvent.add(label, (_) -> toggleDropdown(label.text), null, (_) -> {
 				label.textField.backgroundColor = FlxColor.WHITE;
 				label.color = FlxColor.BLACK;
 			}, (_) -> {
