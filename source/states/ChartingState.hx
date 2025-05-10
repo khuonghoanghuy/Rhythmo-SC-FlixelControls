@@ -199,14 +199,15 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var controlsTxt:FlxText = new FlxText(5, FlxG.height - 400, FlxG.width,
+		var controlsTxt:FlxText = new FlxText(5, FlxG.height - 178, FlxG.width,
 			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
 			18);
 		controlsTxt.scrollFactor.set();
 		add(controlsTxt);
 
-		var charterVer:FlxText = new FlxText(FlxG.width - 5, FlxG.height - 24, 0, 'Charter v0.3-ALPHA // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-BETA.1 // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		charterVer.screenCenter(X);
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
