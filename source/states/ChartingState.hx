@@ -9,6 +9,12 @@ import openfl.net.FileReference;
 import openfl.net.FileFilter;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.ui.FlxUIInputText;
+import flixel.input.mouse.FlxMouseEvent;
+
+typedef DropdownMenuItem = {
+	var name:String;
+	var func:Void->Void;
+}
 
 class ChartingState extends ExtendableState {
 	public static var instance:ChartingState = null;
@@ -49,7 +55,21 @@ class ChartingState extends ExtendableState {
 	var strumLine:FlxSprite;
 
 	var topNavBar:Array<FlxText> = [];
-	var dropDowns:Map<String, FlxGroup> = new Map();
+	var dropDowns:Map<String, Array<FlxText>> = [];
+
+	var activeDropdown:String = "";
+
+	var menuStructure:Map<String, Array<DropdownMenuItem>> = [
+		"File" => [
+			{name: "New", func: function() trace("New file")},
+			{name: "Open", func: function() trace("Open file")},
+			{name: "Save", func: function() trace("Save file")}
+		],
+		"Edit" => [
+			{name: "Undo", func: function() trace("Undo")},
+			{name: "Redo", func: function() trace("Redo")}
+		]
+	];
 
 	var _file:FileReference;
 
@@ -196,35 +216,34 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var menuItems = ["File", "Edit", "View"];
 		var xPos = 10;
 
-		for (item in menuItems) {
-			var label = new FlxText(xPos, 5, 0, item, 16);
+		for (menuName in menuStructure.keys()) {
+			var label = new FlxText(xPos, 5, 0, menuName, 16);
 			label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
 			label.color = FlxColor.WHITE;
 			label.ID = topNavBar.length;
-			label.screenCenter(X);
-			label.y = 5;
 			add(label);
 			topNavBar.push(label);
 
-			var dropGroup = new FlxGroup();
-			var options = (item == "File") ? ["New", "Open", "Save"] :
-					(item == "Edit") ? ["Undo", "Redo"] :
-					["Zoom In", "Zoom Out"];
+			var items = [];
+			var yOffset = 25;
 
-			for (i in 0...options.length) {
-				var opt = new FlxText(label.x, label.y + 25 + i * 20, 0, options[i], 14);
-				opt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
-				opt.color = FlxColor.GRAY;
-				opt.visible = false;
-				opt.ID = i;
-				dropGroup.add(opt);
+			for (item in menuStructure.get(menuName)) {
+				var text = new FlxText(xPos, yOffset, 150, item.name, 14);
+				text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+				text.color = FlxColor.GRAY;
+				text.visible = false;
+				FlxMouseEventManager.add(text, function(_) {
+					hideAllDropdowns();
+					item.func();
+				}, null, null);
+				add(text);
+				items.push(text);
+				yOffset += 20;
 			}
-			dropDowns.set(item, dropGroup);
-			add(dropGroup);
 
+			dropDowns.set(menuName, items);
 			xPos += 70;
 		}
 	}
@@ -333,11 +352,21 @@ class ChartingState extends ExtendableState {
 
 	function toggleDropdown(label:String) {
 		for (key in dropDowns.keys()) {
-			var group = dropDowns.get(key);
-			for (item in group.members) {
-				item.visible = (key == label) ? !item.visible : false;
+			final show = key == label && activeDropdown != label;
+
+			for (item in dropDowns.get(key)) {
+				item.visible = show;
 			}
 		}
+
+		activeDropdown = (activeDropdown == label) ? "" : label;
+	}
+
+	function hideAllDropdowns() {
+		for (group in dropDowns) {
+			for (item in group) item.visible = false;
+		}
+		activeDropdown = "";
 	}
 
 	function loadSong(daSong:String):Void {
