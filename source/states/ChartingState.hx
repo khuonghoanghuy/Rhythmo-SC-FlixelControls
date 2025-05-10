@@ -216,26 +216,22 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 18, FlxColor.GRAY);
+		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 150, FlxColor.GRAY);
 		add(dropdownBar);
 
 		var xPos = 10;
 
-		var reversedMenuStructure = new Map<String, Array<DropdownMenuItem>>();
-		var keys = [for (k in menuStructure.keys()) k];
-		keys.reverse();
-
-		for (key in keys)
-			reversedMenuStructure.set(key, menuStructure.get(key));
 		for (menuName in menuStructure.keys()) {
 			var label:FlxText = new FlxText(xPos, 5, 0, menuName, 16);
 			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			label.textField.background = true;
 			label.textField.backgroundColor = FlxColor.GRAY;
-			FlxMouseEvent.add(label, (_) -> {
+			FlxMouseEvent.add(label, null, null, (_) -> {
 				label.textField.backgroundColor = FlxColor.WHITE;
+				label.color = FlxColor.BLACK;
 			}, (_) -> {
 				label.textField.backgroundColor = FlxColor.GRAY;
+				label.color = FlxColor.WHITE;
 			}, null);
 			label.ID = topNavBar.length;
 			add(label);
@@ -246,16 +242,19 @@ class ChartingState extends ExtendableState {
 
 			for (item in menuStructure.get(menuName)) {
 				var text = new FlxText(xPos, yOffset, 150, item.name, 14);
-				text.setFormat(Paths.font('vcr.ttf'), 14, FlxColor.GRAY, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				text.setFormat(Paths.font('vcr.ttf'), 14, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				text.textField.background = true;
 				text.textField.backgroundColor = FlxColor.GRAY;
 				text.visible = false;
 				FlxMouseEvent.add(text, (_) -> {
-					text.textField.backgroundColor = FlxColor.GRAY;
 					hideAllDropdowns();
 					item.func();
-				}, (_) -> {
+				}, null, (_) -> {
 					text.textField.backgroundColor = FlxColor.WHITE;
+					text.color = FlxColor.BLACK;
+				}, (_) -> {
+					text.textField.backgroundColor = FlxColor.GRAY;
+					text.color = FlxColor.WHITE;
 				}, null);
 				add(text);
 				items.push(text);
