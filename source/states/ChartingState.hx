@@ -232,7 +232,7 @@ class ChartingState extends ExtendableState {
 			}, (_) -> {
 				label.textField.backgroundColor = FlxColor.GRAY;
 				label.color = FlxColor.WHITE;
-			}, null);
+			});
 			label.ID = topNavBar.length;
 			add(label);
 			topNavBar.push(label);
@@ -255,7 +255,7 @@ class ChartingState extends ExtendableState {
 				}, (_) -> {
 					text.textField.backgroundColor = FlxColor.GRAY;
 					text.color = FlxColor.WHITE;
-				}, null);
+				});
 				add(text);
 				items.push(text);
 				yOffset += 20;
