@@ -234,7 +234,7 @@ class ChartingState extends ExtendableState {
 				text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
 				text.color = FlxColor.GRAY;
 				text.visible = false;
-				FlxMouseEventManager.add(text, function(_) {
+				FlxMouseEvent.add(text, function(_) {
 					hideAllDropdowns();
 					item.func();
 				}, null, null);
