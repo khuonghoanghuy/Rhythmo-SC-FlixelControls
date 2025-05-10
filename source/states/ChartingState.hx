@@ -216,12 +216,22 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
+		var dropdownBar = new FlxSprite(xPos, yOffset).makeGraphic(FlxG.width, 18, FlxColor.GRAY);
+		add(dropdownBar);
+
 		var xPos = 10;
 
+		menuStructure.reverse();
 		for (menuName in menuStructure.keys()) {
-			var label = new FlxText(xPos, 5, 0, menuName, 16);
-			label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
-			label.color = FlxColor.WHITE;
+			var label:FlxText = new FlxText(xPos, 5, 0, menuName, 16);
+			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			label.textField.background = true;
+			label.textField.backgroundColor = FlxColor.GRAY;
+			FlxMouseEvent.add(text, (_) -> {
+				label.textField.backgroundColor = FlxColor.WHITE;
+			}, (_) -> {
+				label.textField.backgroundColor = FlxColor.GRAY;
+			}, null);
 			label.ID = topNavBar.length;
 			add(label);
 			topNavBar.push(label);
@@ -231,13 +241,17 @@ class ChartingState extends ExtendableState {
 
 			for (item in menuStructure.get(menuName)) {
 				var text = new FlxText(xPos, yOffset, 150, item.name, 14);
-				text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
-				text.color = FlxColor.GRAY;
+				text.setFormat(Paths.font('vcr.ttf'), 14, FlxColor.GRAY, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				text.textField.background = true;
+				text.textField.backgroundColor = FlxColor.GRAY;
 				text.visible = false;
-				FlxMouseEvent.add(text, function(_) {
+				FlxMouseEvent.add(text, (_) -> {
+					text.textField.backgroundColor = FlxColor.GRAY;
 					hideAllDropdowns();
 					item.func();
-				}, null, null);
+				}, (_) -> {
+					text.textField.backgroundColor = FlxColor.WHITE;
+				}, null);
 				add(text);
 				items.push(text);
 				yOffset += 20;
@@ -252,9 +266,8 @@ class ChartingState extends ExtendableState {
 		super.update(elapsed);
 
 		for (label in topNavBar) {
-			if (FlxG.mouse.overlaps(label) && FlxG.mouse.justPressed) {
+			if (FlxG.mouse.overlaps(label) && FlxG.mouse.justPressed)
 				toggleDropdown(label.text);
-			}
 		}
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * song.notes[curSection].stepsPerSection));
@@ -353,19 +366,16 @@ class ChartingState extends ExtendableState {
 	function toggleDropdown(label:String) {
 		for (key in dropDowns.keys()) {
 			final show = key == label && activeDropdown != label;
-
-			for (item in dropDowns.get(key)) {
+			for (item in dropDowns.get(key))
 				item.visible = show;
-			}
 		}
 
 		activeDropdown = (activeDropdown == label) ? "" : label;
 	}
 
 	function hideAllDropdowns() {
-		for (group in dropDowns) {
+		for (group in dropDowns)
 			for (item in group) item.visible = false;
-		}
 		activeDropdown = "";
 	}
 
