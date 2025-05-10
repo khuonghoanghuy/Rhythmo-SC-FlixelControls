@@ -216,7 +216,7 @@ class ChartingState extends ExtendableState {
 		charterVer.scrollFactor.set();
 		add(charterVer);
 
-		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 150, FlxColor.GRAY);
+		var dropdownBar = new FlxSprite().makeGraphic(FlxG.width, 45, FlxColor.GRAY);
 		add(dropdownBar);
 
 		var xPos = 10;
