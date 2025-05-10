@@ -199,7 +199,7 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var controlsTxt:FlxText = new FlxText(5, FlxG.height - 178, FlxG.width,
+		var controlsTxt:FlxText = new FlxText(10, FlxG.height - 195, FlxG.width,
 			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
 			18);
 		controlsTxt.scrollFactor.set();
@@ -687,5 +687,11 @@ class LoadSongSubState extends ExtendableSubState {
 			}
 		} else if (Input.justPressed('exit'))
 			close();
+	}
+}
+
+class SongDataSubState extends ExtendableSubState {
+	public function new() {
+		super();
 	}
 }
