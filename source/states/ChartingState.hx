@@ -698,51 +698,58 @@ class LoadSongSubState extends ExtendableSubState {
 
 class SongDataSubState extends ExtendableSubState {
 	var songNameInput:FlxInputText;
-    var bpmInput:FlxInputText;
-    var timeSignatureInput:FlxInputText;
+	var bpmInput:FlxInputText;
+	var timeSignatureInput:FlxInputText;
 
 	public function new() {
 		super();
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
-        bg.alpha = 0.65;
-        add(bg);
+		bg.alpha = 0.65;
+		add(bg);
 
-        var panel:FlxSprite = new FlxSprite(100, 60).makeGraphic(FlxG.width - 200, FlxG.height - 120, FlxColor.GRAY);
-        panel.alpha = 0.9;
-        add(panel);
+		var panelWidth:Int = 500;
+		var panelHeight:Int = 300;
+		var panelX:Float = (FlxG.width - panelWidth) / 2;
+		var panelY:Float = (FlxG.height - panelHeight) / 2;
 
-        var title:FlxText = new FlxText(0, 70, FlxG.width, "Edit Song Metadata", 24);
+		var panel:RoundedSprite = new RoundedSprite(panelX, panelY, 500, 300, FlxColor.GRAY);
+		panel.alpha = 0.9;
+		add(panel);
+
+		var title:FlxText = new FlxText(0, panelY + 10, FlxG.width, "Edit Song Metadata", 20);
 		title.alignment = CENTER;
 		title.screenCenter(X);
-        add(title);
+		add(title);
 
-        var fieldY:Int = 130;
-        var spacing:Int = 70;
+		var fieldX:Int = panelX + 30;
+		var fieldY:Int = panelY + 60;
+		var spacing:Int = 55;
 
-        add(new FlxText(120, fieldY, 0, "Song Name:", 16));
-        songNameInput = new FlxInputText(240, fieldY, 400);
-        add(songNameInput);
+		add(new FlxText(fieldX, fieldY, 0, "Song Name:", 16));
+		songNameInput = new FlxInputText(fieldX + 120, fieldY, 300);
+		add(songNameInput);
 
-        fieldY += spacing;
-        add(new FlxText(120, fieldY, 0, "BPM:", 16));
-        bpmInput = new FlxInputText(240, fieldY, 100);
-        add(bpmInput);
+		fieldY += spacing;
+		add(new FlxText(fieldX, fieldY, 0, "BPM:", 16));
+		bpmInput = new FlxInputText(fieldX + 120, fieldY, 100);
+		add(bpmInput);
 
-        fieldY += spacing;
-        add(new FlxText(120, fieldY, 0, "Time Signature:", 16));
-        timeSignatureInput = new FlxInputText(370, fieldY, 150);
-        add(timeSignatureInput);
+		fieldY += spacing;
+		add(new FlxText(fieldX, fieldY, 0, "Time Signature:", 16));
+		timeSignatureInput = new FlxInputText(fieldX + 120, fieldY, 150);
+		add(timeSignatureInput);
 
-        var saveBtn:FlxButton = new FlxButton(FlxG.width / 2 - 100, FlxG.height - 80, "Save", function() {
-            close();
-        });
-        add(saveBtn);
+		var buttonY = panelY + panelHeight - 50;
+		var saveBtn:FlxButton = new FlxButton(panelX + 80, buttonY, "Save", function() {
+			close();
+		});
+		add(saveBtn);
 
-        var cancelBtn = new FlxButton(FlxG.width / 2 + 10, FlxG.height - 80, "Cancel", function() {
-            close();
-        });
-        add(cancelBtn);
+		var cancelBtn = new FlxButton(panelX + panelWidth - 150, buttonY, "Cancel", function() {
+			close();
+		});
+		add(cancelBtn);
 	}
 
 	override function update(elapsed:Float) {
