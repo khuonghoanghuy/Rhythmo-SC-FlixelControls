@@ -744,6 +744,7 @@ class SongDataSubState extends ExtendableSubState {
 			ChartingState.song.song = songNameInput.text;
 			ChartingState.song.bpm = Std.parseFloat(bpmInput.text);
 			ChartingState.song.timeSignature = [Std.parseInt(timeSignatureInput.text.split(",")[0]), Std.parseInt(timeSignatureInput.text.split(",")[1])];
+		        @:privateAccess
 			ChartingState.updateGrid();
 			close();
 		});
