@@ -230,7 +230,7 @@ class ChartingState extends ExtendableState {
 			topNavBar.push(label);
 
 			var items:Array<FlxText> = [];
-			var yOffset:Int = 30;
+			var yOffset:Int = 32;
 
 			for (item in menuStructure.get(menuName)) {
 				var text:FlxText = new FlxText(xPos, yOffset, 150, item.name, 14);
@@ -718,7 +718,7 @@ class SongDataSubState extends ExtendableSubState {
 		var labelWidth = 100;
 		var inputOffset = 10;
 
-		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth, "Song Name:", 16);
+		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 100, "Song Name:", 16);
 		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 300);
 		songNameInput.text = ChartingState.song.song;
 		add(label1);
@@ -732,7 +732,7 @@ class SongDataSubState extends ExtendableSubState {
 		add(bpmInput);
 
 		fieldY += spacing;
-		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth, "Time Signature:", 16);
+		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth + 200, "Time Sig.:", 16);
 		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 150);
 		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
 		add(label3);

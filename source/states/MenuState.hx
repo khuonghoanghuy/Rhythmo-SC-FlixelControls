@@ -168,7 +168,7 @@ class MenuState extends ExtendableState {
 				FlxG.sound.play(Paths.sound('cancel'));
 			}
 
-			#if desktop
+			#if debug
 			if (Input.justPressed('seven'))
 				ExtendableState.switchState(new EditorState());
 			#end
