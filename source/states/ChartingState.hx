@@ -430,9 +430,8 @@ class ChartingState extends ExtendableState {
 		var swagNum:Int = 0;
 
 		for (sectionNote in song.notes[curSection].sectionNotes) {
-			if (sectionNote.noteStrum == note.strum && sectionNote.noteData % 4 == Utilities.getNoteIndex(note.dir)) {
+			if (sectionNote.noteStrum == note.strum && sectionNote.noteData % 4 == Utilities.getNoteIndex(note.dir))
 				curSelectedNote = sectionNote;
-			}
 
 			swagNum++;
 		}
@@ -449,7 +448,7 @@ class ChartingState extends ExtendableState {
 		updateGrid();
 	}
 
-	function updateGrid() {
+	public static function updateGrid() {
 		renderedNotes.forEach(function(note:Note) {
 			note.kill();
 			note.destroy();
@@ -742,6 +741,10 @@ class SongDataSubState extends ExtendableSubState {
 
 		var buttonY = panelY + panelHeight - 50;
 		var saveBtn:FlxButton = new FlxButton(panelX + 80, buttonY, "Save", function() {
+			ChartingState.song.song = songNameInput.text;
+			ChartingState.song.bpm = Std.parseFloat(bpmInput.text);
+			ChartingState.song.timeSignature = [Std.parseInt(timeSignatureInput.text).split(",")[0], Std.parseInt(timeSignatureInput.text).split(",")[1]];
+			ChartingState.updateGrid();
 			close();
 		});
 		add(saveBtn);

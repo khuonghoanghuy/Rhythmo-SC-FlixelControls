@@ -15,7 +15,7 @@ class RoundedSprite extends FlxSprite {
 		return Value;
 	}
 
-	override public function new(X:Float, Y:Float, Width:Float, Height:Float, Color:FlxColor) {
+	public function new(X:Float, Y:Float, Width:Float, Height:Float, Color:FlxColor) {
 		super(X, Y);
 		this.width = Width;
 		this.height = Height;
