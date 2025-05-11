@@ -710,8 +710,8 @@ class SongDataSubState extends ExtendableSubState {
 
 		var panelWidth:Int = 500;
 		var panelHeight:Int = 300;
-		var panelX:Float = (FlxG.width - panelWidth) / 2;
-		var panelY:Float = (FlxG.height - panelHeight) / 2;
+		var panelX:Int = (FlxG.width - panelWidth) / 2;
+		var panelY:Int = (FlxG.height - panelHeight) / 2;
 
 		var panel:RoundedSprite = new RoundedSprite(panelX, panelY, 500, 300, FlxColor.GRAY);
 		panel.alpha = 0.9;
