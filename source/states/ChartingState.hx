@@ -704,7 +704,7 @@ class SongDataSubState extends ExtendableSubState {
 	public function new() {
 		super();
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.White);
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
         bg.alpha = 0.65;
         add(bg);
 
