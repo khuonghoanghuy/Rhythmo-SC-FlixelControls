@@ -208,7 +208,7 @@ class ChartingState extends ExtendableState {
 		controlsTxt.scrollFactor.set();
 		add(controlsTxt);
 
-		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-BETA.1 // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-BETA.2 // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.screenCenter(X);
 		charterVer.scrollFactor.set();
@@ -448,7 +448,7 @@ class ChartingState extends ExtendableState {
 		updateGrid();
 	}
 
-	public static function updateGrid() {
+	public function updateGrid() {
 		renderedNotes.forEach(function(note:Note) {
 			note.kill();
 			note.destroy();
@@ -743,7 +743,7 @@ class SongDataSubState extends ExtendableSubState {
 		var saveBtn:FlxButton = new FlxButton(panelX + 80, buttonY, "Save", function() {
 			ChartingState.song.song = songNameInput.text;
 			ChartingState.song.bpm = Std.parseFloat(bpmInput.text);
-			ChartingState.song.timeSignature = [Std.parseInt(timeSignatureInput.text).split(",")[0], Std.parseInt(timeSignatureInput.text).split(",")[1]];
+			ChartingState.song.timeSignature = [Std.parseInt(timeSignatureInput.text.split(",")[0]), Std.parseInt(timeSignatureInput.text.split(",")[1])];
 			ChartingState.updateGrid();
 			close();
 		});
