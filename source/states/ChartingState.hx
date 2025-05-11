@@ -39,8 +39,6 @@ class ChartingState extends ExtendableState {
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic> = [];
 
-	var bpmInput:FlxInputText;
-
 	var strumLine:FlxSprite;
 
 	var topNavBar:Array<FlxText> = [];
@@ -191,10 +189,6 @@ class ChartingState extends ExtendableState {
 
 		songInfoText = new FlxText(10, 40, 0, 18);
 		add(songInfoText);
-
-		bpmInput = new FlxInputText(FlxG.width - 110, 280, 50);
-		bpmInput.text = Std.string(song.bpm);
-		add(bpmInput);
 
 		var gridBlackLine:FlxSprite = new FlxSprite(gridBG.x + gridBG.width / 2, gridBG.y).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
 		add(gridBlackLine);
@@ -395,27 +389,29 @@ class ChartingState extends ExtendableState {
 		};
 	}
 
-	function setBPM():Void {
-		song.bpm = Std.parseFloat(bpmInput.text);
-		Conductor.bpm = song.bpm;
-		updateGrid();
-	}
-
 	function addNote() {
+		var noteData:Int = Math.floor((gridBG.x + (FlxG.mouse.x / gridSize)) - 2);
+		var strumTime:Float = getStrumTime(dummyArrow.y) + sectionStartTime();
+
+		var newNote:NoteData = {
+			noteStrum: strumTime,
+			noteData: noteData,
+			noteSus: 0
+		};
+
 		if (song.notes[curSection] == null)
 			addSection();
 
-		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
-		var noteData = Math.floor((gridBG.x + (FlxG.mouse.x / gridSize)) - 2);
-		var noteSus = 0;
-
-		song.notes[curSection].sectionNotes.push({
-			noteStrum: noteStrum,
-			noteData: noteData,
-			noteSus: noteSus
-		});
+		song.notes[curSection].sectionNotes.push(newNote);
 
 		updateGrid();
+
+		for (note in renderedNotes.members) {
+			if (note != null && Math.abs(note.strumTime - strumTime) < 1 && note.noteData == noteData) {
+				selectNote(note.noteData);
+				break;
+			}
+		}
 	}
 
 	function deleteNote(note:Note):Void {
@@ -724,26 +720,37 @@ class SongDataSubState extends ExtendableSubState {
 		var fieldX = panelX + 30;
 		var fieldY = panelY + 60;
 		var spacing = 55;
+		var labelWidth = 100;
+		var inputOffset = 10;
 
-		add(new FlxText(fieldX, fieldY, 0, "Song Name:", 16));
-		songNameInput = new FlxInputText(fieldX + 120, fieldY, 300);
+		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth, "Song Name:", 16);
+		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 300);
+		songNameInput.text = ChartingState.song.song;
+		add(label1);
 		add(songNameInput);
 
 		fieldY += spacing;
-		add(new FlxText(fieldX, fieldY, 0, "BPM:", 16));
-		bpmInput = new FlxInputText(fieldX + 120, fieldY, 100);
+		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
+		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 100);
+		bpmInput.text = Std.parseFloat(ChartingState.song.bpm);
+		add(label2);
 		add(bpmInput);
 
 		fieldY += spacing;
-		add(new FlxText(fieldX, fieldY, 0, "Time Signature:", 16));
-		timeSignatureInput = new FlxInputText(fieldX + 120, fieldY, 150);
+		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth, "Time Signature:", 16);
+		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 150);
+		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
+		add(label3);
 		add(timeSignatureInput);
 
 		var buttonY = panelY + panelHeight - 50;
 		var saveBtn:FlxButton = new FlxButton(panelX + 80, buttonY, "Save", function() {
 			ChartingState.song.song = songNameInput.text;
 			ChartingState.song.bpm = Std.parseFloat(bpmInput.text);
-			ChartingState.song.timeSignature = [Std.parseInt(timeSignatureInput.text.split(",")[0]), Std.parseInt(timeSignatureInput.text.split(",")[1])];
+			ChartingState.song.timeSignature = [
+				Std.parseInt(timeSignatureInput.text.split(",")[0]),
+				Std.parseInt(timeSignatureInput.text.split(",")[1])
+			];
 			ChartingState.instance.updateGrid();
 			close();
 		});
