@@ -406,12 +406,9 @@ class ChartingState extends ExtendableState {
 
 		updateGrid();
 
-		for (note in renderedNotes.members) {
-			if (note != null && Math.abs(note.strumTime - strumTime) < 1 && note.noteData == noteData) {
-				selectNote(note.noteData);
-				break;
-			}
-		}
+		for (note in renderedNotes.members)
+			if (note != null && Math.abs(note.strum - strumTime) < 1 && note.rawNoteData == noteData)
+				selectNote(note);
 	}
 
 	function deleteNote(note:Note):Void {
@@ -601,8 +598,6 @@ class ChartingState extends ExtendableState {
 
 		song = loadedSong;
 		updateGrid();
-
-		bpmInput.text = Std.string(song.bpm);
 	}
 
 	function onLoadError(event:IOErrorEvent):Void {
@@ -732,7 +727,7 @@ class SongDataSubState extends ExtendableSubState {
 		fieldY += spacing;
 		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
 		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 100);
-		bpmInput.text = Std.parseFloat(ChartingState.song.bpm);
+		bpmInput.text = Std.string(ChartingState.song.bpm);
 		add(label2);
 		add(bpmInput);
 
