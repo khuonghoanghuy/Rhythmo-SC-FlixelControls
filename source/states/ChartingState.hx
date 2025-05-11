@@ -718,22 +718,22 @@ class SongDataSubState extends ExtendableSubState {
 		var labelWidth = 100;
 		var inputOffset = 10;
 
-		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 100, "Song Name:", 16);
-		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 300);
+		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 120, "Song Name:", 16);
+		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 300);
 		songNameInput.text = ChartingState.song.song;
 		add(label1);
 		add(songNameInput);
 
 		fieldY += spacing;
 		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
-		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 100);
+		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 100);
 		bpmInput.text = Std.string(ChartingState.song.bpm);
 		add(label2);
 		add(bpmInput);
 
 		fieldY += spacing;
 		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth + 200, "Time Sig.:", 16);
-		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 2, 150);
+		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 150);
 		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
 		add(label3);
 		add(timeSignatureInput);
