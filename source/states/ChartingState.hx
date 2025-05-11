@@ -708,10 +708,10 @@ class SongDataSubState extends ExtendableSubState {
 		bg.alpha = 0.65;
 		add(bg);
 
-		var panelWidth:Int = 500;
-		var panelHeight:Int = 300;
-		var panelX:Int = (FlxG.width - panelWidth) / 2;
-		var panelY:Int = (FlxG.height - panelHeight) / 2;
+		var panelWidth = 500;
+		var panelHeight = 300;
+		var panelX = (FlxG.width - panelWidth) / 2;
+		var panelY = (FlxG.height - panelHeight) / 2;
 
 		var panel:RoundedSprite = new RoundedSprite(panelX, panelY, 500, 300, FlxColor.GRAY);
 		panel.alpha = 0.9;
@@ -722,9 +722,9 @@ class SongDataSubState extends ExtendableSubState {
 		title.screenCenter(X);
 		add(title);
 
-		var fieldX:Int = panelX + 30;
-		var fieldY:Int = panelY + 60;
-		var spacing:Int = 55;
+		var fieldX = panelX + 30;
+		var fieldY = panelY + 60;
+		var spacing = 55;
 
 		add(new FlxText(fieldX, fieldY, 0, "Song Name:", 16));
 		songNameInput = new FlxInputText(fieldX + 120, fieldY, 300);
