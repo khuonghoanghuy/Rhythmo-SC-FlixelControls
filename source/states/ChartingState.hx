@@ -77,6 +77,10 @@ class ChartingState extends ExtendableState {
 		#end
 
 		menuStructure = [
+			"Chart" => [
+				{name: "Playtest", func: openPlayState},
+				{name: "Edit Metadata", func: () -> openSubState(new SongDataSubState())}
+			],
 			"Edit" => [
 				{
 					name: "Copy Section",
@@ -121,8 +125,7 @@ class ChartingState extends ExtendableState {
 							updateGrid();
 						}));
 					}
-				},
-				{name: "Set BPM", func: setBPM}
+				}
 			],
 			"File" => [
 				{name: "Load Song", func: () -> openSubState(new LoadSongSubState())},
@@ -278,13 +281,8 @@ class ChartingState extends ExtendableState {
 		if (Input.justPressed('right'))
 			changeSection(curSection + 1);
 
-		if (Input.justPressed('accept')) {
-			FlxG.mouse.visible = false;
-			if (FlxG.sound.music.playing)
-				FlxG.sound.music.stop();
-			ExtendableState.switchState(new PlayState());
-			PlayState.song = song;
-		}
+		if (Input.justPressed('accept'))
+			openPlayState();
 
 		if (Input.justPressed('space')) {
 			if (FlxG.sound.music.playing)
@@ -372,6 +370,14 @@ class ChartingState extends ExtendableState {
 			for (item in group)
 				item.visible = false;
 		activeDropdown = "";
+	}
+
+	function openPlayState() {
+		FlxG.mouse.visible = false;
+		if (FlxG.sound.music.playing)
+			FlxG.sound.music.stop();
+		ExtendableState.switchState(new PlayState());
+		PlayState.song = song;
 	}
 
 	function loadSong(daSong:String):Void {
@@ -691,7 +697,58 @@ class LoadSongSubState extends ExtendableSubState {
 }
 
 class SongDataSubState extends ExtendableSubState {
+	var songNameInput:FlxInputText;
+    var bpmInput:FlxInputText;
+    var timeSignatureInput:FlxInputText;
+
 	public function new() {
 		super();
+
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.White);
+        bg.alpha = 0.65;
+        add(bg);
+
+        var panel:FlxSprite = new FlxSprite(100, 60).makeGraphic(FlxG.width - 200, FlxG.height - 120, FlxColor.GRAY);
+        panel.alpha = 0.9;
+        add(panel);
+
+        var title:FlxText = new FlxText(0, 70, FlxG.width, "Edit Song Metadata", 24);
+		title.alignment = CENTER;
+		title.screenCenter(X);
+        add(title);
+
+        var fieldY:Int = 130;
+        var spacing:Int = 70;
+
+        add(new FlxText(120, fieldY, 0, "Song Name:", 16));
+        songNameInput = new FlxInputText(240, fieldY, 400);
+        add(songNameInput);
+
+        fieldY += spacing;
+        add(new FlxText(120, fieldY, 0, "BPM:", 16));
+        bpmInput = new FlxInputText(240, fieldY, 100);
+        add(bpmInput);
+
+        fieldY += spacing;
+        add(new FlxText(120, fieldY, 0, "Time Signature:", 16));
+        timeSignatureInput = new FlxInputText(370, fieldY, 150);
+        add(timeSignatureInput);
+
+        var saveBtn:FlxButton = new FlxButton(FlxG.width / 2 - 100, FlxG.height - 80, "Save", function() {
+            close();
+        });
+        add(saveBtn);
+
+        var cancelBtn = new FlxButton(FlxG.width / 2 + 10, FlxG.height - 80, "Cancel", function() {
+            close();
+        });
+        add(cancelBtn);
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (Input.justPressed('exit'))
+			close();
 	}
 }
