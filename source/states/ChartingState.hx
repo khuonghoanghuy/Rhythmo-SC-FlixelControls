@@ -67,7 +67,7 @@ class ChartingState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		Main.fpsDisplay.visible = false;
+		Main.fpsDisplay.onBottom = true;
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -77,6 +77,9 @@ class ChartingState extends ExtendableState {
 		#end
 
 		menuStructure = [
+			"Help" => [
+				{name: "Controls", func: () -> openSubState(new HelpSubState())}
+			],
 			"Chart" => [
 				{name: "Playtest", func: openPlayState},
 				{name: "Edit Metadata", func: () -> openSubState(new SongDataSubState())}
@@ -196,12 +199,6 @@ class ChartingState extends ExtendableState {
 
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
-
-		var controlsTxt:FlxText = new FlxText(10, FlxG.height - 195, FlxG.width,
-			"CONTROLS\nLEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
-			18);
-		controlsTxt.scrollFactor.set();
-		add(controlsTxt);
 
 		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-BETA.2 // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -340,6 +337,8 @@ class ChartingState extends ExtendableState {
 			+ curSection
 			+ "\nBPM: "
 			+ song.bpm
+			+ "\nTime Signature: "
+			+ song.timeSignature[0] + "/" + song.timeSignature[1]
 			+ "\nCurStep: "
 			+ curStep
 			+ "\nCurBeat: "
@@ -720,22 +719,22 @@ class SongDataSubState extends ExtendableSubState {
 		var labelWidth = 100;
 		var inputOffset = 10;
 
-		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 120, "Song Name:", 16);
-		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 300);
+		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 120, "Name:", 16);
+		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 300);
 		songNameInput.text = ChartingState.song.song;
 		add(label1);
 		add(songNameInput);
 
 		fieldY += spacing;
 		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
-		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 100);
+		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 100);
 		bpmInput.text = Std.string(ChartingState.song.bpm);
 		add(label2);
 		add(bpmInput);
 
 		fieldY += spacing;
 		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth + 200, "Time Sig.:", 16);
-		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY, 150);
+		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 150);
 		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
 		add(label3);
 		add(timeSignatureInput);
@@ -753,10 +752,35 @@ class SongDataSubState extends ExtendableSubState {
 		});
 		add(saveBtn);
 
-		var cancelBtn = new FlxButton(panelX + panelWidth - 150, buttonY, "Cancel", function() {
+		var cancelBtn:FlxButton = new FlxButton(panelX + panelWidth - 150, buttonY, "Cancel", function() {
 			close();
 		});
 		add(cancelBtn);
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (Input.justPressed('exit'))
+			close();
+	}
+}
+
+class HelpSubState extends ExtendableSubState {
+	var input:FlxUIInputText;
+
+	public function new() {
+		super();
+
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
+		bg.screenCenter();
+		bg.alpha = 0.65;
+		add(bg);
+
+		var text:FlxText = new FlxText(0, 180, 0, "LEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart", 32);
+		text.setFormat(Paths.font('vcr.ttf'), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.screenCenter(XY);
+		add(text);
 	}
 
 	override function update(elapsed:Float) {
