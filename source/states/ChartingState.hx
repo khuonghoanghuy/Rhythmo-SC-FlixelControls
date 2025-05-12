@@ -67,6 +67,8 @@ class ChartingState extends ExtendableState {
 	override function create() {
 		super.create();
 
+		Main.fpsDisplay.visible = false;
+
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
@@ -160,7 +162,6 @@ class ChartingState extends ExtendableState {
 
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
-
 		FlxG.mouse.visible = true;
 
 		Conductor.bpm = song.bpm;
@@ -367,6 +368,7 @@ class ChartingState extends ExtendableState {
 	}
 
 	function openPlayState() {
+		Main.fpsDisplay.visible = SaveData.settings.fpsCounter;
 		FlxG.mouse.visible = false;
 		if (FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
