@@ -67,8 +67,6 @@ class ChartingState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		Main.fpsDisplay.onRight = true;
-
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
@@ -256,6 +254,11 @@ class ChartingState extends ExtendableState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		for (label in topNavBar) {
+			if (!FlxG.mouse.overlaps(label) && FlxG.mouse.justPressed)
+				hideAllDropdowns();
+		}
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * song.notes[curSection].stepsPerSection));
 

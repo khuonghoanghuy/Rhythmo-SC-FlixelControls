@@ -7,15 +7,6 @@ class FPS extends TextField {
 	public var borderSize:Int = 1;
 	public var borders:Array<TextField> = new Array<TextField>();
 
-	public var onRight(default, set):Bool = false;
-
-	public function set_onRight(val:Bool):Bool {
-		var align:TextFormat = new TextFormat();
-		align.align = (val ? "right" : "left");
-		setTextFormat(align);
-		return onRight = val;
-	}
-
 	private var times:Array<Float> = [];
 
 	public function new(x:Float, y:Float, color:Int, ?font:String) {
@@ -51,13 +42,7 @@ class FPS extends TextField {
 			if (mem > memPeak)
 				memPeak = mem;
 
-			if (visible) {
-				if (onRight)
-					this.x = Application.current.window.width - x;
-				else
-					this.x = x;
-				text = 'FPS: ${times.length}\nMEM: ${FlxStringUtil.formatBytes(mem)} / ${FlxStringUtil.formatBytes(memPeak)}';
-			}
+			text = (visible) ? 'FPS: ${times.length}\nMEM: ${FlxStringUtil.formatBytes(mem)} / ${FlxStringUtil.formatBytes(memPeak)}' : '';
 
 			textColor = (times.length < FlxG.drawFramerate * 0.5) ? 0xFFFF0000 : 0xFFFFFFFF;
 		});
