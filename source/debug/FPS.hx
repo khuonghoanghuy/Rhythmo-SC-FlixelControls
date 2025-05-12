@@ -7,7 +7,14 @@ class FPS extends TextField {
 	public var borderSize:Int = 1;
 	public var borders:Array<TextField> = new Array<TextField>();
 
-	public var onBottom:Bool = false;
+	public var onRight(default, set):Bool = false;
+
+	public function set_onRight(val:Bool):Bool {
+		var align:TextFormat = new TextFormat();
+		align.align = (val ? "right" : "left");
+		setTextFormat(align);
+		return onRight = val;
+	}
 
 	private var times:Array<Float> = [];
 
@@ -45,10 +52,10 @@ class FPS extends TextField {
 				memPeak = mem;
 
 			if (visible) {
-				if (onBottom)
-					this.y = Application.current.window.height - y;
+				if (onRight)
+					this.x = Application.current.window.width - x;
 				else
-					this.y = y;
+					this.x = x;
 				text = 'FPS: ${times.length}\nMEM: ${FlxStringUtil.formatBytes(mem)} / ${FlxStringUtil.formatBytes(memPeak)}';
 			}
 

@@ -89,8 +89,8 @@ class PlayState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		if (Main.fpsDisplay.onBottom)
-			Main.fpsDisplay.onBottom = false;
+		if (Main.fpsDisplay.onRight)
+			Main.fpsDisplay.onRight = false;
 
 		Paths.clearStoredMemory();
 

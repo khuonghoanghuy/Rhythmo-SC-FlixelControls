@@ -67,7 +67,7 @@ class ChartingState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		Main.fpsDisplay.onBottom = true;
+		Main.fpsDisplay.onRight = true;
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -722,7 +722,7 @@ class SongDataSubState extends ExtendableSubState {
 		var inputOffset = 10;
 
 		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 120, "Name:", 16);
-		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 300);
+		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 5, 300);
 		songNameInput.text = ChartingState.song.song;
 		inputs.push(songNameInput);
 		add(label1);
@@ -730,7 +730,7 @@ class SongDataSubState extends ExtendableSubState {
 
 		fieldY += spacing;
 		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
-		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 100);
+		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 5, 100);
 		bpmInput.text = Std.string(ChartingState.song.bpm);
 		inputs.push(bpmInput);
 		add(label2);
@@ -738,7 +738,7 @@ class SongDataSubState extends ExtendableSubState {
 
 		fieldY += spacing;
 		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth + 200, "Time Sig.:", 16);
-		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 150);
+		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 5, 150);
 		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
 		inputs.push(timeSignatureInput);
 		add(label3);
