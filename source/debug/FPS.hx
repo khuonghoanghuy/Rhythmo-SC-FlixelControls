@@ -43,10 +43,10 @@ class FPS extends TextField {
 			var memPeak:Float = 0;
 			if (mem > memPeak)
 				memPeak = mem;
-			
+
 			if (visible) {
 				if (onBottom)
-					this.y = Application.current.window.height - height - y;
+					this.y = Application.current.window.height - y;
 				else
 					this.y = y;
 				text = 'FPS: ${times.length}\nMEM: ${FlxStringUtil.formatBytes(mem)} / ${FlxStringUtil.formatBytes(memPeak)}';

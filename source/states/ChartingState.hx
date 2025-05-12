@@ -77,9 +77,7 @@ class ChartingState extends ExtendableState {
 		#end
 
 		menuStructure = [
-			"Help" => [
-				{name: "Controls", func: () -> openSubState(new HelpSubState())}
-			],
+			"Help" => [{name: "Controls", func: () -> openSubState(new HelpSubState())}],
 			"Chart" => [
 				{name: "Playtest", func: openPlayState},
 				{name: "Edit Metadata", func: () -> openSubState(new SongDataSubState())}
@@ -200,7 +198,7 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-BETA.2 // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-rc.1 // Functionality is subject to change.', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.screenCenter(X);
 		charterVer.scrollFactor.set();
@@ -294,9 +292,11 @@ class ChartingState extends ExtendableState {
 			&& FlxG.mouse.y < gridBG.y + (gridSize * Conductor.stepsPerSection)) {
 			var snappedGridSize = (gridSize / (beatSnap / Conductor.stepsPerSection));
 
+			dummyArrow.visible = true;
 			dummyArrow.x = Math.floor(FlxG.mouse.x / gridSize) * gridSize;
 			dummyArrow.y = (Input.pressed('shift')) ? FlxG.mouse.y : Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
-		}
+		} else
+			dummyArrow.visible = false;
 
 		if (FlxG.mouse.justPressed) {
 			var coolNess = true;
@@ -338,7 +338,9 @@ class ChartingState extends ExtendableState {
 			+ "\nBPM: "
 			+ song.bpm
 			+ "\nTime Signature: "
-			+ song.timeSignature[0] + "/" + song.timeSignature[1]
+			+ song.timeSignature[0]
+			+ "/"
+			+ song.timeSignature[1]
 			+ "\nCurStep: "
 			+ curStep
 			+ "\nCurBeat: "
@@ -367,7 +369,6 @@ class ChartingState extends ExtendableState {
 	}
 
 	function openPlayState() {
-		Main.fpsDisplay.visible = SaveData.settings.fpsCounter;
 		FlxG.mouse.visible = false;
 		if (FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
@@ -691,6 +692,7 @@ class SongDataSubState extends ExtendableSubState {
 	var songNameInput:FlxInputText;
 	var bpmInput:FlxInputText;
 	var timeSignatureInput:FlxInputText;
+	var inputs:Array<FlxInputText> = [];
 
 	public function new() {
 		super();
@@ -720,22 +722,25 @@ class SongDataSubState extends ExtendableSubState {
 		var inputOffset = 10;
 
 		var label1:FlxText = new FlxText(fieldX, fieldY, labelWidth + 120, "Name:", 16);
-		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 300);
+		songNameInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 300);
 		songNameInput.text = ChartingState.song.song;
+		inputs.push(songNameInput);
 		add(label1);
 		add(songNameInput);
 
 		fieldY += spacing;
 		var label2:FlxText = new FlxText(fieldX, fieldY, labelWidth, "BPM:", 16);
-		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 100);
+		bpmInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 100);
 		bpmInput.text = Std.string(ChartingState.song.bpm);
+		inputs.push(bpmInput);
 		add(label2);
 		add(bpmInput);
 
 		fieldY += spacing;
 		var label3:FlxText = new FlxText(fieldX, fieldY, labelWidth + 200, "Time Sig.:", 16);
-		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY - 10, 150);
+		timeSignatureInput = new FlxInputText(fieldX + labelWidth + inputOffset, fieldY + 10, 150);
 		timeSignatureInput.text = '${Std.string(ChartingState.song.timeSignature[0])},${Std.string(ChartingState.song.timeSignature[1])}';
+		inputs.push(timeSignatureInput);
 		add(label3);
 		add(timeSignatureInput);
 
@@ -761,14 +766,29 @@ class SongDataSubState extends ExtendableSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		var lockInputs:Bool = false;
+		for (input in inputs) {
+			if (input.hasFocus) {
+				FlxG.sound.muteKeys = [];
+				FlxG.sound.volumeDownKeys = [];
+				FlxG.sound.volumeUpKeys = [];
+				lockInputs = true;
+				break;
+			}
+		}
+
+		if (!lockInputs) {
+			FlxG.sound.muteKeys = [FlxKey.ZERO];
+			FlxG.sound.volumeDownKeys = [FlxKey.MINUS];
+			FlxG.sound.volumeUpKeys = [FlxKey.PLUS];
+		}
+
 		if (Input.justPressed('exit'))
 			close();
 	}
 }
 
 class HelpSubState extends ExtendableSubState {
-	var input:FlxUIInputText;
-
 	public function new() {
 		super();
 
@@ -777,7 +797,9 @@ class HelpSubState extends ExtendableSubState {
 		bg.alpha = 0.65;
 		add(bg);
 
-		var text:FlxText = new FlxText(0, 180, 0, "LEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart", 32);
+		var text:FlxText = new FlxText(0, 180, 0,
+			"LEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
+			32);
 		text.setFormat(Paths.font('vcr.ttf'), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(XY);
 		add(text);
