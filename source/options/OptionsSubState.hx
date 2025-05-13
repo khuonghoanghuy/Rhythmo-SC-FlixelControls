@@ -12,10 +12,9 @@ class OptionsSubState extends ExtendableSubState {
 	var holdTimer:FlxTimer;
 	var holdDirection:Int = 0;
 
-	var testSprite:FlxSprite;
-
 	var note:Note;
 	var noteSplash:NoteSplash;
+	var testSprite:FlxSprite;
 
 	public function new() {
 		super();
@@ -283,6 +282,7 @@ class OptionsSubState extends ExtendableSubState {
 				}
 				noteSplash = new NoteSplash(1000, 0, 2);
 				noteSplash.isStatic = true;
+				noteSplash.alpha = 1;
 				noteSplash.scrollFactor.set();
 				noteSplash.updateHitbox();
 				noteSplash.screenCenter(Y);
