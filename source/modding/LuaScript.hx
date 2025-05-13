@@ -356,7 +356,7 @@ class LuaScript extends FlxBasic {
 		});
 
 		// Misc. Functions
-		setCallback("getInput", function(key:String, state:String) {
+		setCallback("getInput", function(state:String, key:String) {
 			switch (state) {
 				case "justPressed":
 					return FlxG.keys.anyJustPressed([getKeyName(key)]);

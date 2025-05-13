@@ -341,10 +341,11 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 
 ## Using Haxe in Lua
 * `runHaxeCode(code:String)` - Runs Haxe code.
+* `runHaxeFunction(func:String, ?args:Array<Dynamic>)` - Runs a Haxe function.
 * `importHaxeLibrary(lib:String, ?packageName:String)` - Imports a Haxe library.
 
 ## Misc. Functions
-* `getInputPress(key:String, state:String)` - Checks for a specific input.
+* `getInputPress(state:String, key:String)` - Checks for a specific input.
 
 ## Templates
 For the default template, use [this](https://raw.githubusercontent.com/JoaTH-Team/Rhythmo-SC/main/assets/scripts/template.lua).
