@@ -15,6 +15,7 @@ class OptionsSubState extends ExtendableSubState {
 	var testSprite:FlxSprite;
 
 	var note:Note;
+	var noteSplash:NoteSplash;
 
 	public function new() {
 		super();
@@ -81,7 +82,11 @@ class OptionsSubState extends ExtendableSubState {
 
 		var option:Option = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/notesplashesList'))), SaveData.settings.noteSplashType);
-		option.onChange = (value:Dynamic) -> SaveData.settings.noteSplashType = value;
+		option.showNotesplash = true;
+		option.onChange = (value:Dynamic) -> {
+			SaveData.settings.noteSplashType = value;
+			reloadSprite('splash');
+		};
 		options.push(option);
 
 		var option:Option = new Option(Localization.get("opHitSndT"), Localization.get("descHitSndT"), OptionType.Choice(['Default', 'CD', 'OSU', 'Switch']),
@@ -139,6 +144,8 @@ class OptionsSubState extends ExtendableSubState {
 				reloadSprite('test');
 			if (options[i].showNoteskin)
 				reloadSprite('note');
+			if (options[i].showNotesplash)
+				reloadSprite('splash');
 		}
 
 		description = new FlxText(0, FlxG.height * 0.1, FlxG.width * 0.9, '', 28);
@@ -197,6 +204,8 @@ class OptionsSubState extends ExtendableSubState {
 			testSprite.visible = option.showSillySprite;
 		if (note != null)
 			note.visible = option.showNoteskin;
+		if (noteSplash != null)
+			noteSplash.visible = option.showNotesplash;
 
 		if (option.desc != null) {
 			description.text = option.desc;
@@ -266,6 +275,18 @@ class OptionsSubState extends ExtendableSubState {
 				note.updateHitbox();
 				note.screenCenter(Y);
 				add(note);
+			case 'splash':
+				if (noteSplash != null) {
+					noteSplash.kill();
+					remove(noteSplash);
+					noteSplash.destroy();
+				}
+				noteSplash = new NoteSplash(1000, 0, 2);
+				noteSplash.isStatic = true;
+				noteSplash.scrollFactor.set();
+				noteSplash.updateHitbox();
+				noteSplash.screenCenter(Y);
+				add(noteSplash);
 		}
 	}
 }
