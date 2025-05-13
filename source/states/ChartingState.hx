@@ -158,7 +158,6 @@ class ChartingState extends ExtendableState {
 				},
 				{name: "Save Chart As", func: saveSong}
 			]
-
 		];
 
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
