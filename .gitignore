@@ -8,6 +8,6 @@ vscode-project.hxml
 .ionide
 
 ### Misc
-.DS_Store
+*.DS_Store
 desktop.ini
 dump/
