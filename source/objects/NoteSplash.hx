@@ -4,9 +4,16 @@ class NoteSplash extends GameSprite {
 	public var colorSwap:ColorSwap;
 	public var noteColor:Array<Int> = [255, 0, 0];
 
+	public var isStatic:Bool = false;
+
 	private var tweenStarted:Bool = false;
 
-	public function setupSplash(x:Float = 0, y:Float = 0, noteData:Int = 0) {
+	public function new(x:Float, y:Float, noteData:Int = 0) {
+		super(x, y);
+		setupSplash(x, y, noteData);
+	}
+
+	public function setupSplash(x:Float, y:Float, noteData:Int = 0) {
 		setPosition(x, y);
 
 		loadGraphic(Paths.image('gameplay/notesplashes/${SaveData.settings.noteSplashType.toLowerCase()}/splash_${Utilities.getDirection(noteData)}'), true,
@@ -32,14 +39,16 @@ class NoteSplash extends GameSprite {
 	}
 
 	override function update(elapsed:Float) {
-		if (visible && alpha > 0 && !tweenStarted) {
-			tweenStarted = true;
-			FlxTween.tween(this, {alpha: 0}, 0.33, {
-				onComplete: (twn:FlxTween) -> {
-					if (alpha <= 0)
-						kill();
-				}
-			});
+		if (!isStatic) {
+			if (visible && alpha > 0 && !tweenStarted) {
+				tweenStarted = true;
+				FlxTween.tween(this, {alpha: 0}, 0.33, {
+					onComplete: (twn:FlxTween) -> {
+						if (alpha <= 0)
+							kill();
+					}
+				});
+			}
 		}
 
 		super.update(elapsed);
