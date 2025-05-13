@@ -198,7 +198,7 @@ class ChartingState extends ExtendableState {
 		strumLine = new FlxSprite(gridBG.x, 50).makeGraphic(Std.int(gridBG.width), 4);
 		add(strumLine);
 
-		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3-rc.1 // Functionality is subject to change.', 12);
+		var charterVer:FlxText = new FlxText(0, FlxG.height - 24, 0, 'Charter v0.3', 12);
 		charterVer.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charterVer.screenCenter(X);
 		charterVer.scrollFactor.set();

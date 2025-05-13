@@ -2,7 +2,7 @@
 ## Current To-Dos
 ### High Priority
 * [ ] Actually finish the charts
-* [ ] Improve Chart Editor
+* [X] Improve Chart Editor
 * [X] Discord Rich Presence Support
 * [X] Lua Script Support
 * [X] Campaign Mode
