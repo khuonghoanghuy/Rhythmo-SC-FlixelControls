@@ -115,7 +115,7 @@ class ModIcon extends GameSprite {
 			try {
 				loadGraphic(BitmapData.fromBytes(bytes), true, 150, 150);
 				var totalFrames = Math.floor(this.width / 150) * Math.floor(this.height / 150);
-				animation.add('icon', [for (i in 0...totalFrames.length) i], 10);
+				animation.add('icon', [for (i in 0...totalFrames) i], 10);
 				animation.play('icon');
 			} catch (e:Dynamic) {
 				FlxG.log.warn(e);
