@@ -345,7 +345,7 @@ Similar to HScript, your script should either be located in `assets/scripts/[nam
 * `importHaxeLibrary(lib:String, ?packageName:String)` - Imports a Haxe library.
 
 ## Misc. Functions
-* `getInputPress(state:String, key:String)` - Checks for a specific input.
+* `getInput(state:String, key:String)` - Checks for a specific input.
 
 ## Templates
 For the default template, use [this](https://raw.githubusercontent.com/JoaTH-Team/Rhythmo-SC/main/assets/scripts/template.lua).
@@ -372,13 +372,13 @@ function create()
 end
 
 function update(elapsed)
-	if getInputPress("pressed", "LEFT") then
+	if getInput("pressed", "LEFT") then
 		playAnimation("player", "singLEFT", true, false, 0)
-	elseif getInputPress("pressed", "RIGHT") then
+	elseif getInput("pressed", "RIGHT") then
 		playAnimation("player", "singRIGHT", true, false, 0)
-	elseif getInputPress("pressed", "UP") then
+	elseif getInput("pressed", "UP") then
 		playAnimation("player", "singUP", true, false, 0)
-	elseif getInputPress("pressed", "DOWN") then
+	elseif getInput("pressed", "DOWN") then
 		playAnimation("player", "singDOWN", true, false, 0)
 	else
 		playAnimation("player", "idle", false, false, 0)
