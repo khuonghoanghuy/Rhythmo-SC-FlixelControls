@@ -1,15 +1,16 @@
 Scripts in Rhythmo can be active in only one song, or be applied globally to every song. You can use scripts to make custom backgrounds, add special functions, make cool mechanics, etc.
 
-# HScript
-Your script should either be located in `assets/scripts/[name].hxs`, or in `assets/songs/[song-name]/[name].hxs`. <br>
-However, if your script is a scripted state or substate, it should be located in `assets/classes/[name].hxs`.
+Your script should either be located in `assets/scripts/`, or in `assets/songs/[song-name]/`. <br>
+However, if your script is a scripted state or substate, it should be located in `assets/states/` or `assets/substates/`.
 
-But also, it doesn't have to be an `.hxs` file. <br>
-The following extensions are also supported: 
+Currently, the following extensions are supported:
+* `.hscript`
 * `.hx`
 * `.hxc`
-* `.hscript`
+* `.hxs`
+* `.lua`
 
+# HScript
 ## Limitations
 The following are not supported:
 * Keywords:
@@ -270,8 +271,6 @@ function update(elapsed:Float) {
 ```
 
 # Lua
-Similar to HScript, your script should either be located in `assets/scripts/[name].lua`, or in `assets/songs/[song-name]/[name].lua`.
-
 ## Default Variables
 * `Function_Stop` - Cancels functions (e.g., startCountdown, endSong).
 * `Function_Continue` - Continues the game like normal.
