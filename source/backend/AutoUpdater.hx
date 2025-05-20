@@ -5,7 +5,7 @@ import haxe.zip.Reader;
 import haxe.io.BytesOutput;
 
 /**
- * @author YoPhlox
+ * @author maybekoi
  * @see https://github.com/Moon4K-Dev/Moon4K
  */
 class AutoUpdater {
