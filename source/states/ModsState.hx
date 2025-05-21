@@ -113,9 +113,19 @@ class ModIcon extends GameSprite {
 
 		if (bytes != null && bytes.length > 0) {
 			try {
-				loadGraphic(BitmapData.fromBytes(bytes), true, 150, 150);
-				var totalFrames = Math.floor(this.width / 150) * Math.floor(this.height / 150);
-				animation.add('icon', [for (i in 0...totalFrames) i], 24);
+				var bmp:BitmapData = BitmapData.fromBytes(bytes);
+				var sheetWidth = bmp.width;
+				var sheetHeight = bmp.height;
+				var frameWidth = 150;
+				var frameHeight = 150;
+				var framesWide = Math.floor(sheetWidth / frameWidth);
+				var framesHigh = Math.floor(sheetHeight / frameHeight);
+				var totalFrames = framesWide * framesHigh;
+
+				loadGraphic(bmp, true, frameWidth, frameHeight);
+
+				var frameIndices = [for (i in 0...totalFrames) i];
+				animation.add('icon', frameIndices, 24, true);
 				animation.play('icon');
 			} catch (e:Dynamic) {
 				FlxG.log.warn(e);
