@@ -56,7 +56,6 @@ class NoteSplash extends GameSprite {
 		shakeDuration = duration;
 		originalX = x;
 		originalY = y;
-		tweenStarted = true;
 	}
 
 	override function update(elapsed:Float) {
@@ -70,7 +69,8 @@ class NoteSplash extends GameSprite {
 				x = originalX;
 				y = originalY;
 				tweenStarted = false;
-			}
+			} else
+				tweenStarted = true;
 		}
 
 		if (!isStatic) {
