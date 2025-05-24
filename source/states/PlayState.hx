@@ -677,8 +677,6 @@ class PlayState extends ExtendableState {
 		if (rating == 'perfect' || rating == 'perfect-golden') {
 			var splash:NoteSplash = noteSplashes.recycle(NoteSplash);
 			splash.setupSplash(note.x, note.y, Utilities.getNoteIndex(note.dir));
-			if (note.type == "sustain")
-				splash.startShake(note.sustainLength);
 			noteSplashes.add(splash);
 		}
 

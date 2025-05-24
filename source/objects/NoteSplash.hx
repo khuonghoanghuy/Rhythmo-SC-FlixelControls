@@ -8,12 +8,6 @@ class NoteSplash extends GameSprite {
 
 	private var tweenStarted:Bool = false;
 
-	private var shakeActive:Bool = false;
-	private var shakeTime:Float = 0;
-	private var shakeDuration:Float = 0;
-	private var originalX:Float = 0;
-	private var originalY:Float = 0;
-
 	public function new(x:Float, y:Float, noteData:Int = 0) {
 		super(x, y);
 		setupSplash(x, y, noteData);
@@ -42,37 +36,9 @@ class NoteSplash extends GameSprite {
 		}
 
 		tweenStarted = false;
-
-		shakeActive = false;
-		shakeTime = 0;
-		shakeDuration = 0;
-		originalX = x;
-		originalY = y;
-	}
-
-	public function startShake(duration:Float) {
-		shakeActive = true;
-		shakeTime = 0;
-		shakeDuration = duration;
-		originalX = x;
-		originalY = y;
-		tweenStarted = true;
 	}
 
 	override function update(elapsed:Float) {
-		if (shakeActive) {
-			shakeTime += elapsed;
-			x = originalX + (Math.random() - 0.5) * 10;
-			y = originalY + (Math.random() - 0.5) * 10;
-
-			if (shakeTime >= shakeDuration) {
-				shakeActive = false;
-				x = originalX;
-				y = originalY;
-				tweenStarted = false;
-			}
-		}
-
 		if (!isStatic) {
 			if (visible && alpha > 0 && !tweenStarted) {
 				tweenStarted = true;
