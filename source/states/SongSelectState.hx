@@ -116,9 +116,12 @@ class SongSelectState extends ExtendableState {
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
-		if (!isResetting)
-			panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
-				+ Std.string(songListData.songs[currentIndex].diff) + "/5";
+		if (!isResetting) {
+			var txt = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt") + Std.string(songListData.songs[currentIndex].diff)
+				+ "/5";
+
+			panelTxt.text = (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(txt) : txt;
+		}
 
 		if (!lockInputs) {
 			if (Input.justPressed('left') || Input.justPressed('right'))
@@ -137,8 +140,9 @@ class SongSelectState extends ExtendableState {
 				lockInputs = false;
 				titleTxt.color = FlxColor.WHITE;
 				titleTxt.text = songListData.songs[currentIndex].name;
-				panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
+				var txt = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
 					+ Std.string(songListData.songs[currentIndex].diff) + "/5";
+				panelTxt.text = (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(txt) : txt;
 				tinyTxt.text = Localization.get("tinyGuide");
 			}
 			FlxG.sound.play(Paths.sound('cancel'));
@@ -166,8 +170,9 @@ class SongSelectState extends ExtendableState {
 						lockInputs = false;
 						titleTxt.color = FlxColor.WHITE;
 						titleTxt.text = songListData.songs[currentIndex].name;
-						panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
+						var txt = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
 							+ Std.string(songListData.songs[currentIndex].diff) + "/5";
+						panelTxt.text = (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(txt) : txt;
 						tinyTxt.text = Localization.get("tinyGuide");
 						changeSelection();
 					});

@@ -115,15 +115,10 @@ class Localization {
 		var PDF = "\u202C";
 		var LRM = "\u200E";
 
-		if (StringTools.endsWith(text, ":")) {
-			var shaped = ArabicReshaper.reshape(text.substr(0, text.length - 1));
-			var bidi = UBA.display(shaped);
-			return RLE + bidi + PDF + LRM + ":";
-		}
-
 		var shaped = ArabicReshaper.reshape(text);
 		var bidi = UBA.display(shaped);
-		return RLE + bidi + PDF + LRM;
+
+		return RLE + bidi + PDF;
 	}
 
 	public static function dispose() {
