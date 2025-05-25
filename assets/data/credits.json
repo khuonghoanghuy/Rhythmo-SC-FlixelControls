@@ -40,16 +40,15 @@
             "colors": [26, 184, 28]
         },
         {
-
             "name": "NeoDev",
             "iconData": ["NeoDev", 0, 0],
             "textData": ["Additional Programmer, Adding Other language", "I like python."],
             "urlData": [
                 ["Discord", "https://discord.com/user/1314204512814235689"],
-                ["GitHub", "https://github.com/TheNeodev"]
+                ["GitHub", "https://github.com/TheNeodev"],
                 ["YT", " https://youtube.com/@kezeru-c"]
             ],
             "colors": [0, 210, 230]
-        },
+        }
     ]
 }

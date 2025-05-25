@@ -15,6 +15,8 @@ class Localization {
 	private static var data:Map<String, Dynamic>;
 	private static var currentLanguage:String;
 
+	public static var DEFAULT_FONT:String = "vcr";
+
 	public static var DEFAULT_LANGUAGE:String = "en";
 	public static var directory:String = DEFAULT_DIR;
 
@@ -77,6 +79,20 @@ class Localization {
 				return field;
 
 		return field != null ? field : 'missing key: $key';
+	}
+
+	public static function getFont():String {
+		if (data != null && data.exists(currentLanguage)) {
+			var languageData = data.get(currentLanguage);
+
+			if (Reflect.hasField(languageData, "customFont")) {
+				var font = Reflect.field(languageData, "customFont");
+				if (font != null && font != "")
+					return font;
+			}
+		}
+
+		return DEFAULT_FONT;
 	}
 
 	private static function path(language:String) {

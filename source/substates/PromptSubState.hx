@@ -21,7 +21,7 @@ class PromptSubState extends FlxSubState {
 		add(box);
 
 		var questionTxt:FlxText = new FlxText(box.x, box.y + 20, width, question);
-		questionTxt.setFormat(Paths.font('vcr.ttf'), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		questionTxt.setFormat(Paths.font(Localization.getFont()), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		questionTxt.scrollFactor.set();
 		add(questionTxt);
 
@@ -34,6 +34,7 @@ class PromptSubState extends FlxSubState {
 		btnYes.scale.set(2, 2);
 		btnYes.label.scale.set(2, 2);
 		btnYes.label.screenCenter(XY);
+		btnYes.label.font = Paths.font(Localization.getFont());
 		add(btnYes);
 
 		var btnNo:FlxButton = new FlxButton(0, btnYes.y + 50, Localization.get("no"), () -> {
@@ -45,6 +46,7 @@ class PromptSubState extends FlxSubState {
 		btnNo.scale.set(2, 2);
 		btnNo.label.scale.set(2, 2);
 		btnNo.label.screenCenter(XY);
+		btnNo.label.font = Paths.font(Localization.getFont());
 		add(btnNo);
 	}
 }

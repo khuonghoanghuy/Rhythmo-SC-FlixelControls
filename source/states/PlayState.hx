@@ -156,7 +156,7 @@ class PlayState extends ExtendableState {
 		}
 
 		scoreTxt = new FlxText(0, (FlxG.height * (SaveData.settings.downScroll ? 0.11 : 0.89)) + 20, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.font('vcr.ttf'), 35, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font(Localization.getFont()), 35, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.screenCenter(X);
 
 		judgementCounter = new FlxText(20, 0, 0, "", 20);
