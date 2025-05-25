@@ -4,6 +4,9 @@ package backend;
 import openfl.system.Capabilities;
 #end
 
+import hx_arabic_shaper.ArabicReshaper;
+import hx_arabic_shaper.bidi.UBA;
+
 /**
  * A simple localization system.
  * Please credit me if you use it!
@@ -43,6 +46,10 @@ class Localization {
 				data.set(language, languageData);
 			}
 		}
+
+		var config = ArabicReshaper.getDefaultConfig();
+		config.delete_harakat = true;
+		ArabicReshaper.init(config);
 	}
 
 	private static function loadLanguageData(language:String):Dynamic {
@@ -72,13 +79,15 @@ class Localization {
 	public static function get(key:String, ?language:String):String {
 		var targetLanguage:String = language != null ? language : currentLanguage;
 		var languageData = data.get(targetLanguage);
-		final field:String = Reflect.field(languageData, key);
 
-		if (data != null && data.exists(targetLanguage))
-			if (languageData != null && Reflect.hasField(languageData, key))
-				return field;
+		if (data != null && data.exists(targetLanguage)) {
+			if (languageData != null && Reflect.hasField(languageData, key)) {
+				var field:String = Reflect.field(languageData, key);
+				return (targetLanguage == "ar") ? shapeArabicText(field) : field;
+			}
+		}
 
-		return field != null ? field : 'missing key: $key';
+		return 'missing key: $key';
 	}
 
 	public static function getFont():String {
@@ -99,6 +108,16 @@ class Localization {
 		var localDir = Path.join([directory, language + ".json"]);
 		var path:String = Paths.file(localDir);
 		return path;
+	}
+
+	// for arabic text
+	private static function shapeArabicText(text:String):String {
+		var shaped = ArabicReshaper.reshape(text);
+		return UBA.display(shaped);
+	}
+
+	public static function dispose() {
+		ArabicReshaper.dispose();
 	}
 }
 

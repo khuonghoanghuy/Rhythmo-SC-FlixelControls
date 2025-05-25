@@ -49,6 +49,7 @@
 	<haxelib name="polymod" if="FUTURE_POLYMOD" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
+	<haxelib name="hx_arabic_shaper" />
 
 	<!-- [ Defines ] -->
 
@@ -93,8 +94,7 @@
 	<target id="haxe" tool="linker" if="macos">
 		<lib name="/lib64/libX11.a" if="HXCPP_M64" /> <!-- mac support -->
 	</target>
-
-	<!-- For Lua -->
+	
 	<haxedef name="NO_PRECOMPILED_HEADERS"/>
 
 </project>
