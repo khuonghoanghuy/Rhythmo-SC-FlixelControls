@@ -3,7 +3,6 @@ package backend;
 #if openfl
 import openfl.system.Capabilities;
 #end
-
 import hx_arabic_shaper.ArabicReshaper;
 import hx_arabic_shaper.bidi.UBA;
 
@@ -113,7 +112,12 @@ class Localization {
 	// for arabic text
 	private static function shapeArabicText(text:String):String {
 		var shaped = ArabicReshaper.reshape(text);
-		return UBA.display(shaped);
+		var bidi = UBA.display(shaped);
+
+		var RLE = "\u202B";
+		var PDF = "\u202C";
+
+		return RLE + bidi + PDF;
 	}
 
 	public static function dispose() {
