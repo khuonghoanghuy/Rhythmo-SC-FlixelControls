@@ -7,4 +7,4 @@ Italian (IT):it
 Arabic (AR):ar
 Chinese (ZH):zh 
 Spanish (ES):es
-Tiếng Việt (VN):vn
+Vietnamese (VN):vn
