@@ -1,3 +1,10 @@
 en
+jp
+id
+ko
+ru
+it
+ar
+zh
 es
 vn
