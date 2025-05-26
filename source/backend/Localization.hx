@@ -110,7 +110,7 @@ class Localization {
 	}
 
 	// for arabic text
-	private static function shapeArabicText(text:String):String {
+	public static function shapeArabicText(text:String):String {
 		var RLE = "\u202B";
 		var PDF = "\u202C";
 		var LRM = "\u200E";
