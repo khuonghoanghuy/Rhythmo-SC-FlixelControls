@@ -153,14 +153,13 @@ class NoteColorState extends ExtendableState {
 				blue = '>$blue<';
 		}
 
-		var txt = Localization.get("noteColorGuide")
+		daText.text = Localization.get("noteColorGuide")
 			+ Localization.get("red")
 			+ red
 			+ Localization.get("green")
 			+ green
 			+ Localization.get("blue")
 			+ blue;
-		daText.text = (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(txt) : txt;
 		daText.screenCenter(X);
 	}
 

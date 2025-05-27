@@ -32,14 +32,14 @@ class ResultsSubState extends ExtendableSubState {
 				tweens.push(FlxTween.angle(rankSpr, rankSpr.angle, -4, 4, {ease: FlxEase.quartInOut}));
 		}, 0);
 
-		var resultsTxt = Localization.get("resultsTxt")
+		rankTxt = new FlxText(10, 300, FlxG.width,
+			Localization.get("resultsTxt")
 			+ Localization.get("scoreTxt")
 			+ score
 			+ "\n"
 			+ Localization.get("accTxt")
 			+ accuracy
-			+ "%";
-		rankTxt = new FlxText(10, 300, FlxG.width, (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(resultsTxt) : resultsTxt, 12);
+			+ "%", 12);
 		rankTxt.setFormat(Paths.font(Localization.getFont()), 40, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		rankTxt.alpha = 0;
 		add(rankTxt);

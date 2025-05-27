@@ -69,6 +69,6 @@ class Option {
 				formattedString = name;
 		}
 
-		return (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(formattedString) : formattedString;
+		return formattedString;
 	}
 }

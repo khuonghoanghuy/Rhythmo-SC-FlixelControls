@@ -334,10 +334,16 @@ class PlayState extends ExtendableState {
 
 		accuracy = (!SaveData.settings.botPlay) ? Utilities.boundTo(Math.floor((score * 100) / ((hits + misses) * 3.5)) * 0.01, 0, 100) : 0;
 		judgementCounter.text = 'Perfects: ${perfects}\nNices: ${nices}\nOkays: ${okays}\nNos: ${nos}';
-
-		var fullScoreString = Localization.get("scoreTxt") + score + ' // ' + Localization.get("missTxt") + misses + ' // '
-			+ Localization.get("accTxt") + accuracy + '%' + ' (${generateRank()})';
-		scoreTxt.text = (SaveData.settings.lang == "ar") ? Localization.shapeArabicText(fullScoreString) : fullScoreString;
+		scoreTxt.text = (SaveData.settings.botPlay) ? Localization.get("botplayTxt") : Localization.get("scoreTxt")
+			+ score
+			+ ' // '
+			+ Localization.get("missTxt")
+			+ misses
+			+ ' // '
+			+ Localization.get("accTxt")
+			+ accuracy
+			+ '%'
+			+ ' (${generateRank()})';
 
 		if (spawnNotes.length > 0) {
 			while (spawnNotes.length > 0 && spawnNotes[0].strum - Conductor.songPosition < (1500 * songMultiplier)) {

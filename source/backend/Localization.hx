@@ -110,15 +110,9 @@ class Localization {
 	}
 
 	// for arabic text
-	public static function shapeArabicText(text:String):String {
-		var RLE = "\u202B";
-		var PDF = "\u202C";
-		var LRM = "\u200E";
-
+	private static function shapeArabicText(text:String):String {
 		var shaped = ArabicReshaper.reshape(text);
-		var bidi = UBA.display(shaped);
-
-		return RLE + bidi + PDF;
+		return UBA.display(shaped);
 	}
 
 	public static function dispose() {
