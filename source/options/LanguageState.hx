@@ -27,10 +27,10 @@ class LanguageState extends ExtendableState {
 				initLangString[i] = initLangString[i].trim();
 		}
 
-		var data:Array<String> = initLangString[i].split(':');
-
-		for (i in 0...initLangString.length)
+		for (i in 0...initLangString.length) {
+			var data:Array<String> = initLangString[i].split(':');
 			langStrings.push(new Locale(data[0], data[1]));
+		}
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.screenCenter(X);
@@ -49,6 +49,7 @@ class LanguageState extends ExtendableState {
 		add(group);
 
 		for (i in 0...langStrings.length) {
+			var data:Array<String> = initLangString[i].split(':');
 			var font:String = (data[2] != null) ? data[2] : 'vcr.ttf';
 			var text:FlxText = new FlxText(0, 295 + (i * 80), 0, langStrings[i].lang, 32);
 			text.setFormat(Paths.font(font), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
