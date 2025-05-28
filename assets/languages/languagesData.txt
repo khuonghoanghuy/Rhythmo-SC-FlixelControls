@@ -1,10 +1,10 @@
 English (US):en
-Japanese (JP):jp
+Japanese (JP):jp:kyokasho
 Indonesian (ID):id
-Korean (KO):ko
+Korean (KO):ko:jua
 Russian (RU):ru
 Italian (IT):it
-Arabic (AR):ar
-Chinese (ZH):zh 
+Arabic (AR):ar:amiri
+Chinese (ZH):zh:wdxl
 Spanish (ES):es
 Vietnamese (VN):vn

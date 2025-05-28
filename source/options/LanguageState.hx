@@ -27,10 +27,10 @@ class LanguageState extends ExtendableState {
 				initLangString[i] = initLangString[i].trim();
 		}
 
-		for (i in 0...initLangString.length) {
-			var data:Array<String> = initLangString[i].split(':');
+		var data:Array<String> = initLangString[i].split(':');
+
+		for (i in 0...initLangString.length)
 			langStrings.push(new Locale(data[0], data[1]));
-		}
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.screenCenter(X);
@@ -45,22 +45,23 @@ class LanguageState extends ExtendableState {
 		grid.velocity.set(40, 40);
 		add(grid);
 
+		group = new FlxTypedGroup<FlxText>();
+		add(group);
+
+		for (i in 0...langStrings.length) {
+			var font:String = (data[2] != null) ? data[2] : 'vcr.ttf';
+			var text:FlxText = new FlxText(0, 295 + (i * 80), 0, langStrings[i].lang, 32);
+			text.setFormat(Paths.font(font), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			text.screenCenter(X);
+			text.ID = i;
+			group.add(text);
+		}
+
 		var title:FlxText = new FlxText(0, 0, 0, Localization.get("langSelect"), 12);
 		title.setFormat(Paths.font(Localization.getFont()), 70, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		title.scrollFactor.set();
 		title.screenCenter(X);
 		add(title);
-
-		group = new FlxTypedGroup<FlxText>();
-		add(group);
-
-		for (i in 0...langStrings.length) {
-			var text:FlxText = new FlxText(0, 295 + (i * 80), 0, langStrings[i].lang, 32);
-			text.setFormat(Paths.font(Localization.getFont()), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			text.screenCenter(X);
-			text.ID = i;
-			group.add(text);
-		}
 
 		var noticeTxt:FlxText = new FlxText(5, FlxG.height - 30, 0, Localization.get("langNotCompletelyAccurate"), 12);
 		noticeTxt.setFormat(Paths.font(Localization.getFont()), 26, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
