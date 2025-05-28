@@ -1,10 +1,10 @@
 en
-jp
-id
-ko
-ru
-it
-ar
-zh
 es
+it
+id
 vn
+ru
+zh
+jp
+ko
+ar
