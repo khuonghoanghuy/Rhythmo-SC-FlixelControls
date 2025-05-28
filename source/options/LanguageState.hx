@@ -51,12 +51,19 @@ class LanguageState extends ExtendableState {
 		for (i in 0...langStrings.length) {
 			var data:Array<String> = initLangString[i].split(':');
 			var font:String = (data[2] != null) ? data[2] : 'vcr.ttf';
-			var text:FlxText = new FlxText(0, 295 + (i * 80), 0, langStrings[i].lang, 32);
+			var text:FlxText = new FlxText(0, 295 + (i * 80), 0, (data[1] == "ar") ? Localization.shapeArabicText(langStrings[i].lang) : langStrings[i].lang,
+				32);
 			text.setFormat(Paths.font(font), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.screenCenter(X);
 			text.ID = i;
 			group.add(text);
 		}
+
+		var titlePanel:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 80, FlxColor.BLACK);
+		titlePanel.alpha = 0.6;
+		titlePanel.scrollFactor.set();
+		titlePanel.screenCenter(X);
+		add(titlePanel);
 
 		var title:FlxText = new FlxText(0, 0, 0, Localization.get("langSelect"), 12);
 		title.setFormat(Paths.font(Localization.getFont()), 70, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

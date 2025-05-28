@@ -110,7 +110,7 @@ class Localization {
 	}
 
 	// for arabic text
-	private static function shapeArabicText(text:String):String {
+	public static function shapeArabicText(text:String):String {
 		var shaped = ArabicReshaper.reshape(text);
 		return UBA.display(shaped);
 	}

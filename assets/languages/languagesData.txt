@@ -1,10 +1,10 @@
 English (US):en
-Japanese (JP):jp:kyokasho
-Indonesian (ID):id
-Korean (KO):ko:jua
-Russian (RU):ru
-Italian (IT):it
-Arabic (AR):ar:amiri
-Chinese (ZH):zh:wdxl
-Spanish (ES):es
-Vietnamese (VN):vn
+Español (ES):es
+Italiano (IT):it
+Bahasa Indonesia (ID):id
+Tiếng Việt (VN):vn
+Русский язык (RU):ru
+中文 (ZH):zh:wdxl
+日本語 (JP):jp:kyokasho
+한국어 (KO):ko:jua
+العربية (AR):ar:amiri
