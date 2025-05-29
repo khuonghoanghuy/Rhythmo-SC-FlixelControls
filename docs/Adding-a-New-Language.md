@@ -19,6 +19,22 @@ So, for example, if you wanted to add German, it would look like:
 Deutsch (Deutschland):de
 ```
 
+## Custom Font Support
+If you want to add a custom font to your language, add this field anywhere in your `.json`:
+```json
+{
+    "customFont": "font"
+}
+```
+
+Also, make sure that your font actually exists before doing so.
+
+You can also have your font be shown in the language selection menu. <br>
+Wherever your languages is in `languagesData.txt`, add this extra field:
+```
+Deutsch (Deutschland):de:germanFont
+```
+
 ## Localization Functions
 Like most functions, these can be accessed through [scripting](https://github.com/Joalor64GH/Rhythmo-SC/wiki/Scripting).
 
