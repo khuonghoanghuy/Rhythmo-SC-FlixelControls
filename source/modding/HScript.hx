@@ -192,7 +192,7 @@ class HScript extends FlxBasic {
 
 		setVariable('game', PlayState.instance);
 
-		if (execute && file != null)
+		if (execute)
 			this.execute(file);
 	}
 
