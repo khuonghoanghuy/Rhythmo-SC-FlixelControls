@@ -31,6 +31,7 @@ class ScriptedState extends ExtendableState {
 			script = new HScript(path, false);
 			script.execute(path, false);
 
+			scriptSet('this', this);
 			scriptSet('multiAdd', multiAdd);
 			scriptSet('multiRemove', multiRemove);
 			scriptSet('openSubState', openSubState);
