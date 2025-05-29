@@ -193,11 +193,11 @@ import('backend.Input');
 
 function create() {
 	var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, FlxColor.WHITE);
-	add(bg);
+	this.add(bg);
 
 	var text:FlxText = new FlxText(0, 0, FlxG.width, "I am a custom state!", 48);
 	text.color = FlxColor.BLACK;
-	add(text);
+	this.add(text);
 }
 
 function update(elapsed:Float) {
