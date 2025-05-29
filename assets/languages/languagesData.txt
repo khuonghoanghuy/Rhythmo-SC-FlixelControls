@@ -3,7 +3,7 @@ Español (ES):es
 Italiano (IT):it
 Bahasa Indonesia (ID):id
 Tiếng Việt (VN):vn
-Русский язык (RU):ru
+Русский (RU):ru
 中文 (ZH):zh:wdxl
 日本語 (JP):jp:kyokasho
 한국어 (KO):ko:jua
