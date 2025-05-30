@@ -193,11 +193,11 @@ import('backend.Input');
 
 function create() {
 	var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, FlxColor.WHITE);
-	this.add(bg);
+	add(bg);
 
 	var text:FlxText = new FlxText(0, 0, FlxG.width, "I am a custom state!", 48);
 	text.color = FlxColor.BLACK;
-	this.add(text);
+	add(text);
 }
 
 function update(elapsed:Float) {
@@ -205,7 +205,7 @@ function update(elapsed:Float) {
 		ExtendableState.switchState(new ScriptedState('name', [/* arguments, if any */])); // load custom state
 
 	if (Input.justPressed('exit'))
-		state.openSubState(new ScriptedSubState('name', [/* arguments, if any */])); // load custom substate
+		openSubState(new ScriptedSubState('name', [/* arguments, if any */])); // load custom substate
 }
 ```
 
