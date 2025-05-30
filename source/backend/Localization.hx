@@ -35,14 +35,15 @@ class Localization {
 	public static function loadLanguages() {
 		data = new Map<String, Dynamic>();
 
-		var path:String = Paths.txt("languages/languagesList");
+		var path:String = Paths.txt("languages/languagesData");
 		if (Paths.exists(path)) {
 			var listContent:String = Paths.getText(path);
 			var languages:Array<String> = listContent.split('\n');
 
 			for (language in languages) {
-				var languageData:Dynamic = loadLanguageData(language.trim());
-				data.set(language, languageData);
+				var langCode:String = language.trim().split(':')[1];
+				var languageData:Dynamic = loadLanguageData(langCode);
+				data.set(langCode, languageData);
 			}
 		}
 
