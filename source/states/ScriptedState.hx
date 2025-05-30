@@ -31,9 +31,13 @@ class ScriptedState extends ExtendableState {
 			script = new HScript(path, false);
 			script.execute(path, false);
 
-			scriptSet('this', this);
-			scriptSet('multiAdd', multiAdd);
-			scriptSet('multiRemove', multiRemove);
+			scriptSet('state', this);
+			scriptSet('add', this.add);
+			scriptSet('insert', this.insert);
+			scriptSet('remove', this.remove);
+			scriptSet('members', this.members);
+			scriptSet('multiAdd', this.multiAdd);
+			scriptSet('multiRemove', this.multiRemove);
 			scriptSet('openSubState', openSubState);
 		} catch (e:Dynamic) {
 			script = null;
@@ -89,7 +93,7 @@ class ScriptedState extends ExtendableState {
 	}
 
 	override function openSubState(SubState:FlxSubState):Void {
-		scriptExecute('openSubState', []);
+		scriptExecute('openSubState', [SubState]);
 		super.openSubState(SubState);
 	}
 
