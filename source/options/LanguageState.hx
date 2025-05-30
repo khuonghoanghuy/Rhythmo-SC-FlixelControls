@@ -18,10 +18,10 @@ class LanguageState extends ExtendableState {
 	override function create() {
 		super.create();
 
-		var initLangString:Array<String> = Paths.getTextArray(Paths.txt('languages/languagesData'));
+		var initLangString:Array<String> = Paths.getTextArray(Paths.txt('languages/languagesList'));
 
-		if (Paths.exists(Paths.txt('languages/languagesData'))) {
-			initLangString = Paths.getText(Paths.txt('languages/languagesData')).trim().split('\n');
+		if (Paths.exists(Paths.txt('languages/languagesList'))) {
+			initLangString = Paths.getText(Paths.txt('languages/languagesList')).trim().split('\n');
 
 			for (i in 0...initLangString.length)
 				initLangString[i] = initLangString[i].trim();

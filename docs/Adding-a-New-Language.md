@@ -5,13 +5,10 @@ The name doesn't really matter, so you can call it whatever you want.
 For its data, copy [this](https://raw.githubusercontent.com/Joalor64GH/Rhythmo-SC/main/assets/languages/en.json), and edit it with your translations.
 
 ## Loading your Language
-Now, you need to edit these two main text files:
-* `assets/languages/languagesList.txt` - Your list of languages. (e.g., `de`, `en`, `es`, `fr`)
-* `assets/languages/languagesData.txt` - This is so that your language can be selected in `LanguagesState.hx`.
-
-To add your language into `languagesData.txt`, use this format:
+Now, you need to edit the main text file, `assets/languages/languagesList.txt`, which just contains the data for your language(s). <br>
+To add your language into `languagesList.txt`, use this format:
 ```
-Name (Country):code
+Name (Country/Tag):save-tag
 ```
 
 So, for example, if you wanted to add German, it would look like:
@@ -30,7 +27,7 @@ If you want to add a custom font to your language, add this field anywhere in yo
 Also, make sure that your font actually exists before doing so.
 
 You can also have your font be shown in the language selection menu. <br>
-Wherever your languages is in `languagesData.txt`, add this extra field:
+Wherever your languages is in `languagesList.txt`, add this extra field:
 ```
 Deutsch (Deutschland):de:germanFont
 ```
