@@ -38,12 +38,12 @@ Like most functions, these can be accessed through [scripting](https://github.co
 ### Switching to Another Language
 HScript:
 ```hx
-Localization.switchLanguage('language-code');
+Localization.switchLanguage('language-tag');
 ```
 
 Lua:
 ```lua
-switchLanguage('language-code');
+switchLanguage('language-tag');
 ```
 
 If that language is already selected, the change will not happen.
@@ -51,12 +51,12 @@ If that language is already selected, the change will not happen.
 ### Retrieving a Key
 HScript:
 ```hx
-Localization.get('key', 'language-code');
+Localization.get('key', 'language-tag');
 ```
 
 Lua:
 ```lua
-getLangKey('key', 'language-code');
+getLangKey('key', 'language-tag');
 ```
 
 If the second parameter is empty, defaults to current language.
