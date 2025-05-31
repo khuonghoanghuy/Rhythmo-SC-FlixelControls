@@ -39,13 +39,12 @@ class UpdateState extends ExtendableState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (Input.justPressed('accept') || Input.justPressed('exit')) {
+		if (Input.justPressed('accept')) {
+			FlxG.sound.play(Paths.sound('select'));
+			AutoUpdater.downloadUpdate();
+		} else if (Input.justPressed('exit')) {
+			FlxG.sound.play(Paths.sound('cancel'));
 			ExtendableState.switchState(new TitleState());
-			if (!Input.justPressed('exit')) {
-				FlxG.sound.play(Paths.sound('select'));
-				AutoUpdater.downloadUpdate();
-			} else
-				FlxG.sound.play(Paths.sound('cancel'));
 		}
 	}
 }
