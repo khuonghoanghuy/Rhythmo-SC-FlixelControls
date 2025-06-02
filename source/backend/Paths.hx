@@ -143,10 +143,10 @@ class Paths {
 		return file('$key.lua');
 
 	inline static public function script(key:String) {
+		var extension:String = '.hxs';
 		for (ext in HSCRIPT_EXT)
-			if (exists(file(key + ext)))
-				return file(key + ext);
-		return file('$key.hxs');
+			extension = (exists(file(key + ext))) ? ext : extension;
+		return file(key + extension);
 	}
 
 	static public function validScriptType(n:String):Bool
