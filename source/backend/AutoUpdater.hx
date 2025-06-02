@@ -63,7 +63,6 @@ class AutoUpdater {
 					}
 				}
 			}
-
 			http.onError = (error:String) -> trace("HTTP Error: " + error);
 			http.customRequest(false, output);
 
@@ -85,10 +84,8 @@ class AutoUpdater {
 			trace("Downloading update, size: " + data.length + " bytes");
 			File.saveBytes(tempPath, data);
 			trace("Update downloaded successfully");
-
 			if (!FileSystem.exists(tempPath) || FileSystem.stat(tempPath).size == 0)
 				throw "Downloaded file is empty or doesn't exist";
-
 			extractUpdate(tempPath);
 		} catch (e:Dynamic) {
 			trace("Error saving update: " + e);
@@ -134,9 +131,7 @@ class AutoUpdater {
 	private static function finishUpdate():Void {
 		var batchContent = '@echo off\n' + 'timeout /t 1 /nobreak > NUL\n' + 'move /y Rhythmo.exe.new Rhythmo.exe\n' + 'move /y lime.ndll.new lime.ndll\n'
 			+ 'start "" Rhythmo.exe\n' + 'del "%~f0"';
-
 		File.saveContent("finish_update.bat", batchContent);
-
 		Sys.command("start finish_update.bat");
 		Application.current.window.close();
 	}

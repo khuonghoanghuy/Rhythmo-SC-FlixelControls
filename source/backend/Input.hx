@@ -10,20 +10,10 @@ typedef Bind = {
 class Input {
 	static public var kBinds:Array<FlxKey> = SaveData.settings.keyboardBinds;
 	static public var gBinds:Array<FlxGamepadInputID> = SaveData.settings.gamepadBinds;
+	public static var binds:Map<String, Bind> = getDefaultBinds();
 
-	public static var binds:Map<String, Bind> = [
-		'left' => {key: [kBinds[0], kBinds[4]], gamepad: [gBinds[0], gBinds[4]]},
-		'down' => {key: [kBinds[1], kBinds[5]], gamepad: [gBinds[1], gBinds[5]]},
-		'up' => {key: [kBinds[2], kBinds[6]], gamepad: [gBinds[2], gBinds[6]]},
-		'right' => {key: [kBinds[3], kBinds[7]], gamepad: [gBinds[3], gBinds[7]]},
-		'accept' => {key: [kBinds[8]], gamepad: [gBinds[8]]},
-		'exit' => {key: [kBinds[9]], gamepad: [gBinds[9]]},
-		'reset' => {key: [kBinds[10]], gamepad: [gBinds[10]]}
-	];
-
-	public static function refreshControls() {
-		binds.clear();
-		binds = [
+	inline static function getDefaultBinds():Map<String, Bind>
+		return [
 			'left' => {key: [kBinds[0], kBinds[4]], gamepad: [gBinds[0], gBinds[4]]},
 			'down' => {key: [kBinds[1], kBinds[5]], gamepad: [gBinds[1], gBinds[5]]},
 			'up' => {key: [kBinds[2], kBinds[6]], gamepad: [gBinds[2], gBinds[6]]},
@@ -32,7 +22,9 @@ class Input {
 			'exit' => {key: [kBinds[9]], gamepad: [gBinds[9]]},
 			'reset' => {key: [kBinds[10]], gamepad: [gBinds[10]]}
 		];
-	}
+
+	public static function refreshControls()
+		binds = getDefaultBinds();
 
 	public static function resetControls() {
 		SaveData.settings.keyboardBinds = [LEFT, DOWN, UP, RIGHT, A, S, W, D, ENTER, ESCAPE, R];
@@ -49,7 +41,6 @@ class Input {
 			B,
 			RIGHT_STICK_CLICK
 		];
-
 		SaveData.saveSettings();
 		refreshControls();
 	}
@@ -74,27 +65,22 @@ class Input {
 
 	public static function checkInput(tag:String, state:FlxInputState):Bool {
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-
 		if (binds.exists(tag)) {
 			if (gamepad != null) {
-				for (i in 0...binds[tag].gamepad.length) {
-					var input = binds[tag].gamepad[i];
+				for (input in binds[tag].gamepad)
 					if (input != FlxGamepadInputID.NONE && gamepad.checkStatus(input, state))
 						return true;
-				}
-			} else {
-				for (i in 0...binds[tag].key.length) {
-					var input = binds[tag].key[i];
-					if (input != FlxKey.NONE && FlxG.keys.checkStatus(input, state))
-						return true;
-				}
 			}
-		} else {
-			if (gamepad != null)
-				if (FlxGamepadInputID.fromString(tag) != FlxGamepadInputID.NONE
-					&& gamepad.checkStatus(FlxGamepadInputID.fromString(tag), state))
-					return true;
 
+			for (input in binds[tag].key)
+				if (input != FlxKey.NONE && FlxG.keys.checkStatus(input, state))
+					return true;
+		} else {
+			if (gamepad != null) {
+				var gpInput = FlxGamepadInputID.fromString(tag);
+				if (gpInput != FlxGamepadInputID.NONE && gamepad.checkStatus(gpInput, state))
+					return true;
+			}
 			if (FlxKey.fromString(tag) != FlxKey.NONE && FlxG.keys.checkStatus(FlxKey.fromString(tag), state))
 				return true;
 		}
@@ -103,32 +89,26 @@ class Input {
 	}
 
 	public static function checkAnyInputs(tags:Array<String>, state:FlxInputState):Bool {
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-
 		if (tags == null || tags.length <= 0)
 			return false;
 
-		for (i in 0...tags.length) {
-			var tag = tags[i];
+		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
+		for (tag in tags) {
 			if (binds.exists(tag)) {
 				if (gamepad != null) {
-					for (j in 0...binds[tag].gamepad.length) {
-						var input = binds[tag].gamepad[j];
+					for (input in binds[tag].gamepad)
 						if (input != FlxGamepadInputID.NONE && gamepad.checkStatus(input, state))
 							return true;
-					}
-				} else {
-					for (j in 0...binds[tag].key.length) {
-						var input = binds[tag].key[j];
-						if (input != FlxKey.NONE && FlxG.keys.checkStatus(input, state))
-							return true;
-					}
 				}
-			} else {
-				if (gamepad != null)
-					if (FlxGamepadInputID.fromString(tag) != FlxGamepadInputID.NONE
-						&& gamepad.checkStatus(FlxGamepadInputID.fromString(tag), state))
+				for (input in binds[tag].key)
+					if (input != FlxKey.NONE && FlxG.keys.checkStatus(input, state))
 						return true;
+			} else {
+				if (gamepad != null) {
+					var gpInput = FlxGamepadInputID.fromString(tag);
+					if (gpInput != FlxGamepadInputID.NONE && gamepad.checkStatus(gpInput, state))
+						return true;
+				}
 
 				if (FlxKey.fromString(tag) != FlxKey.NONE && FlxG.keys.checkStatus(FlxKey.fromString(tag), state))
 					return true;

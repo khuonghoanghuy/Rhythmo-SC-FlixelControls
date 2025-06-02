@@ -38,10 +38,8 @@ class Conductor {
 
 	public static function recalculateStuff(?multi:Float = 1) {
 		safeZoneOffset = Math.floor((safeFrames / 60) * 1000) * multi;
-
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / timeScale[1];
-
 		stepsPerSection = Math.floor((16 / timeScale[1]) * timeScale[0]);
 	}
 
@@ -55,35 +53,17 @@ class Conductor {
 		var totalPos:Float = 0;
 
 		for (i in 0...song.notes.length) {
-			if (song.notes[i].changeBPM && song.notes[i].bpm != curBPM) {
-				curBPM = song.notes[i].bpm;
-
-				var event:BPMChangeEvent = {
-					stepTime: totalSteps,
-					songTime: totalPos,
-					bpm: curBPM
-				};
-
-				bpmChangeMap.push(event);
+			var note = song.notes[i];
+			if (note.changeBPM && note.bpm != curBPM) {
+				curBPM = note.bpm;
+				bpmChangeMap.push({stepTime: totalSteps, songTime: totalPos, bpm: curBPM});
 			}
-
-			if (song.notes[i].changeTimeScale
-				&& song.notes[i].timeScale[0] != curTimeScale[0]
-				&& song.notes[i].timeScale[1] != curTimeScale[1]) {
-				curTimeScale = song.notes[i].timeScale;
-
-				var event:TimeScaleChangeEvent = {
-					stepTime: totalSteps,
-					songTime: totalPos,
-					timeScale: curTimeScale
-				};
-
-				timeScaleChangeMap.push(event);
+			if (note.changeTimeScale && note.timeScale[0] != curTimeScale[0] && note.timeScale[1] != curTimeScale[1]) {
+				curTimeScale = note.timeScale;
+				timeScaleChangeMap.push({stepTime: totalSteps, songTime: totalPos, timeScale: curTimeScale});
 			}
-
 			var deltaSteps:Int = Math.floor((16 / curTimeScale[1]) * curTimeScale[0]);
 			totalSteps += deltaSteps;
-
 			totalPos += ((60 / curBPM) * 1000 / curTimeScale[0]) * deltaSteps;
 		}
 

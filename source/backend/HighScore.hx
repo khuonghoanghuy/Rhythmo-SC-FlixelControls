@@ -21,7 +21,6 @@ class HighScore {
 	public static function getScore(song:String):Int {
 		if (!songScores.exists(song))
 			setScore(song, 0);
-
 		return songScores.get(song);
 	}
 
@@ -45,7 +44,6 @@ class HighScore {
 	public static function load():Void {
 		if (FlxG.save.data.songScores != null)
 			songScores = FlxG.save.data.songScores;
-
 		if (FlxG.save.data.campaignScoreSave != null)
 			campaignScoreSave = FlxG.save.data.campaignScoreSave;
 	}

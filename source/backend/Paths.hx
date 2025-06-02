@@ -66,24 +66,21 @@ class Paths {
 				currentTrackedAssets.remove(key);
 			}
 		}
-
 		compress();
 		gc(true);
 	}
 
 	@:access(flixel.system.frontEnds.BitmapFrontEnd._cache)
 	public static function clearStoredMemory() {
-		for (key in FlxG.bitmap._cache.keys()) {
+		for (key in FlxG.bitmap._cache.keys())
 			if (!currentTrackedAssets.exists(key))
 				destroyGraphic(FlxG.bitmap.get(key));
-		}
 
-		for (key => asset in currentTrackedSounds) {
+		for (key => asset in currentTrackedSounds)
 			if (!localTrackedAssets.contains(key) && asset != null) {
 				Assets.cache.clear(key);
 				currentTrackedSounds.remove(key);
 			}
-		}
 
 		localTrackedAssets = [];
 		Assets.cache.clear("songs");
@@ -109,7 +106,6 @@ class Paths {
 		if (obj != null) {
 			obj.dispose();
 			obj.disposeImage();
-			obj = null;
 			trackedBitmaps.remove(id);
 		}
 	}
@@ -122,17 +118,11 @@ class Paths {
 	inline static public function exists(asset:String)
 		return FileAssets.exists(asset);
 
-	static public function getPath(folder:Null<String>, file:String) {
-		if (folder == null)
-			folder = DEFAULT_FOLDER;
-		return folder + '/' + file;
-	}
+	static public function getPath(folder:Null<String>, file:String)
+		return (folder == null ? DEFAULT_FOLDER : folder) + '/' + file;
 
-	static public function file(file:String, folder:String = DEFAULT_FOLDER) {
-		if (#if sys FileSystem.exists(folder) && #end (folder != null && folder != DEFAULT_FOLDER))
-			return getPath(folder, file);
-		return getPath(null, file);
-	}
+	static public function file(file:String, folder:String = DEFAULT_FOLDER)
+		return #if sys FileSystem.exists(folder) && #end (folder != null && folder != DEFAULT_FOLDER) ? getPath(folder, file) : getPath(null, file);
 
 	inline public static function getTextArray(path:String):Array<String>
 		return exists(path) ? [for (i in getText(path).trim().split('\n')) i.trim()] : [];
@@ -153,16 +143,14 @@ class Paths {
 		return file('$key.lua');
 
 	inline static public function script(key:String) {
-		var extension:String = '.hxs';
-
 		for (ext in HSCRIPT_EXT)
-			extension = (exists(file(key + ext))) ? ext : extension;
-
-		return file(key + extension);
+			if (exists(file(key + ext)))
+				return file(key + ext);
+		return file('$key.hxs');
 	}
 
 	static public function validScriptType(n:String):Bool
-		return n.endsWith('.hx') || n.endsWith('.hxs') || n.endsWith('.hxc') || n.endsWith('.hscript');
+		return HSCRIPT_EXT.exists(ext -> n.endsWith(ext));
 
 	inline static public function frag(key:String)
 		return file('shaders/$key.frag');
@@ -187,14 +175,9 @@ class Paths {
 
 	inline static public function font(key:String) {
 		var path:String = file('fonts/$key');
-
-		if (path.extension() == '') {
-			if (exists(path.withExtension("ttf")))
-				path = path.withExtension("ttf");
-			else if (exists(path.withExtension("otf")))
-				path = path.withExtension("otf");
-		}
-
+		for (i in ['ttf', 'otf'])
+			if (path.extension() == '' && exists(path.withExtension(i)))
+				path = path.withExtension(i);
 		return path;
 	}
 
@@ -202,8 +185,7 @@ class Paths {
 		return returnGraphic('images/$key', cache);
 
 	public static inline function spritesheet(key:String, ?cache:Bool = true, ?type:SpriteSheetType):FlxAtlasFrames {
-		if (type == null)
-			type = SPARROW;
+		type = type ?? SPARROW;
 
 		return switch (type) {
 			case ASEPRITE:
@@ -229,8 +211,7 @@ class Paths {
 				graphic.persist = true;
 				currentTrackedAssets.set(path, graphic);
 			}
-
-			localTrackedAssets.push(path);
+			pushTracked(path);
 			return currentTrackedAssets.get(path);
 		}
 
@@ -240,12 +221,11 @@ class Paths {
 
 	public static function returnSound(key:String, ?cache:Bool = true, ?beepOnNull:Bool = true):Sound {
 		for (i in SOUND_EXT) {
+			var path:String = file(key + i);
 			if (Assets.exists(file(key + i), SOUND)) {
-				var path:String = file(key + i);
 				if (!currentTrackedSounds.exists(path))
 					currentTrackedSounds.set(path, Assets.getSound(path, cache));
-
-				localTrackedAssets.push(path);
+				pushTracked(path);
 				return currentTrackedSounds.get(path);
 			}
 		}

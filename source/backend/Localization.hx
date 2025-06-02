@@ -37,13 +37,9 @@ class Localization {
 
 		var path:String = Paths.txt("languages/languagesList");
 		if (Paths.exists(path)) {
-			var listContent:String = Paths.getText(path);
-			var languages:Array<String> = listContent.split('\n');
-
-			for (language in languages) {
+			for (language in Paths.getText(path).split('\n')) {
 				var langCode:String = language.trim().split(':')[1];
-				var languageData:Dynamic = loadLanguageData(langCode);
-				data.set(langCode, languageData);
+				data.set(langCode, loadLanguageData(langCode));
 			}
 		}
 
@@ -53,26 +49,20 @@ class Localization {
 	}
 
 	private static function loadLanguageData(language:String):Dynamic {
-		var jsonContent:String;
-
-		try {
-			jsonContent = Paths.getText(path(language));
-		} catch (e:Dynamic) {
+		try
+			return Paths.getText(path(language));
+		catch (e:Dynamic) {
 			trace('language file not found: $e');
-			jsonContent = Paths.getText(path(DEFAULT_LANGUAGE));
+			return Paths.getText(path(DEFAULT_LANGUAGE));
 		}
-
-		return TJSON.parse(jsonContent);
 	}
 
 	public static function switchLanguage(newLanguage:String) {
 		if (newLanguage == currentLanguage)
 			return;
 
-		var languageData:Dynamic = loadLanguageData(newLanguage);
-
 		currentLanguage = newLanguage;
-		data.set(newLanguage, languageData);
+		data.set(newLanguage, loadLanguageData(newLanguage));
 		trace('Language changed to $currentLanguage');
 	}
 
@@ -80,11 +70,9 @@ class Localization {
 		var targetLanguage:String = language != null ? language : currentLanguage;
 		var languageData = data.get(targetLanguage);
 
-		if (data != null && data.exists(targetLanguage)) {
-			if (languageData != null && Reflect.hasField(languageData, key)) {
-				var field:String = Reflect.field(languageData, key);
-				return (targetLanguage == "ar") ? shapeArabicText(field) : field;
-			}
+		if (data != null && data.exists(targetLanguage) && languageData != null && Reflect.hasField(languageData, key)) {
+			var field:String = Reflect.field(languageData, key);
+			return (targetLanguage == "ar") ? shapeArabicText(field) : field;
 		}
 
 		return 'missing key: $key';
@@ -93,32 +81,21 @@ class Localization {
 	public static function getFont():String {
 		if (data != null && data.exists(currentLanguage)) {
 			var languageData = data.get(currentLanguage);
-
-			if (Reflect.hasField(languageData, "customFont")) {
-				var font = Reflect.field(languageData, "customFont");
-				if (font != null && font != "")
-					return font;
-			}
+			return Reflect.hasField(languageData, "customFont") ? Reflect.field(languageData, "customFont") : null;
 		}
 
 		return DEFAULT_FONT;
 	}
 
-	private static function path(language:String) {
-		var localDir = Path.join([directory, language + ".json"]);
-		var path:String = Paths.file(localDir);
-		return path;
-	}
+	private static function path(language:String)
+		return Paths.file(Path.join([directory, language + ".json"]));
 
 	// for arabic text
-	public static function shapeArabicText(text:String):String {
-		var shaped = ArabicReshaper.reshape(text);
-		return UBA.display(shaped);
-	}
+	public static function shapeArabicText(text:String):String
+		return UBA.display(ArabicReshaper.reshape(text));
 
-	public static function dispose() {
+	public static function dispose()
 		ArabicReshaper.dispose();
-	}
 }
 
 class Locale {
