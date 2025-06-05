@@ -264,7 +264,9 @@ class LuaScript extends FlxBasic {
 				var ret:Dynamic = hscript.executeStr(code);
 				if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 					ret = null;
-				return ret ?? Lua.pushnil(lua);
+				if (ret == null)
+					Lua.pushnil(lua);
+				return ret;
 			} catch (e:Dynamic)
 				Lib.application.window.alert(e, "Lua Error!");
 		});
@@ -274,7 +276,9 @@ class LuaScript extends FlxBasic {
 				var ret:Dynamic = hscript.executeFunc(func, args);
 				if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 					ret = null;
-				return ret ?? Lua.pushnil(lua);
+				if (ret == null)
+					Lua.pushnil(lua);
+				return ret;
 			} catch (e:Dynamic)
 				Lib.application.window.alert(e, "Lua Error!");
 		});
