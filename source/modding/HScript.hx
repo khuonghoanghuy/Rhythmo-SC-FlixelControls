@@ -167,9 +167,9 @@ class HScript extends FlxBasic {
 	}
 
 	public function execute(file:String, ?executeCreate:Bool = true):Void {
-		try
+		try {
 			interp.execute(parser.parseString(File.getContent(file)));
-		catch (e:Dynamic)
+		} catch (e:Dynamic)
 			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 		trace('Script Loaded Succesfully: $file');
 		if (executeCreate)
@@ -206,25 +206,25 @@ class HScript extends FlxBasic {
 	}
 
 	public function removeVariable(name:String):Void {
-		try
+		try {
 			interp?.variables.remove(name);
-		catch (e:Dynamic)
+		} catch (e:Dynamic)
 			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 	}
 
 	public function existsVariable(name:String):Bool {
-		try
+		try {
 			return interp?.variables.exists(name);
-		catch (e:Dynamic)
+		} catch (e:Dynamic)
 			Lib.application.window.alert(Std.string(e), 'HScript Error!');
 		return false;
 	}
 
 	public function executeFunc(funcName:String, ?args:Array<Dynamic>):Dynamic {
 		if (existsVariable(funcName)) {
-			try
+			try {
 				return Reflect.callMethod(this, getVariable(funcName), args == null ? [] : args);
-			catch (e:Dynamic)
+			} catch (e:Dynamic)
 				Lib.application.window.alert(Std.string(e), 'HScript Error!');
 		}
 		return null;
