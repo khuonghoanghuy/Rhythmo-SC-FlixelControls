@@ -267,8 +267,11 @@ class LuaScript extends FlxBasic {
 				if (ret == null)
 					Lua.pushnil(lua);
 				return ret;
-			} catch (e:Dynamic)
+			} catch (e:Dynamic) {
 				Lib.application.window.alert(e, "Lua Error!");
+				Lua.pushnil(lua);
+				return null;
+			}
 		});
 		setCallback("runHaxeFunction", function(func:String, ?args:Array<Dynamic>) {
 			initHaxeModule();
@@ -279,8 +282,11 @@ class LuaScript extends FlxBasic {
 				if (ret == null)
 					Lua.pushnil(lua);
 				return ret;
-			} catch (e:Dynamic)
+			} catch (e:Dynamic) {
 				Lib.application.window.alert(e, "Lua Error!");
+				Lua.pushnil(lua);
+				return null;
+			}
 		});
 		setCallback("importHaxeLibrary", function(lib:String, ?packageName:String) {
 			initHaxeModule();
