@@ -265,7 +265,7 @@ class HScript extends FlxBasic {
 			"fromRGBFloat": FlxColor.fromRGBFloat,
 			"fromString": FlxColor.fromString,
 			"interpolate": FlxColor.interpolate,
-			"to24Bit": function(color:Int) return color & 0xffffff;
+			"to24Bit": function(color:Int) return color & 0xffffff
 		};
 
 	public static function getFlxKey()
@@ -368,7 +368,7 @@ class HScript extends FlxBasic {
 			'fromStringMap': FlxKey.fromStringMap,
 			'toStringMap': FlxKey.toStringMap,
 			'fromString': FlxKey.fromString,
-			'toString': function(key:Int) return FlxKey.toStringMap.get(key);
+			'toString': function(key:Int) return FlxKey.toStringMap.get(key)
 		};
 
 	public function getFlxCameraFollowStyle()
