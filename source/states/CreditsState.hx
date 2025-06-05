@@ -194,7 +194,7 @@ class CreditsState extends ExtendableState {
 				menuColorTween.cancel();
 			if (color != menuBG.color) {
 				menuColorTween = FlxTween.color(menuBG, 0.35, menuBG.color, color, {
-					onComplete: (tween:FlxTween) -> menuColorTween = null;
+					onComplete: (tween:FlxTween) -> menuColorTween = null
 				});
 			}
 		}

@@ -35,7 +35,7 @@ class HScript extends FlxBasic {
 		setVariable('stopScript', () -> this.destroy());
 
 		// Haxe
-		for (pair in [
+		var haxeClasses:Array<Dynamic> = [
 			['Array', Array],
 			['Bool', Bool],
 			['Date', Date],
@@ -58,18 +58,20 @@ class HScript extends FlxBasic {
 			['TJSON', TJSON],
 			['Type', Type],
 			['Xml', Xml]
-		])
+		];
+		for (pair in haxeClasses)
 			setVariable(pair[0], pair[1]);
 		setVariable('createThread', createThreadFunc);
 
 		// OpenFL
-		for (pair in [
+		var openflClasses:Array<Dynamic> = [
 			['Assets', Assets],
 			['BitmapData', BitmapData],
 			['Lib', Lib],
 			['ShaderFilter', ShaderFilter],
 			['Sound', Sound]
-		])
+		];
+		for (pair in openflClasses)
 			setVariable(pair[0], pair[1]);
 
 		// Flixel
@@ -106,7 +108,7 @@ class HScript extends FlxBasic {
 		setVariable('state', FlxG.state);
 
 		// Rhythmo
-		for (pair in [
+		var gameClasses:Array<Dynamic> = [
 			['Achievements', Achievements],
 			['Bar', Bar],
 			['Conductor', Conductor],
@@ -129,7 +131,8 @@ class HScript extends FlxBasic {
 			['ScriptedSubState', ScriptedSubState],
 			['Song', Song],
 			['Utilities', Utilities]
-		])
+		];
+		for (pair in gameClasses)
 			setVariable(pair[0], pair[1]);
 
 		setVariable('game', PlayState.instance);

@@ -46,7 +46,8 @@ class LuaScript extends FlxBasic {
 		setVar("platform", PlatformUtil.getPlatform());
 		setVar("version", Lib.application.meta.get('version'));
 		setVar("lua", {version: Lua.version(), versionJIT: Lua.versionJIT()});
-		for (pair in [
+
+		var defaultFuncs:Array<Dynamic> = [
 			["trace", function(v:Dynamic) trace(v)],
 			["print", function(v:Dynamic) trace(v)],
 			["stopScript", () -> this.destroy()],
@@ -55,11 +56,12 @@ class LuaScript extends FlxBasic {
 			["deleteVar", name -> deleteVar(name)],
 			["callFunction", (name, args) -> callFunction(name, args)],
 			["stdInt", (x:Float) -> Std.int(x)]
-		])
+		];
+		for (pair in defaultFuncs)
 			setCallback(pair[0], pair[1]);
 
 		// PlayState Stuff
-		for (pair in [
+		var playStateArr:Array<Dynamic> = [
 			["score", game.score],
 			["combo", game.combo],
 			["misses", game.misses],
@@ -72,7 +74,8 @@ class LuaScript extends FlxBasic {
 			["songPos", Conductor.songPosition],
 			["curStep", game.curStep],
 			["curBeat", game.curBeat]
-		])
+		];
+		for (pair in playStateArr)
 			setVar(pair[0], pair[1]);
 		setCallback("addScore", (v:Int = 0) -> game.score += v);
 		setCallback("addMisses", (v:Int = 0) -> game.misses += v);
