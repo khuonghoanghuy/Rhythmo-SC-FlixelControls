@@ -136,9 +136,9 @@ class ChartingState extends ExtendableState {
 					func: () -> {
 						try {
 							var chart:String = Json.stringify(song);
-							File.saveContent(Paths.chart(Paths.formatToSongPath(song.song)), chart);
-							trace("chart saved!\nsaved path: " + Paths.chart(Paths.formatToSongPath(song.song)));
-							var savedText:FlxText = new FlxText(0, 0, 0, "Chart saved! Saved path:\n" + Paths.chart(Paths.formatToSongPath(song.song)), 12);
+							File.saveContent(Paths.json('songs/${Paths.formatToSongPath(song.song)}/chart'), chart);
+							trace("chart saved!\nsaved path: " + Paths.json('songs/${Paths.formatToSongPath(song.song)}/chart'));
+							var savedText:FlxText = new FlxText(0, 0, 0, "Chart saved! Saved path:\n" + Paths.json('songs/${Paths.formatToSongPath(song.song)}/chart'), 12);
 							savedText.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 							savedText.screenCenter();
 							add(savedText);

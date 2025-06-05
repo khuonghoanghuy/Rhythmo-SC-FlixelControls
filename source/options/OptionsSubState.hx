@@ -19,103 +19,102 @@ class OptionsSubState extends ExtendableSubState {
 	public function new() {
 		super();
 
-		var option:Option = new Option(Localization.get("opAnti"), Localization.get("descAnti"), OptionType.Toggle, SaveData.settings.antialiasing);
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.antialiasing = value;
+		var o:Option;
+		o = new Option(Localization.get("opAnti"), Localization.get("descAnti"), OptionType.Toggle, SaveData.settings.antialiasing);
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.antialiasing = v;
 			reloadSprite('test');
 		};
-		option.showSillySprite = true;
-		options.push(option);
+		o.showSillySprite = true;
+		options.push(o);
 
 		#if desktop
-		var option:Option = new Option(Localization.get("opFlScrn"), Localization.get("descFlScrn"), OptionType.Toggle, SaveData.settings.fullscreen);
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.fullscreen = value;
+		o = new Option(Localization.get("opFlScrn"), Localization.get("descFlScrn"), OptionType.Toggle, SaveData.settings.fullscreen);
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.fullscreen = v;
 			FlxG.fullscreen = SaveData.settings.fullscreen;
 		};
-		options.push(option);
+		options.push(o);
 		#end
 
-		var option:Option = new Option(Localization.get("opFlash"), Localization.get("descFlash"), OptionType.Toggle, SaveData.settings.flashing);
-		option.onChange = (value:Dynamic) -> SaveData.settings.flashing = value;
-		options.push(option);
+		o = new Option(Localization.get("opFlash"), Localization.get("descFlash"), OptionType.Toggle, SaveData.settings.flashing);
+		o.onChange = (v:Dynamic) -> SaveData.settings.flashing = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opFrm"), Localization.get("descFrm"), OptionType.Integer(60, 240, 10),
+		o = new Option(Localization.get("opFrm"), Localization.get("descFrm"), OptionType.Integer(60, 240, 10),
 			Std.int(FlxMath.bound(FlxG.stage.application.window.displayMode.refreshRate, 60, 240)));
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.framerate = value;
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.framerate = v;
 			Main.framerate = SaveData.settings.framerate;
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opFPS"), Localization.get("descFPS"), OptionType.Toggle, SaveData.settings.fpsCounter);
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.fpsCounter = value;
+		o = new Option(Localization.get("opFPS"), Localization.get("descFPS"), OptionType.Toggle, SaveData.settings.fpsCounter);
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.fpsCounter = v;
 			if (Main.fpsDisplay != null)
 				Main.fpsDisplay.visible = SaveData.settings.fpsCounter;
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opSpeed"), Localization.get("descSpeed"), OptionType.Integer(1, 10, 1), SaveData.settings.songSpeed);
-		option.onChange = (value:Dynamic) -> SaveData.settings.songSpeed = value;
-		options.push(option);
+		o = new Option(Localization.get("opSpeed"), Localization.get("descSpeed"), OptionType.Integer(1, 10, 1), SaveData.settings.songSpeed);
+		o.onChange = (v:Dynamic) -> SaveData.settings.songSpeed = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opDwnScrl"), Localization.get("descDwnScrl"), OptionType.Toggle, SaveData.settings.downScroll);
-		option.onChange = (value:Dynamic) -> SaveData.settings.downScroll = value;
-		options.push(option);
+		o = new Option(Localization.get("opDwnScrl"), Localization.get("descDwnScrl"), OptionType.Toggle, SaveData.settings.downScroll);
+		o.onChange = (v:Dynamic) -> SaveData.settings.downScroll = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opUnderlay"), Localization.get("descUnderlay"), OptionType.Integer(0, 100, 1),
-			SaveData.settings.laneUnderlay);
-		option.showPercentage = true;
-		option.onChange = (value:Dynamic) -> SaveData.settings.laneUnderlay = value;
-		options.push(option);
+		o = new Option(Localization.get("opUnderlay"), Localization.get("descUnderlay"), OptionType.Integer(0, 100, 1), SaveData.settings.laneUnderlay);
+		o.showPercentage = true;
+		o.onChange = (v:Dynamic) -> SaveData.settings.laneUnderlay = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opNoteskin"), Localization.get("descNoteskin"),
+		o = new Option(Localization.get("opNoteskin"), Localization.get("descNoteskin"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/noteskinsList'))), SaveData.settings.noteSkinType);
-		option.showNoteskin = true;
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.noteSkinType = value;
+		o.showNoteskin = true;
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.noteSkinType = v;
 			reloadSprite('note');
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"),
+		o = new Option(Localization.get("opNotesplash"), Localization.get("descNotesplash"),
 			OptionType.Choice(Paths.getTextArray(Paths.txt('data/notesplashesList'))), SaveData.settings.noteSplashType);
-		option.showNotesplash = true;
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.noteSplashType = value;
+		o.showNotesplash = true;
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.noteSplashType = v;
 			reloadSprite('splash');
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opHitSndT"), Localization.get("descHitSndT"), OptionType.Choice(['Default', 'CD', 'OSU', 'Switch']),
+		o = new Option(Localization.get("opHitSndT"), Localization.get("descHitSndT"), OptionType.Choice(['Default', 'CD', 'OSU', 'Switch']),
 			SaveData.settings.hitSoundType);
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.hitSoundType = value;
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.hitSoundType = v;
 			FlxG.sound.play(Paths.sound('hitsound' + SaveData.settings.hitSoundType));
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opHitSndV"), Localization.get("descHitSndV"), OptionType.Integer(0, 100, 10),
-			SaveData.settings.hitSoundVolume);
-		option.showPercentage = true;
-		option.onChange = (value:Dynamic) -> {
-			SaveData.settings.hitSoundVolume = value;
+		o = new Option(Localization.get("opHitSndV"), Localization.get("descHitSndV"), OptionType.Integer(0, 100, 10), SaveData.settings.hitSoundVolume);
+		o.showPercentage = true;
+		o.onChange = (v:Dynamic) -> {
+			SaveData.settings.hitSoundVolume = v;
 			FlxG.sound.play(Paths.sound('hitsound' + SaveData.settings.hitSoundType), SaveData.settings.hitSoundVolume / 100);
 		};
-		options.push(option);
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opBot"), Localization.get("descBot"), OptionType.Toggle, SaveData.settings.botPlay);
-		option.onChange = (value:Dynamic) -> SaveData.settings.botPlay = value;
-		options.push(option);
+		o = new Option(Localization.get("opBot"), Localization.get("descBot"), OptionType.Toggle, SaveData.settings.botPlay);
+		o.onChange = (v:Dynamic) -> SaveData.settings.botPlay = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opMSDisp"), Localization.get("descMSDisp"), OptionType.Toggle, SaveData.settings.displayMS);
-		option.onChange = (value:Dynamic) -> SaveData.settings.displayMS = value;
-		options.push(option);
+		o = new Option(Localization.get("opMSDisp"), Localization.get("descMSDisp"), OptionType.Toggle, SaveData.settings.displayMS);
+		o.onChange = (v:Dynamic) -> SaveData.settings.displayMS = v;
+		options.push(o);
 
-		var option:Option = new Option(Localization.get("opMash"), Localization.get("descMash"), OptionType.Toggle, SaveData.settings.antiMash);
-		option.onChange = (value:Dynamic) -> SaveData.settings.antiMash = value;
-		options.push(option);
+		o = new Option(Localization.get("opMash"), Localization.get("descMash"), OptionType.Toggle, SaveData.settings.antiMash);
+		o.onChange = (v:Dynamic) -> SaveData.settings.antiMash = v;
+		options.push(o);
 
 		camFollow = new FlxObject(80, 0, 0, 0);
 		camFollow.screenCenter(X);
@@ -165,17 +164,15 @@ class OptionsSubState extends ExtendableSubState {
 
 		if (Input.justPressed('up') || Input.justPressed('down'))
 			changeSelection(Input.justPressed('up') ? -1 : 1);
-
 		if (Input.justPressed('right') || Input.justPressed('left'))
 			startHold(Input.justPressed('right') ? 1 : -1);
-
 		if (Input.justReleased('right') || Input.justReleased('left')) {
 			if (holdTimer.active)
 				holdTimer.cancel();
 		}
 
 		if (Input.justPressed('accept')) {
-			final option:Option = options[curSelected];
+			var option:Option = options[curSelected];
 			if (option != null)
 				option.execute();
 		}
@@ -214,7 +211,7 @@ class OptionsSubState extends ExtendableSubState {
 
 	private function changeValue(direction:Int = 0):Void {
 		FlxG.sound.play(Paths.sound('scroll'));
-		final option:Option = options[curSelected];
+		var option:Option = options[curSelected];
 
 		if (option != null) {
 			option.changeValue(direction);
@@ -229,7 +226,7 @@ class OptionsSubState extends ExtendableSubState {
 	private function startHold(direction:Int = 0):Void {
 		holdDirection = direction;
 
-		final option:Option = options[curSelected];
+		var option:Option = options[curSelected];
 
 		if (option != null) {
 			if (option.type != OptionType.Function)

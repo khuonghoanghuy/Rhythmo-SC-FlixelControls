@@ -170,9 +170,6 @@ class Paths {
 	inline static public function formatToSongPath(path:String)
 		return path.toLowerCase().replace(' ', '-');
 
-	inline static public function chart(key:String)
-		return file('songs/$key/chart.json');
-
 	inline static public function font(key:String) {
 		var path:String = file('fonts/$key');
 		for (i in ['ttf', 'otf'])

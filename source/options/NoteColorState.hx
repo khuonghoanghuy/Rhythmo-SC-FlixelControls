@@ -61,11 +61,10 @@ class NoteColorState extends ExtendableState {
 
 		if (Input.justPressed('reset')) {
 			curColorVals = NoteColors.defaultColors[curSelectedControl];
-
-			strumline.members[curSelectedControl].colorSwap.r = curColorVals[0];
-			strumline.members[curSelectedControl].colorSwap.g = curColorVals[1];
-			strumline.members[curSelectedControl].colorSwap.b = curColorVals[2];
-
+			var n = strumline.members[curSelectedControl];
+			n.colorSwap.r = curColorVals[0];
+			n.colorSwap.g = curColorVals[1];
+			n.colorSwap.b = curColorVals[2];
 			NoteColors.setNoteColor(curSelectedControl, curColorVals);
 		}
 
@@ -80,48 +79,31 @@ class NoteColorState extends ExtendableState {
 		}
 
 		if (!isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right'))) {
-			if (Input.justPressed('left'))
-				curSelectedControl--;
-			if (Input.justPressed('right'))
-				curSelectedControl++;
-
+			curSelectedControl += Input.justPressed('left') ? -1 : 1;
 			if (curSelectedControl < 0)
 				curSelectedControl = 3;
 			if (curSelectedControl > 3)
 				curSelectedControl = 0;
-
 			updateColorVals();
 		}
 
 		if (isSelectingSomething && (Input.justPressed('up') || Input.justPressed('down'))) {
-			if (Input.justPressed('up'))
-				curColorVals[curSelectedValue]++;
-			if (Input.justPressed('down'))
-				curColorVals[curSelectedValue]--;
-
-			if (curColorVals[curSelectedValue] < colorMins[curSelectedValue])
-				curColorVals[curSelectedValue] = colorMins[curSelectedValue];
-			if (curColorVals[curSelectedValue] > colorMaxs[curSelectedValue])
-				curColorVals[curSelectedValue] = colorMaxs[curSelectedValue];
-
+			curColorVals[curSelectedValue] += Input.justPressed('up') ? 1 : -1;
+			curColorVals[curSelectedValue] = Std.int(FlxMath.bound(curColorVals[curSelectedValue], colorMins[curSelectedValue], colorMaxs[curSelectedValue]));
+			var n = strumline.members[curSelectedControl];
 			switch (curSelectedValue) {
 				case 0:
-					strumline.members[curSelectedControl].colorSwap.r = curColorVals[curSelectedValue];
+					n.colorSwap.r = curColorVals[0];
 				case 1:
-					strumline.members[curSelectedControl].colorSwap.g = curColorVals[curSelectedValue];
+					n.colorSwap.g = curColorVals[1];
 				case 2:
-					strumline.members[curSelectedControl].colorSwap.b = curColorVals[curSelectedValue];
+					n.colorSwap.b = curColorVals[2];
 			}
-
 			NoteColors.setNoteColor(curSelectedControl, curColorVals);
 		}
 
 		if (isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right'))) {
-			if (Input.justPressed('left'))
-				curSelectedValue--;
-			if (Input.justPressed('right'))
-				curSelectedValue++;
-
+			curSelectedValue += Input.justPressed('left') ? -1 : 1;
 			if (curSelectedValue < 0)
 				curSelectedValue = 2;
 			if (curSelectedValue > 2)
@@ -140,30 +122,27 @@ class NoteColorState extends ExtendableState {
 	}
 
 	function updateText() {
-		var red:String = Std.string(curColorVals[0]);
-		var green:String = Std.string(curColorVals[1]);
-		var blue:String = Std.string(curColorVals[2]);
-
+		var r:String = Std.string(curColorVals[0]);
+		var g:String = Std.string(curColorVals[1]);
+		var b:String = Std.string(curColorVals[2]);
 		switch (curSelectedValue) {
 			case 0:
-				red = '>$red<';
+				r = '>$r<';
 			case 1:
-				green = '>$green<';
+				g = '>$g<';
 			case 2:
-				blue = '>$blue<';
+				b = '>$b<';
 		}
-
 		daText.text = Localization.get("noteColorGuide")
 			+ Localization.get("red")
-			+ red
+			+ r
 			+ Localization.get("green")
-			+ green
+			+ g
 			+ Localization.get("blue")
-			+ blue;
+			+ b;
 		daText.screenCenter(X);
 	}
 
-	inline function updateColorVals() {
+	inline function updateColorVals()
 		curColorVals = NoteColors.getNoteColor(curSelectedControl);
-	}
 }

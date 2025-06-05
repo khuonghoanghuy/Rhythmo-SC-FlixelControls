@@ -5,11 +5,8 @@ class HighScore {
 	public static var campaignScoreSave:Int = 0;
 
 	public static function saveScore(song:String, score:Int = 0):Void {
-		if (songScores.exists(song)) {
-			if (songScores.get(song) < score)
+		if (!songScores.exists(song) || songScores.get(song) < score)
 				setScore(song, score);
-		} else
-			setScore(song, score);
 	}
 
 	static function setScore(song:String, score:Int):Void {

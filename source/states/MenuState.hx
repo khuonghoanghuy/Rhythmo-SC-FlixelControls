@@ -17,11 +17,8 @@ class MenuState extends ExtendableState {
 		if (Paths.exists(path)) {
 			try {
 				var menuArray:Array<String> = Paths.getTextArray(path);
-				for (i in 0...menuArray.length)
-					selections = menuArray;
-
+				selections = menuArray;
 				trace('menu options are: ${menuArray.join(',')}');
-
 				#if !FUTURE_POLYMOD
 				if (selections.contains('mods'))
 					selections.remove('mods');
