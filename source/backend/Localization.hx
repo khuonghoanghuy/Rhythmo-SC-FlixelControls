@@ -81,7 +81,7 @@ class Localization {
 	public static function getFont():String {
 		if (data != null && data.exists(currentLanguage)) {
 			var languageData = data.get(currentLanguage);
-			return Reflect.hasField(languageData, "customFont") ? Reflect.field(languageData, "customFont") : null;
+			return Reflect.hasField(languageData, "customFont") ? Reflect.field(languageData, "customFont") : DEFAULT_FONT;
 		}
 
 		return DEFAULT_FONT;
