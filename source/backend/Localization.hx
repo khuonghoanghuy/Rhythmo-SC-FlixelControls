@@ -50,10 +50,10 @@ class Localization {
 
 	private static function loadLanguageData(language:String):Dynamic {
 		try {
-			return Paths.getText(path(language));
+			return TJSON.parse(Paths.getText(path(language)));
 		} catch (e:Dynamic) {
 			trace('language file not found: $e');
-			return Paths.getText(path(DEFAULT_LANGUAGE));
+			return TJSON.parse(Paths.getText(path(DEFAULT_LANGUAGE)));
 		}
 	}
 
