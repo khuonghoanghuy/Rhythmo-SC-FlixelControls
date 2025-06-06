@@ -346,7 +346,6 @@ class LuaScript extends FlxBasic {
 	public function setVar(name:String, value:Dynamic) {
 		if (lua == null)
 			return;
-
 		Convert.toLua(lua, value);
 		Lua.setglobal(lua, name);
 	}

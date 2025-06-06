@@ -185,20 +185,13 @@ class Paths {
 
 	public static inline function spritesheet(key:String, ?cache:Bool = true, ?type:SpriteSheetType):FlxAtlasFrames {
 		type = type ?? SPARROW;
-
 		return switch (type) {
-			case ASEPRITE:
-				FlxAtlasFrames.fromAseprite(image(key, cache), json('images/$key'));
-			case PACKER:
-				FlxAtlasFrames.fromSpriteSheetPacker(image(key, cache), txt('images/$key'));
-			case SPARROW:
-				FlxAtlasFrames.fromSparrow(image(key, cache), xml('images/$key'));
-			case TEXTURE_PATCHER_JSON:
-				FlxAtlasFrames.fromTexturePackerJson(image(key, cache), json('images/$key'));
-			case TEXTURE_PATCHER_XML:
-				FlxAtlasFrames.fromTexturePackerXml(image(key, cache), xml('images/$key'));
-			default:
-				FlxAtlasFrames.fromSparrow(image('errorSparrow', cache), xml('images/errorSparrow'));
+			case ASEPRITE: FlxAtlasFrames.fromAseprite(image(key, cache), json('images/$key'));
+			case PACKER: FlxAtlasFrames.fromSpriteSheetPacker(image(key, cache), txt('images/$key'));
+			case SPARROW: FlxAtlasFrames.fromSparrow(image(key, cache), xml('images/$key'));
+			case TEXTURE_PATCHER_JSON: FlxAtlasFrames.fromTexturePackerJson(image(key, cache), json('images/$key'));
+			case TEXTURE_PATCHER_XML: FlxAtlasFrames.fromTexturePackerXml(image(key, cache), xml('images/$key'));
+			default: FlxAtlasFrames.fromSparrow(image('errorSparrow', cache), xml('images/errorSparrow'));
 		}
 	}
 

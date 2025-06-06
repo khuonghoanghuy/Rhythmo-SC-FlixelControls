@@ -13,10 +13,8 @@ class TitleState extends ExtendableState {
 		hueShader = new HueDisplacer();
 
 		#if FUTURE_POLYMOD
-		if (ModHandler.trackedMods.length > 0) {
-			var installedMods:Array<String> = ModHandler.getModIDs();
-			Main.toast.create('Mods Installed:', 0xFFFFFF00, installedMods.join('\n'));
-		}
+		if (ModHandler.trackedMods.length > 0)
+			Main.toast.create('Mods Installed:', 0xFFFFFF00, ModHandler.getModIDs().join('\n'));
 		#end
 
 		persistentUpdate = persistentDraw = true;
