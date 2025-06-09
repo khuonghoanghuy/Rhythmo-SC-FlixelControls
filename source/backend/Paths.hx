@@ -1,16 +1,11 @@
 package backend;
 
-#if cpp
-import cpp.vm.Gc;
-#elseif hl
-import hl.Gc;
-#elseif neko
-import neko.vm.Gc;
-#end
 import flixel.graphics.FlxGraphic;
-import flixel.system.FlxAssets;
 
 using haxe.io.Path;
+
+typedef FileAssets = #if sys FileSystem; #else Assets; #end
+typedef GarbageCollect = #if cpp cpp.vm.Gc; #elseif hl hl.Gc; #elseif neko neko.vm.Gc; #end
 
 enum SpriteSheetType {
 	ASEPRITE;
@@ -38,19 +33,19 @@ class Paths {
 
 	@:noCompletion private inline static function _gc(major:Bool) {
 		#if (cpp || neko)
-		Gc.run(major);
+		GarbageCollect.run(major);
 		#elseif hl
-		Gc.major();
+		GarbageCollect.major();
 		#end
 	}
 
 	@:noCompletion public inline static function compress() {
 		#if cpp
-		Gc.compact();
+		GarbageCollect.compact();
 		#elseif hl
-		Gc.major();
+		GarbageCollect.major();
 		#elseif neko
-		Gc.run(true);
+		GarbageCollect.run(true);
 		#end
 	}
 
@@ -172,12 +167,9 @@ class Paths {
 
 	inline static public function font(key:String) {
 		var path:String = file('fonts/$key');
-		if (path.extension() == '') {
-			if (exists(path.withExtension("ttf")))
-				path = path.withExtension("ttf");
-			else if (exists(path.withExtension("otf")))
-				path = path.withExtension("otf");
-		}
+		for (i in ["ttf", "otf"])
+        	if (path.extension() == '' && exists(path.withExtension(i)))
+            	path = path.withExtension(i);
 		return path;
 	}
 
@@ -224,8 +216,6 @@ class Paths {
 		}
 
 		trace('oops! sound $key returned null');
-		return (beepOnNull) ? FlxAssets.getSound('flixel/sounds/beep') : null;
+		return (beepOnNull) ? flixel.system.FlxAssets.getSound('flixel/sounds/beep') : null;
 	}
 }
-
-typedef FileAssets = #if sys FileSystem; #else Assets; #end

@@ -139,8 +139,8 @@ class CreditsState extends ExtendableState {
 
 		var controlArray:Array<Bool> = [
 			FlxG.keys.justPressed.UP, FlxG.keys.justPressed.DOWN,
-			 Input.justPressed('up'),  Input.justPressed('down'),
-			   FlxG.mouse.wheel == 1,     FlxG.mouse.wheel == -1
+			Input.justPressed('up'), Input.justPressed('down'),
+			FlxG.mouse.wheel == 1, FlxG.mouse.wheel == -1
 		];
 		if (controlArray.contains(true)) {
 			for (i in 0...controlArray.length) {
