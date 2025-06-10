@@ -107,7 +107,7 @@ class PauseSubState extends ExtendableSubState {
 				tipTxt.alpha = 0;
 				FlxTween.tween(tipTxt, {alpha: 1}, 1, {
 					ease: FlxEase.linear,
-					onComplete: (twn:FlxTween) -> isTweening = false;
+					onComplete: (twn:FlxTween) -> isTweening = false
 				});
 			}
 		});
