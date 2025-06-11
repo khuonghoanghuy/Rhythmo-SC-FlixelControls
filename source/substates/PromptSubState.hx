@@ -32,7 +32,6 @@ class PromptSubState extends FlxSubState {
 		});
 		btnYes.screenCenter(X);
 		btnYes.scale.set(2, 2);
-		btnYes.label.scale.set(2, 2);
 		btnYes.label.screenCenter(XY);
 		btnYes.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(btnYes);
@@ -44,7 +43,6 @@ class PromptSubState extends FlxSubState {
 		});
 		btnNo.screenCenter(X);
 		btnNo.scale.set(2, 2);
-		btnNo.label.scale.set(2, 2);
 		btnNo.label.screenCenter(XY);
 		btnNo.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(btnNo);
