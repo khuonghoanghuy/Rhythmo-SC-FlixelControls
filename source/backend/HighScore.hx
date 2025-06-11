@@ -16,9 +16,7 @@ class HighScore {
 	}
 
 	public static function getScore(song:String):Int {
-		if (!songScores.exists(song))
-			setScore(song, 0);
-		return songScores.get(song);
+		return (songScores.exists(song)) ? songScores.get(song) : 0;
 	}
 
 	public static function resetSong(song:String):Void {

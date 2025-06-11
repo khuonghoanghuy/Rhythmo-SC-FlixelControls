@@ -15,7 +15,7 @@ class PromptSubState extends FlxSubState {
 		var width:Float = FlxG.width * 0.75;
 		var height:Float = FlxG.height * 0.5;
 
-		var box:FlxSprite = new FlxSprite().makeGraphic(Std.int(width), Std.int(height), 0xFF000000);
+		var box:RoundedSprite = new RoundedSprite(0, 0, Std.int(width), Std.int(height), FlxColor.BLACK);
 		box.scrollFactor.set();
 		box.screenCenter();
 		add(box);
@@ -34,7 +34,7 @@ class PromptSubState extends FlxSubState {
 		btnYes.scale.set(2, 2);
 		btnYes.label.scale.set(2, 2);
 		btnYes.label.screenCenter(XY);
-		btnYes.label.font = Paths.font(Localization.getFont());
+		btnYes.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(btnYes);
 
 		var btnNo:FlxButton = new FlxButton(0, btnYes.y + 50, Localization.get("no"), () -> {
@@ -46,7 +46,7 @@ class PromptSubState extends FlxSubState {
 		btnNo.scale.set(2, 2);
 		btnNo.label.scale.set(2, 2);
 		btnNo.label.screenCenter(XY);
-		btnNo.label.font = Paths.font(Localization.getFont());
+		btnNo.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(btnNo);
 	}
 }
