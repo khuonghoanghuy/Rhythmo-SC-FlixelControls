@@ -102,7 +102,7 @@ class SongSelectState extends ExtendableState {
 		add(titleTxt);
 
 		var arrows:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/arrows'));
-		arrows.screenCenter(XY);
+		arrows.screenCenter();
 		add(arrows);
 
 		changeSelection(0, false);

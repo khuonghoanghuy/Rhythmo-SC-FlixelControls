@@ -667,7 +667,7 @@ class LoadSongSubState extends ExtendableSubState {
 		input.setFormat(Paths.font('vcr.ttf'), 96, FlxColor.WHITE, FlxTextAlign.CENTER);
 		input.alignment = CENTER;
 		input.setBorderStyle(OUTLINE, 0xFF000000, 5, 1);
-		input.screenCenter(XY);
+		input.screenCenter();
 		input.y += 50;
 		input.backgroundColor = 0xFF000000;
 		input.lines = 1;
@@ -805,7 +805,7 @@ class HelpSubState extends ExtendableSubState {
 			"LEFT/RIGHT - Next/Previous Section\nLMB - Add/Remove Note\nCTRL + LMB - Select Note\nE/Q - Increase/Decrease Note Sustain\nSHIFT - Disable Chart Snapping\nSPACE - Play/Pause Music\nENTER - Playtest Chart",
 			32);
 		text.setFormat(Paths.font('vcr.ttf'), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		text.screenCenter(XY);
+		text.screenCenter();
 		add(text);
 	}
 

@@ -87,7 +87,7 @@ class ControlsSubState extends ExtendableSubState {
 		anyKeyTxt = new FlxText(0, 0, 0, "", 12);
 		anyKeyTxt.setFormat(Paths.font(Localization.getFont()), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		anyKeyTxt.scrollFactor.set();
-		anyKeyTxt.screenCenter(XY);
+		anyKeyTxt.screenCenter();
 		add(anyKeyTxt);
 
 		changeSelection(0, false);

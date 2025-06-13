@@ -30,10 +30,11 @@ class PromptSubState extends FlxSubState {
 				callbackYes();
 			close();
 		});
-		btnYes.screenCenter(X);
 		btnYes.scale.set(2, 2);
-		btnYes.label.screenCenter(XY);
+		btnYes.scrollFactor.set();
 		btnYes.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		btnYes.label.screenCenter();
+		btnYes.screenCenter(X);
 		add(btnYes);
 
 		var btnNo:FlxButton = new FlxButton(0, btnYes.y + 50, Localization.get("no"), () -> {
@@ -41,10 +42,11 @@ class PromptSubState extends FlxSubState {
 				callbackNo();
 			close();
 		});
-		btnNo.screenCenter(X);
 		btnNo.scale.set(2, 2);
-		btnNo.label.screenCenter(XY);
+		btnNo.scrollFactor.set();
 		btnNo.label.setFormat(Paths.font(Localization.getFont()), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		btnNo.label.screenCenter();
+		btnNo.screenCenter(X);
 		add(btnNo);
 	}
 }

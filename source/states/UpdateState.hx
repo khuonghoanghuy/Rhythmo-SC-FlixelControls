@@ -15,7 +15,7 @@ class UpdateState extends ExtendableState {
 			+ '\nPress ENTER to update the game. Otherwise, press ESCAPE to proceed anyways.\n
 			Thanks for playing!', 32);
 		text.setFormat(Paths.font('vcr.ttf'), 40, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		text.screenCenter(XY);
+		text.screenCenter();
 		add(text);
 	}
 
