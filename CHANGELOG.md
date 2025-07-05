@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [V1.1.0-pre] - 2025-07-05
-Here's the new content update we've been working on! <br>
+The new content update we've been working on is here! <br>
 Well, at least the pre-release is. <br>
 Keep that in mind, as there may be some placeholder assets!
 
