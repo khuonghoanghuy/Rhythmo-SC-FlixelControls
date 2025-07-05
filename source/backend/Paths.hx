@@ -168,8 +168,8 @@ class Paths {
 	inline static public function font(key:String) {
 		var path:String = file('fonts/$key');
 		for (i in ["ttf", "otf"])
-        	if (path.extension() == '' && exists(path.withExtension(i)))
-            	path = path.withExtension(i);
+			if (path.extension() == '' && exists(path.withExtension(i)))
+				path = path.withExtension(i);
 		return path;
 	}
 
