@@ -61,7 +61,8 @@ class SongSelectState extends ExtendableState {
 		if (modFS.exists('data/songs.json')) {
 			var modData = TJSON.parse(modFS.getFileContent('data/songs.json'));
 			if (modData != null && Reflect.hasField(modData, "songs")) {
-				for (song in modData.songs) {
+				var modSongs:Array<Dynamic> = cast modData.songs;
+				for (song in modSongs) {
 					allSongs.push({
 						name: song.name,
 						diff: song.diff

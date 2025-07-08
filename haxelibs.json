@@ -47,13 +47,8 @@
       "name": "grig.audio",
       "type": "git",
       "dir": "src",
-      "ref": "162f924bdde427fc84af5b51961d2faef51f6955",
-      "url": "https://github.com/Snirozu/grig.audio"
-    },
-    {
-      "name": "tink_core",
-      "type": "haxelib",
-      "version": "2.1.1"
+      "ref": "57f5d47f2533fd0c3dcd025a86cb86c0dfa0b6d2",
+      "url": "https://gitlab.com/haxe-grig/grig.audio.git"
     },
     {
       "name": "polymod",
