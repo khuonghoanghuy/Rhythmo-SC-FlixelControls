@@ -1,5 +1,9 @@
 package states;
 
+#if FUTURE_POLYMOD
+import polymod.Polymod;
+#end
+
 typedef BasicData = {
 	var songs:Array<SongArray>;
 }
@@ -49,7 +53,27 @@ class SongSelectState extends ExtendableState {
 
 		persistentUpdate = true;
 
-		songListData = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
+		var baseData:Dynamic = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
+		var allSongs:Array<SongArray> = baseData.songs;
+
+		#if FUTURE_POLYMOD
+		var modFS = Polymod.getFileSystem();
+		if (modFS.exists('data/songs.json')) {
+			var modData:Dynamic = TJSON.parse(modFS.getFile('data/songs.json'));
+			if (modData != null && Reflect.hasField(modData, "songs")) {
+				for (song in modData.songs) {
+					allSongs.push({
+						name: song.name,
+						diff: song.diff
+					});
+				}
+			}
+		}
+		#end
+
+		songListData = {
+			songs: allSongs
+		};
 
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/selector_bg'));
 		add(bg);
