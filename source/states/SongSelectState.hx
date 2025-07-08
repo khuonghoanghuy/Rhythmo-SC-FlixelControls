@@ -53,13 +53,13 @@ class SongSelectState extends ExtendableState {
 
 		persistentUpdate = true;
 
-		var baseData:Dynamic = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
+		var baseData = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
 		var allSongs:Array<SongArray> = baseData.songs;
 
 		#if FUTURE_POLYMOD
 		var modFS = Polymod.getFileSystem();
 		if (modFS.exists('data/songs.json')) {
-			var modData:Dynamic = TJSON.parse(modFS.getFile('data/songs.json'));
+			var modData = TJSON.parse(modFS.getFileContent('data/songs.json'));
 			if (modData != null && Reflect.hasField(modData, "songs")) {
 				for (song in modData.songs) {
 					allSongs.push({
