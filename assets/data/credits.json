@@ -50,6 +50,15 @@
                 ["YT", " https://youtube.com/@kezeru-c"]
             ],
             "colors": [0, 255, 255]
+        },
+        {
+            "name": "Santiago",
+            "iconData": ["santiago", 0, 0],
+            "textData": ["Portuguese (Brazil) translation", "i love haxe."],
+            "urlData": [
+                ["GitHub", "https://github.com/SantiagoCalebe"]
+            ],
+            "colors": [255, 0, 0]
         }
     ]
 }
