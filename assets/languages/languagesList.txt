@@ -1,6 +1,7 @@
 English (US):en
 Español (ES):es
 Italiano (IT):it
+Português (BR):pt-br
 Bahasa Indonesia (ID):id
 Tiếng Việt (VN):vn
 Русский (RU):ru
