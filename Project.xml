@@ -54,6 +54,7 @@
 	<!-- [ Defines ] -->
 
 	<haxedef name="FLX_RECORD" />
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
@@ -95,6 +96,6 @@
 		<lib name="/lib64/libX11.a" if="HXCPP_M64" /> <!-- mac support -->
 	</target>
 	
-	<haxedef name="NO_PRECOMPILED_HEADERS"/>
+	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux" />
 
 </project>
