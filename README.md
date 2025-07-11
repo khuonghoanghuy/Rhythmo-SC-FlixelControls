@@ -49,6 +49,7 @@ If you want to add your own content, feel free to learn how to mod the game by r
 * Huy1234Th - Additional Programmer / Vietnamese Translation / Lua Code
 * Moxie - Additional Programmer
 * NeoDev - Additional Translations
+* Santiago - Portuguese (Brazil) Translation
 
 ### Special Thanks
 * [freesound.org](https://freesound.org/) - SFX
