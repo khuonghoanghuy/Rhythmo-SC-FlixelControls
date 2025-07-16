@@ -1,9 +1,7 @@
 package options;
 
-import backend.Localization.Locale;
-
 class LanguageState extends ExtendableState {
-	var langStrings:Array<Locale> = [];
+	var langStrings:Array<{lang:String, code:String}> = [];
 	var group:FlxTypedGroup<FlxText>;
 	var curSelected:Int = 0;
 	var camFollow:FlxObject;
@@ -29,7 +27,7 @@ class LanguageState extends ExtendableState {
 
 		for (i in 0...initLangString.length) {
 			var data:Array<String> = initLangString[i].split(':');
-			langStrings.push(new Locale(data[0], data[1]));
+			langStrings.push({lang: data[0], code: data[1]});
 		}
 
 		camFollow = new FlxObject(0, 0, 1, 1);
