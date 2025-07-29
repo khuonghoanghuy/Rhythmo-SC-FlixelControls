@@ -60,6 +60,7 @@ class ModHandler {
 		var loadedModlist:Array<ModMetadata> = Polymod.init({
 			modRoot: MOD_DIR,
 			dirs: folders,
+			customFilesystem: fs,
 			framework: OPENFL,
 			apiVersionRule: API_VERSION,
 			errorCallback: onError,
