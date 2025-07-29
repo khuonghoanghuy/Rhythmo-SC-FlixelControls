@@ -15,7 +15,8 @@ class LuaScript extends FlxBasic {
 	public function new(file:String, ?execute:Bool = true) {
 		super();
 
-		this.game = PlayState.instance;
+		if (FlxG.state is PlayState && PlayState.instance != null)
+			this.game = PlayState.instance;
 
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
@@ -75,10 +76,12 @@ class LuaScript extends FlxBasic {
 			["curStep", game.curStep],
 			["curBeat", game.curBeat]
 		];
-		for (pair in playStateArr)
-			setVar(pair[0], pair[1]);
-		setCallback("addScore", (v:Int = 0) -> game.score += v);
-		setCallback("addMisses", (v:Int = 0) -> game.misses += v);
+		if (FlxG.state is PlayState && PlayState.instance != null) {
+			for (pair in playStateArr)
+				setVar(pair[0], pair[1]);
+			setCallback("addScore", (v:Int = 0) -> game.score += v);
+			setCallback("addMisses", (v:Int = 0) -> game.misses += v);
+		}
 
 		setCallback("unlockAchievement", function(name:String) {
 			Achievements.unlock(name, {date: Date.now(), song: PlayState.song.song});
