@@ -4,6 +4,7 @@
 * [ ] Finish chart for Harmony of No Tomorrow
 * [ ] HTML5 Support
 * [ ] Reformat Files
+* [ ] Overhaul HScript (Using RuleScript)
 * [ ] Reorganize Source Code
 * [ ] Improve Modding Support
 * [ ] Optimizations
