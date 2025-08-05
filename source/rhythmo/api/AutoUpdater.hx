@@ -17,6 +17,8 @@ class AutoUpdater
 		'https://github.com/JoaTH-Team/Rhythmo-SC/releases/latest/download/release-mac.zip'
 		#elseif linux
 		'https://github.com/JoaTH-Team/Rhythmo-SC/releases/latest/download/release-linux.zip'
+		#else
+		''
 		#end;
 
 	public static function downloadUpdate():Void
