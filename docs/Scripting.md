@@ -112,7 +112,6 @@ Some useful templates to get started. For the default template, use [this](https
 ### FlxSprite
 ```hx
 import flixel.FlxSprite;
-import states.PlayState;
 
 function create() 
 {
@@ -124,8 +123,7 @@ function create()
 #### Animated Sprite
 ```hx
 import flixel.FlxSprite;
-import states.PlayState;
-import backend.Paths;
+import rhythmo.Paths;
 
 function create() 
 {
@@ -140,7 +138,6 @@ function create()
 ### FlxText
 ```hx
 import flixel.text.FlxText;
-import states.PlayState;
 
 function create() 
 {
@@ -169,12 +166,12 @@ function create()
 
 ### Custom States/Substates
 ```hx
-import states.ScriptedState;
-import substates.ScriptedSubState;
-import backend.ExtendableState;
+import rhythmo.states.ScriptedState;
+import rhythmo.states.ExtendableState;
+import rhythmo.substates.ScriptedSubState;
+import rhythmo.input.Input;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
-import backend.Input;
 
 function create() 
 {
@@ -207,7 +204,7 @@ Script 1:
 package helpers;
 
 import flixel.FlxSprite;
-import backend.Paths;
+import rhythmo.Paths;
 
 function createSprite(x:Float, y:Float, graphic:String) 
 {
@@ -215,7 +212,7 @@ function createSprite(x:Float, y:Float, graphic:String)
 	spr.loadGraphic(Paths.image(graphic));
 	add(spr);
 
-	trace("sprite " + sprite + " created");
+	trace("sprite " + graphic + " created");
 }
 ```
 
@@ -234,7 +231,7 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
 import openfl.utils.Assets;
 import flixel.FlxG;
-import backend.Paths;
+import rhythmo.Paths;
 
 var shader:FlxRuntimeShader;
 var shader2:FlxRunTimeShader;
