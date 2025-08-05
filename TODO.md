@@ -7,6 +7,7 @@
 * [X] Overhaul Lua (Using hxluajit-wrapper)
 * [X] Reorganize Source Code
 * [X] Improve Modding Support
+* [ ] Add documentation inside files
 * [ ] Optimizations
 
 ### Low Priority
