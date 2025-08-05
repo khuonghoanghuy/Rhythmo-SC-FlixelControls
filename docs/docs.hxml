@@ -1,0 +1,49 @@
+-L lime
+-L openfl
+-L flixel
+-L flixel-addons
+-L flixel-ui
+-L tjson
+-L hscript
+-L rulescript
+-L hxluajit
+-L hxluajit-wrapper
+-L scriptless-polymod
+-L hxdiscord_rpc
+-L hx_arabic_shaper
+-L hxcpp-debug-server
+-L jsonpath
+-L jsonpatch
+-L thx.core
+-L thx.semver
+
+-cp source
+
+--define hscript
+--define hscriptPos
+--define FUTURE_POLYMOD
+--define FUTURE_DISCORD_RPC
+--define FLX_NO_HEALTH
+--define UPDATE_CHECK
+--define CRASH_HANDLER
+--define FLX_NO_DEBUG
+
+--macro lime._internal.macros.DefineMacro.run()
+--macro openfl.utils._internal.ExtraParamsMacro.include()
+--remap flash:openfl
+--macro flixel.system.macros.FlxDefines.run()
+
+--macro allowPackage('flash')
+--macro include('my.pack')
+--macro include('flixel', true, ['flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*'])
+--macro keep('Main')
+
+--no-output
+
+--define doc-gen
+--define message.reporting=pretty
+
+-xml docs/doc.xml
+--cpp docs-bin/
+
+-dce no
