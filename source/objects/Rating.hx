@@ -1,11 +1,14 @@
 package objects;
 
-class Rating extends GameSprite {
-	public function new(x:Float, y:Float) {
+class Rating extends GameSprite
+{
+	public function new(x:Float, y:Float):Void
+	{
 		super(x, y);
 	}
 
-	public function showCurrentRating(rating:String = '') {
+	public function showCurrentRating(rating:String = ''):Void
+	{
 		scale.set(1.2, 1.2);
 		alpha = 1;
 
@@ -20,7 +23,8 @@ class Rating extends GameSprite {
 		centerOrigin();
 	}
 
-	override public function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		super.update(elapsed);
 
 		var scaleX:Float = FlxMath.lerp(scale.x, 1, elapsed * 7);

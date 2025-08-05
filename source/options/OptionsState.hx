@@ -1,22 +1,23 @@
 package options;
 
-class OptionsState extends ExtendableState {
+class OptionsState extends ExtendableState
+{
 	final options:Array<String> = ['prefTxt', 'ctrlTxt', 'langTxt', 'notesTxt'];
 	var opGrp:FlxTypedGroup<FlxText>;
 	var curSelected:Int = 0;
 
 	var fromPlayState:Bool = false;
 
-	public function new(?fromPlayState:Bool = false) {
+	public function new(?fromPlayState:Bool = false):Void
+	{
 		super();
 		this.fromPlayState = fromPlayState;
 	}
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		#if FUTURE_DISCORD_RPC
-		DiscordClient.changePresence("Options Menu", null);
+		DiscordClient.changePresence('Options Menu', null);
 		#end
 
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/options_bg'));
@@ -31,7 +32,8 @@ class OptionsState extends ExtendableState {
 		opGrp = new FlxTypedGroup<FlxText>();
 		add(opGrp);
 
-		for (i in 0...options.length) {
+		for (i in 0...options.length)
+		{
 			var text:FlxText = new FlxText(0, 255 + (i * 70), 0, Localization.get(options[i]), 32);
 			text.setFormat(Paths.font(Localization.getFont()), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.scrollFactor.set();
@@ -40,27 +42,31 @@ class OptionsState extends ExtendableState {
 			opGrp.add(text);
 		}
 
-		var resetControlsTxt:FlxText = new FlxText(5, FlxG.height - 30, 0, Localization.get("ctrlResetGuide"), 12);
+		var resetControlsTxt:FlxText = new FlxText(5, FlxG.height - 30, 0, Localization.get('ctrlResetGuide'), 12);
 		resetControlsTxt.setFormat(Paths.font(Localization.getFont()), 26, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		resetControlsTxt.scrollFactor.set();
 		add(resetControlsTxt);
 
 		changeSelection(0, false);
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		if (Input.justPressed('up') || Input.justPressed('down'))
 			changeSelection(Input.justPressed('up') ? -1 : 1);
 
-		if (Input.justPressed('reset')) {
+		if (Input.justPressed('reset'))
+		{
 			Input.resetControls();
 			FlxG.sound.play(Paths.sound('select'));
 		}
 
-		if (Input.justPressed('accept')) {
-			switch (curSelected) {
+		if (Input.justPressed('accept'))
+		{
+			switch (curSelected)
+			{
 				case 0:
 					openSubState(new options.OptionsSubState());
 					persistentUpdate = persistentDraw = false;
@@ -74,22 +80,29 @@ class OptionsState extends ExtendableState {
 			}
 		}
 
-		if (Input.justPressed('exit')) {
-			if (fromPlayState) {
+		if (Input.justPressed('exit'))
+		{
+			if (fromPlayState)
+			{
 				ExtendableState.switchState(new PlayState());
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
-			} else
+			}
+			else
 				ExtendableState.switchState(new MenuState());
 			FlxG.sound.play(Paths.sound('cancel'));
 		}
+
+		super.update(elapsed);
 	}
 
-	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {
+	private function changeSelection(change:Int = 0, ?playSound:Bool = true):Void
+	{
 		if (playSound)
 			FlxG.sound.play(Paths.sound('scroll'));
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
-		opGrp.forEach(function(txt:FlxText) {
+		opGrp.forEach(function(txt:FlxText)
+		{
 			txt.color = (txt.ID == curSelected) ? FlxColor.LIME : FlxColor.WHITE;
 		});
 	}

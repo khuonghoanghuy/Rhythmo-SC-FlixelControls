@@ -1,29 +1,30 @@
 package states;
 
-#if FUTURE_POLYMOD
-import polymod.Polymod;
-#end
-
-typedef BasicData = {
+typedef BasicData =
+{
 	var songs:Array<SongArray>;
 }
 
-typedef SongArray = {
+typedef SongArray =
+{
 	var name:String;
 	var diff:Float;
 }
 
-class Cover extends GameSprite {
+class Cover extends GameSprite
+{
 	public var lerpSpeed:Float = 6;
 	public var posX:Float = 0;
 
-	override function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		super.update(elapsed);
 		x = FlxMath.lerp(x, (FlxG.width - width) / 2 + posX * 760, Utilities.boundTo(elapsed * lerpSpeed, 0, 1));
 	}
 }
 
-class SongSelectState extends ExtendableState {
+class SongSelectState extends ExtendableState
+{
 	var bg:FlxSprite;
 	var coverGrp:FlxTypedGroup<Cover>;
 
@@ -41,32 +42,35 @@ class SongSelectState extends ExtendableState {
 	var isResetting:Bool = false;
 	var lockInputs:Bool = false;
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
 		#if FUTURE_DISCORD_RPC
-		DiscordClient.changePresence("Freeplay Menu", null);
+		DiscordClient.changePresence('Freeplay Menu', null);
 		#end
 
 		persistentUpdate = true;
 
-		var baseData = TJSON.parse(Paths.getTextFromFile('data/songs.json'));
-		var allSongs:Array<SongArray> = baseData.songs;
+		var baseSongs = TJSON.parse(Paths.getTextFromFile('data/songs/songs.json'));
+		var allSongs:Array<SongArray> = baseSongs.songs.copy();
 
 		#if FUTURE_POLYMOD
-		var modFS = Polymod.getFileSystem();
-		if (modFS.exists('data/songs.json')) {
-			var modData = TJSON.parse(modFS.getFileContent('data/songs.json'));
-			if (modData != null && Reflect.hasField(modData, "songs")) {
-				var modSongs:Array<Dynamic> = cast modData.songs;
-				for (song in modSongs) {
-					allSongs.push({
-						name: song.name,
-						diff: song.diff
-					});
+		var mods = FileSystem.readDirectory('mods');
+		for (i in mods)
+		{
+			var path = 'mods/$i/data/songs/songs.json';
+			if (FileSystem.isDirectory('mods/$i') && FileSystem.exists(path))
+			{
+				try
+				{
+					var modData:BasicData = cast TJSON.parse(File.getContent(path));
+					allSongs = allSongs.concat(modData.songs);
+				}
+				catch (e:Dynamic)
+				{
+					trace('Error loading mod songs from $path: $e');
 				}
 			}
 		}
@@ -91,11 +95,15 @@ class SongSelectState extends ExtendableState {
 		coverGrp = new FlxTypedGroup<Cover>();
 		add(coverGrp);
 
-		for (i in 0...songListData.songs.length) {
+		for (i in 0...songListData.songs.length)
+		{
 			var newItem:Cover = new Cover();
-			try {
+			try
+			{
 				newItem.loadGraphic(Paths.image('covers/' + Paths.formatToSongPath(songListData.songs[i].name)));
-			} catch (e:Dynamic) {
+			}
+			catch (e:Dynamic)
+			{
 				trace('Error getting song cover: $e');
 				newItem.loadGraphic(Paths.image('covers/placeholder'));
 			}
@@ -108,19 +116,19 @@ class SongSelectState extends ExtendableState {
 		bottomPanel.alpha = 0.6;
 		add(bottomPanel);
 
-		panelTxt = new FlxText(bottomPanel.x, bottomPanel.y + 8, FlxG.width, "", 32);
+		panelTxt = new FlxText(bottomPanel.x, bottomPanel.y + 8, FlxG.width, '', 32);
 		panelTxt.setFormat(Paths.font(Localization.getFont()), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		panelTxt.scrollFactor.set();
 		panelTxt.screenCenter(X);
 		add(panelTxt);
 
-		tinyTxt = new FlxText(panelTxt.x, panelTxt.y + 50, FlxG.width, Localization.get("tinyGuide"), 22);
+		tinyTxt = new FlxText(panelTxt.x, panelTxt.y + 50, FlxG.width, Localization.get('tinyGuide'), 22);
 		tinyTxt.screenCenter(X);
 		tinyTxt.scrollFactor.set();
 		tinyTxt.setFormat(Paths.font(Localization.getFont()), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(tinyTxt);
 
-		titleTxt = new FlxText(0, 0, FlxG.width, "", 32);
+		titleTxt = new FlxText(0, 0, FlxG.width, '', 32);
 		titleTxt.setFormat(Paths.font(Localization.getFont()), 70, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		titleTxt.scrollFactor.set();
 		titleTxt.screenCenter(X);
@@ -131,21 +139,23 @@ class SongSelectState extends ExtendableState {
 		add(arrows);
 
 		changeSelection(0, false);
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		lerpScore = Math.floor(FlxMath.lerp(intendedScore, lerpScore, Math.exp(-elapsed * 24)));
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
 		if (!isResetting)
-			panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
-				+ Std.string(songListData.songs[currentIndex].diff) + "/5";
+			panelTxt.text = Localization.get('scoreTxt') + lerpScore + ' // ' + Localization.get('diffTxt')
+				+ Std.string(songListData.songs[currentIndex].diff) + '/5';
 
-		if (!lockInputs) {
+		if (!lockInputs)
+		{
 			if (Input.justPressed('left') || Input.justPressed('right'))
 				changeSelection(Input.justPressed('left') ? -1 : 1);
 
@@ -153,70 +163,89 @@ class SongSelectState extends ExtendableState {
 				openPlayState(currentIndex);
 		}
 
-		if (Input.justPressed('exit')) {
-			if (!isResetting) {
+		if (Input.justPressed('exit'))
+		{
+			if (!isResetting)
+			{
 				persistentUpdate = false;
 				ExtendableState.switchState(new MenuState());
-			} else {
+			}
+			else
+			{
 				isResetting = false;
 				lockInputs = false;
 				titleTxt.color = FlxColor.WHITE;
 				titleTxt.text = songListData.songs[currentIndex].name;
-				panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
-					+ Std.string(songListData.songs[currentIndex].diff) + "/5";
-				tinyTxt.text = Localization.get("tinyGuide");
+				panelTxt.text = Localization.get('scoreTxt') + lerpScore + ' // ' + Localization.get('diffTxt')
+					+ Std.string(songListData.songs[currentIndex].diff) + '/5';
+				tinyTxt.text = Localization.get('tinyGuide');
 			}
 			FlxG.sound.play(Paths.sound('cancel'));
 		}
 
-		if (Input.justPressed('reset')) {
-			if (Input.pressed('space')) {
+		if (Input.justPressed('reset'))
+		{
+			if (Input.pressed('space'))
+			{
 				var randomSong:Int = FlxG.random.int(0, songListData.songs.length - 1);
 				openPlayState(randomSong);
-			} else {
-				if (!isResetting) {
+			}
+			else
+			{
+				if (!isResetting)
+				{
 					isResetting = true;
 					lockInputs = true;
-					titleTxt.text = Localization.get("youDecide");
+					titleTxt.text = Localization.get('youDecide');
 					titleTxt.color = FlxColor.RED;
-					panelTxt.text = Localization.get("confirmReset");
+					panelTxt.text = Localization.get('confirmReset');
 					tinyTxt.text = '';
-				} else {
+				}
+				else
+				{
 					FlxG.sound.play(Paths.sound('erase'));
-					titleTxt.text = Localization.get("confirmedReset");
+					titleTxt.text = Localization.get('confirmedReset');
 					tinyTxt.text = '';
 					HighScore.resetSong(songListData.songs[currentIndex].name);
 					isResetting = false;
-					new FlxTimer().start(1, function(tmr:FlxTimer) {
+					new FlxTimer().start(1, function(tmr:FlxTimer)
+					{
 						lockInputs = false;
 						titleTxt.color = FlxColor.WHITE;
 						titleTxt.text = songListData.songs[currentIndex].name;
-						panelTxt.text = Localization.get("scoreTxt") + lerpScore + " // " + Localization.get("diffTxt")
-							+ Std.string(songListData.songs[currentIndex].diff) + "/5";
-						tinyTxt.text = Localization.get("tinyGuide");
+						panelTxt.text = Localization.get('scoreTxt') + lerpScore + ' // ' + Localization.get('diffTxt')
+							+ Std.string(songListData.songs[currentIndex].diff) + '/5';
+						tinyTxt.text = Localization.get('tinyGuide');
 						changeSelection();
 					});
 				}
 			}
 		}
+
+		super.update(elapsed);
 	}
 
-	function openPlayState(index:Int) {
-		try {
+	function openPlayState(index:Int):Void
+	{
+		try
+		{
 			persistentUpdate = false;
 			PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songListData.songs[index].name));
 			ExtendableState.switchState(new PlayState());
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
-		} catch (e)
+		}
+		catch (e:Dynamic)
 			trace(e);
 	}
 
-	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {
+	private function changeSelection(change:Int = 0, ?playSound:Bool = true):Void
+	{
 		if (playSound)
 			FlxG.sound.play(Paths.sound('scroll'));
 		currentIndex = FlxMath.wrap(currentIndex + change, 0, songListData.songs.length - 1);
-		for (num => item in coverGrp) {
+		for (num => item in coverGrp)
+		{
 			item.posX = num++ - currentIndex;
 			item.alpha = (item.ID == currentIndex) ? 1 : 0.6;
 		}

@@ -1,12 +1,12 @@
 package states;
 
-class TitleState extends ExtendableState {
+class TitleState extends ExtendableState
+{
 	var lockInputs:Bool = false;
 	var hueShader:HueDisplacer;
 
-	override function create() {
-		super.create();
-
+	override function create():Void
+	{
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
@@ -39,33 +39,39 @@ class TitleState extends ExtendableState {
 
 		FlxTween.tween(logo, {y: logo.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 
-		new FlxTimer().start(0.01, (tmr:FlxTimer) -> {
+		new FlxTimer().start(0.01, (tmr:FlxTimer) ->
+		{
 			if (logo.angle == -4)
 				FlxTween.angle(logo, logo.angle, 4, 4, {ease: FlxEase.quartInOut});
 			if (logo.angle == 4)
 				FlxTween.angle(logo, logo.angle, -4, 4, {ease: FlxEase.quartInOut});
 		}, 0);
 
-		var text:FlxText = new FlxText(0, logo.y + 400, 0, Localization.get("pressEnter"), 12);
+		var text:FlxText = new FlxText(0, logo.y + 400, 0, Localization.get('pressEnter'), 12);
 		text.setFormat(Paths.font(Localization.getFont()), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		add(text);
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		if (Input.pressed('left') || Input.pressed('right'))
 			hueShader?.update(Input.pressed('left') ? elapsed * 0.1 : -elapsed * 0.1);
 
-		if (Input.justPressed('accept') && !lockInputs) {
+		if (Input.justPressed('accept') && !lockInputs)
+		{
 			lockInputs = true;
 			FlxG.sound.play(Paths.sound('start'));
 			if (SaveData.settings.flashing)
 				FlxG.camera.flash(FlxColor.WHITE, 1);
-			new FlxTimer().start(1, (tmr:FlxTimer) -> {
+			new FlxTimer().start(1, (tmr:FlxTimer) ->
+			{
 				ExtendableState.switchState(new MenuState());
 			});
 		}
+
+		super.update(elapsed);
 	}
 }

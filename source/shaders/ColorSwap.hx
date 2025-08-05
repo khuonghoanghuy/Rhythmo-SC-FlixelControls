@@ -2,38 +2,44 @@ package shaders;
 
 import flixel.system.FlxAssets.FlxShader;
 
-class ColorSwap {
+class ColorSwap
+{
 	public var shader(default, null):ColorSwapShader = new ColorSwapShader();
 	public var r(default, set):Float = 255;
 	public var g(default, set):Float = 0;
 	public var b(default, set):Float = 0;
 
-	private function set_r(value:Float) {
+	private function set_r(value:Float):Float
+	{
 		r = value;
 		shader.red.value = [r / 255];
 		return r;
 	}
 
-	private function set_g(value:Float) {
+	private function set_g(value:Float):Float
+	{
 		g = value;
 		shader.green.value = [g / 255];
 		return g;
 	}
 
-	private function set_b(value:Float) {
+	private function set_b(value:Float):Float
+	{
 		b = value;
 		shader.blue.value = [b / 255];
 		return b;
 	}
 
-	public function new() {
+	public function new():Void
+	{
 		r = 255 / 255;
 		g = 0 / 255;
 		b = 0 / 255;
 	}
 }
 
-class ColorSwapShader extends FlxShader {
+class ColorSwapShader extends FlxShader
+{
 	@:glFragmentSource('
 		#pragma header
 
@@ -50,7 +56,8 @@ class ColorSwapShader extends FlxShader {
 			gl_FragColor = vec4(((col.g + col.b) / 2.0) + (red * diff), col.g + (green * diff), col.b + (blue * diff), col.a);
 		}
 	')
-	public function new() {
+	public function new():Void
+	{
 		super();
 	}
 }

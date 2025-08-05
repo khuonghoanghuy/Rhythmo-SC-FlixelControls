@@ -1,18 +1,19 @@
 package options;
 
-class ControlsSubState extends ExtendableSubState {
+class ControlsSubState extends ExtendableSubState
+{
 	var coolControls:Array<String> = [
-		"leftKey",
-		"downKey",
-		"upKey",
-		"rightKey",
-		"leftKeyAlt",
-		"downKeyAlt",
-		"upKeyAlt",
-		"rightKeyAlt",
-		"acceptKey",
-		"exitKey",
-		"resetKey"
+		'leftKey',
+		'downKey',
+		'upKey',
+		'rightKey',
+		'leftKeyAlt',
+		'downKeyAlt',
+		'upKeyAlt',
+		'rightKeyAlt',
+		'acceptKey',
+		'exitKey',
+		'resetKey'
 	];
 
 	var ctrlGroup:FlxTypedGroup<FlxText>;
@@ -31,9 +32,8 @@ class ControlsSubState extends ExtendableSubState {
 
 	var ignoreInputTimer:Float = 0;
 
-	public function new() {
-		super();
-
+	override public function create():Void
+	{
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
 
@@ -58,14 +58,15 @@ class ControlsSubState extends ExtendableSubState {
 		ctrlGroup = new FlxTypedGroup<FlxText>();
 		add(ctrlGroup);
 
-		for (i in 0...coolControls.length) {
+		for (i in 0...coolControls.length)
+		{
 			var bindTxt:FlxText = new FlxText(20, 20 + (i * 80), 0, Localization.get(coolControls[i]), 32);
 			bindTxt.setFormat(Paths.font(Localization.getFont()), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			bindTxt.ID = i;
 			ctrlGroup.add(bindTxt);
 		}
 
-		curControl = new FlxText(700, 0, 0, "LOADING", 12);
+		curControl = new FlxText(700, 0, 0, 'LOADING', 12);
 		curControl.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		curControl.scrollFactor.set();
 		curControl.screenCenter(Y);
@@ -84,7 +85,7 @@ class ControlsSubState extends ExtendableSubState {
 		tempBG.visible = false;
 		add(tempBG);
 
-		anyKeyTxt = new FlxText(0, 0, 0, "", 12);
+		anyKeyTxt = new FlxText(0, 0, 0, '', 12);
 		anyKeyTxt.setFormat(Paths.font(Localization.getFont()), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		anyKeyTxt.scrollFactor.set();
 		anyKeyTxt.screenCenter();
@@ -93,12 +94,14 @@ class ControlsSubState extends ExtendableSubState {
 		changeSelection(0, false);
 
 		FlxG.camera.follow(camFollow, null, 0.15);
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
-		if (ignoreInputTimer > 0) {
+	override public function update(elapsed:Float):Void
+	{
+		if (ignoreInputTimer > 0)
+		{
 			ignoreInputTimer -= elapsed;
 			return;
 		}
@@ -108,60 +111,76 @@ class ControlsSubState extends ExtendableSubState {
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 
-		if (!isChangingBind) {
+		if (!isChangingBind)
+		{
 			if (Input.justPressed('up') || Input.justPressed('down'))
 				changeSelection(Input.justPressed('up') ? -1 : 1);
 
-			if (Input.justPressed('accept')) {
+			if (Input.justPressed('accept'))
+			{
 				isChangingBind = true;
 				tempBG.visible = true;
-				anyKeyTxt.text = Localization.get("ctrlGuide");
+				anyKeyTxt.text = Localization.get('ctrlGuide');
 			}
 
-			if (Input.justPressed('exit')) {
+			if (Input.justPressed('exit'))
+			{
 				persistentDraw = persistentUpdate = true;
 				FlxG.mouse.visible = false;
 				close();
 			}
 
-			if (FlxG.mouse.overlaps(switchSpr) && FlxG.mouse.justPressed) {
+			if (FlxG.mouse.overlaps(switchSpr) && FlxG.mouse.justPressed)
+			{
 				gamepadMode = !gamepadMode;
-				if (gamepad != null) {
+				if (gamepad != null)
+				{
 					FlxG.sound.play(Paths.sound('select'));
 					FlxTween.cancelTweensOf(bg);
 					FlxTween.color(bg, 0.5, bg.color, gamepadMode ? 0xFF22ebf2 : 0xFFac21ff, {ease: FlxEase.linear});
-				} else {
+				}
+				else
+				{
 					gamepadMode = false;
 					FlxG.sound.play(Paths.sound('cancel'));
 					FlxTween.cancelTweensOf(bg);
 					FlxTween.color(bg, 0.5, bg.color, 0xFFac21ff, {ease: FlxEase.linear});
-					Main.toast.create("Can't do that.", 0xFFFFFF00, "Connect a controller to edit your gamepad controls.");
+					Main.toast.create('Can\'t do that.', 0xFFFFFF00, 'Connect a controller to edit your gamepad controls.');
 				}
 			}
-		} else {
-			if (Input.justPressed('any')) {
-				if (gamepadMode) {
+		}
+		else
+		{
+			if (Input.justPressed('any'))
+			{
+				if (gamepadMode)
+				{
 					var keyPressed:FlxGamepadInputID = gamepad.firstJustPressedID();
 					if (gamepad != null && keyPressed.toString() != FlxGamepadInputID.NONE)
 						SaveData.settings.gamepadBinds[curSelected] = keyPressed;
-				} else
+				}
+				else
 					SaveData.settings.keyboardBinds[curSelected] = FlxG.keys.getIsDown()[0].ID.toString();
 
 				SaveData.saveSettings();
 				Input.refreshControls();
 				FlxG.sound.play(Paths.sound('select'));
 				isChangingBind = false;
-				anyKeyTxt.text = "";
+				anyKeyTxt.text = '';
 				tempBG.visible = false;
 			}
 		}
+
+		super.update(elapsed);
 	}
 
-	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {
+	private function changeSelection(change:Int = 0, ?playSound:Bool = true):Void
+	{
 		if (playSound)
 			FlxG.sound.play(Paths.sound('scroll'));
 		curSelected = FlxMath.wrap(curSelected + change, 0, coolControls.length - 1);
-		ctrlGroup.forEach(function(txt:FlxText) {
+		ctrlGroup.forEach(function(txt:FlxText)
+		{
 			txt.alpha = (txt.ID == curSelected) ? 1 : 0.6;
 			if (txt.ID == curSelected)
 				camFollow.y = txt.y;

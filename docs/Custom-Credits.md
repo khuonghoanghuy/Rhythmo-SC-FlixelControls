@@ -1,5 +1,5 @@
 ## Credits Data
-In `assets/data/credits.json`, you can edit the following fields:
+In `assets/data/credits/credits.json`, you can edit the following fields:
 * `menuBG` - Your custom menu background.
 * `menuBGColor` - The color of your custom background (`[R, G, B]`).
 * `tweenColor` - If the colors should set to the user's colors or not.

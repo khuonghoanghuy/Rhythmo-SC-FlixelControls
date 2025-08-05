@@ -1,6 +1,7 @@
 package options;
 
-class NoteColorState extends ExtendableState {
+class NoteColorState extends ExtendableState
+{
 	var daText:FlxText;
 
 	var strumline:FlxTypedGroup<Note>;
@@ -17,14 +18,14 @@ class NoteColorState extends ExtendableState {
 
 	var fromPlayState:Bool = false;
 
-	public function new(?fromPlayState:Bool = false) {
+	public function new(?fromPlayState:Bool = false):Void
+	{
 		super();
 		this.fromPlayState = fromPlayState;
 	}
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/options_bg'));
 		bg.scrollFactor.set();
 		bg.screenCenter();
@@ -41,25 +42,28 @@ class NoteColorState extends ExtendableState {
 		var totalWidth:Float = noteDirs.length * noteWidth;
 		var startX:Float = (FlxG.width - totalWidth) / 2;
 
-		for (i in 0...noteDirs.length) {
-			var note:Note = new Note(startX + i * noteWidth, 50, noteDirs[i], "note");
+		for (i in 0...noteDirs.length)
+		{
+			var note:Note = new Note(startX + i * noteWidth, 50, noteDirs[i], 'note');
 			note.ID = i;
 			strumline.add(note);
 		}
 
-		daText = new FlxText(0, 280, FlxG.width, "", 12);
+		daText = new FlxText(0, 280, FlxG.width, '', 12);
 		daText.setFormat(Paths.font(Localization.getFont()), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		daText.screenCenter(X);
 		add(daText);
 
 		updateColorVals();
 		updateText();
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
-		if (Input.justPressed('reset')) {
+	override public function update(elapsed:Float):Void
+	{
+		if (Input.justPressed('reset'))
+		{
 			curColorVals = NoteColors.defaultColors[curSelectedControl];
 			var n = strumline.members[curSelectedControl];
 			n.colorSwap.r = curColorVals[0];
@@ -68,17 +72,20 @@ class NoteColorState extends ExtendableState {
 			NoteColors.setNoteColor(curSelectedControl, curColorVals);
 		}
 
-		if (Input.justPressed('exit')) {
+		if (Input.justPressed('exit'))
+		{
 			if (isSelectingSomething)
 				isSelectingSomething = false;
-			else {
+			else
+			{
 				SaveData.saveSettings();
 				ExtendableState.switchState(new OptionsState(fromPlayState));
 				FlxG.sound.play(Paths.sound('cancel'));
 			}
 		}
 
-		if (!isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right'))) {
+		if (!isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right')))
+		{
 			curSelectedControl += Input.justPressed('left') ? -1 : 1;
 			if (curSelectedControl < 0)
 				curSelectedControl = 3;
@@ -87,11 +94,13 @@ class NoteColorState extends ExtendableState {
 			updateColorVals();
 		}
 
-		if (isSelectingSomething && (Input.justPressed('up') || Input.justPressed('down'))) {
+		if (isSelectingSomething && (Input.justPressed('up') || Input.justPressed('down')))
+		{
 			curColorVals[curSelectedValue] += Input.justPressed('up') ? 1 : -1;
 			curColorVals[curSelectedValue] = Std.int(FlxMath.bound(curColorVals[curSelectedValue], colorMins[curSelectedValue], colorMaxs[curSelectedValue]));
 			var n = strumline.members[curSelectedControl];
-			switch (curSelectedValue) {
+			switch (curSelectedValue)
+			{
 				case 0:
 					n.colorSwap.r = curColorVals[0];
 				case 1:
@@ -102,7 +111,8 @@ class NoteColorState extends ExtendableState {
 			NoteColors.setNoteColor(curSelectedControl, curColorVals);
 		}
 
-		if (isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right'))) {
+		if (isSelectingSomething && (Input.justPressed('left') || Input.justPressed('right')))
+		{
 			curSelectedValue += Input.justPressed('left') ? -1 : 1;
 			if (curSelectedValue < 0)
 				curSelectedValue = 2;
@@ -112,20 +122,26 @@ class NoteColorState extends ExtendableState {
 
 		updateText();
 
-		for (note in strumline) {
-			if (note.ID == curSelectedControl && Input.justPressed('accept') && !isSelectingSomething) {
+		for (note in strumline)
+		{
+			if (note.ID == curSelectedControl && Input.justPressed('accept') && !isSelectingSomething)
+			{
 				curSelectedControl = note.ID;
 				isSelectingSomething = true;
 			}
 			note.alpha = (note.ID == curSelectedControl) ? 1 : 0.6;
 		}
+
+		super.update(elapsed);
 	}
 
-	function updateText() {
+	function updateText():Void
+	{
 		var r:String = Std.string(curColorVals[0]);
 		var g:String = Std.string(curColorVals[1]);
 		var b:String = Std.string(curColorVals[2]);
-		switch (curSelectedValue) {
+		switch (curSelectedValue)
+		{
 			case 0:
 				r = '>$r<';
 			case 1:
@@ -133,16 +149,16 @@ class NoteColorState extends ExtendableState {
 			case 2:
 				b = '>$b<';
 		}
-		daText.text = Localization.get("noteColorGuide")
-			+ Localization.get("red")
+		daText.text = Localization.get('noteColorGuide')
+			+ Localization.get('red')
 			+ r
-			+ Localization.get("green")
+			+ Localization.get('green')
 			+ g
-			+ Localization.get("blue")
+			+ Localization.get('blue')
 			+ b;
 		daText.screenCenter(X);
 	}
 
-	inline function updateColorVals()
+	inline function updateColorVals():Void
 		curColorVals = NoteColors.getNoteColor(curSelectedControl);
 }

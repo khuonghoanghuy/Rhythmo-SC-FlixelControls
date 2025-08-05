@@ -2,15 +2,18 @@ package backend;
 
 import backend.Conductor.BPMChangeEvent;
 
-class ExtendableSubState extends FlxSubState {
+class ExtendableSubState extends FlxSubState
+{
 	public var curStep:Int = 0;
 	public var curBeat:Int = 0;
 
-	override function create() {
+	override public function create():Void
+	{
 		super.create();
 	}
 
-	override function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		var oldStep:Int = curStep;
 
 		updateCurStep();
@@ -24,11 +27,13 @@ class ExtendableSubState extends FlxSubState {
 		super.update(elapsed);
 	}
 
-	private function updateBeat():Void {
+	private function updateBeat():Void
+	{
 		curBeat = Math.floor(curStep / (16 / Conductor.timeScale[1]));
 	}
 
-	private function updateCurStep():Void {
+	private function updateCurStep():Void
+	{
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
@@ -46,19 +51,22 @@ class ExtendableSubState extends FlxSubState {
 		updateBeat();
 	}
 
-	public function stepHit():Void {
+	public function stepHit():Void
+	{
 		if (curStep % Conductor.timeScale[0] == 0)
 			beatHit();
 	}
 
 	public function beatHit():Void {}
 
-	public function multiAdd(basic:Array<FlxBasic>) {
+	public function multiAdd(basic:Array<FlxBasic>):Void
+	{
 		for (bsc in basic)
 			add(bsc);
 	}
 
-	public function multiRemove(basic:Array<FlxBasic>) {
+	public function multiRemove(basic:Array<FlxBasic>):Void
+	{
 		for (bsc in basic)
 			remove(bsc);
 	}

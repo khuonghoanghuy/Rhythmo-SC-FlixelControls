@@ -1,27 +1,34 @@
 package substates;
 
-class ScriptedSubState extends ExtendableSubState {
-	public var path:String = "";
+class ScriptedSubState extends ExtendableSubState
+{
+	public var path:String = '';
 	public var script:HScript = null;
 
 	public static var instance:ScriptedSubState = null;
 
-	public function new(_path:String = null, ?args:Array<Dynamic>) {
+	public function new(_path:String = null, ?args:Array<Dynamic>):Void
+	{
 		if (_path != null)
 			path = _path;
 
 		instance = this;
 
-		try {
+		try
+		{
 			var folders:Array<String> = [Paths.file('substates/')];
 			#if FUTURE_POLYMOD
 			for (mod in ModHandler.getModIDs())
 				folders.push('mods/$mod/substates/');
 			#end
-			for (folder in folders) {
-				if (FileSystem.exists(folder)) {
-					for (file in FileSystem.readDirectory(folder)) {
-						if (file.startsWith(path) && Paths.validScriptType(file)) {
+			for (folder in folders)
+			{
+				if (FileSystem.exists(folder))
+				{
+					for (file in FileSystem.readDirectory(folder))
+					{
+						if (file.startsWith(path) && Paths.validScriptType(file))
+						{
 							path = folder + file;
 						}
 					}
@@ -38,7 +45,9 @@ class ScriptedSubState extends ExtendableSubState {
 			scriptSet('members', this.members);
 			scriptSet('multiAdd', this.multiAdd);
 			scriptSet('multiRemove', this.multiRemove);
-		} catch (e:Dynamic) {
+		}
+		catch (e:Dynamic)
+		{
 			script = null;
 			trace('Error while getting script: $path!\n$e');
 		}
@@ -48,12 +57,14 @@ class ScriptedSubState extends ExtendableSubState {
 		super();
 	}
 
-	override function create() {
+	override public function create():Void
+	{
 		scriptExecute('create', []);
 		super.create();
 	}
 
-	override function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		scriptExecute('update', [elapsed]);
 		super.update(elapsed);
 
@@ -61,41 +72,51 @@ class ScriptedSubState extends ExtendableSubState {
 			ExtendableState.switchState(new MenuState());
 	}
 
-	override function beatHit() {
+	override public function beatHit():Void
+	{
 		scriptExecute('beatHit', [curBeat]);
 		scriptSet('curBeat', curBeat);
 		super.beatHit();
 	}
 
-	override function stepHit() {
+	override public function stepHit():Void
+	{
 		scriptExecute('stepHit', [curStep]);
 		scriptSet('curStep', curStep);
 		super.stepHit();
 	}
 
-	override function destroy() {
+	override public function destroy():Void
+	{
 		scriptExecute('destroy', []);
 		super.destroy();
 	}
 
-	override function onFocus() {
+	override public function onFocus():Void
+	{
 		scriptExecute('onFocus', []);
 		super.onFocus();
 	}
 
-	override function onFocusLost() {
+	override public function onFocusLost():Void
+	{
 		scriptExecute('onFocusLost', []);
 		super.onFocusLost();
 	}
 
-	function scriptSet(key:String, value:Dynamic) {
+	public function scriptSet(key:String, value:Dynamic):Void
+	{
 		script?.setVariable(key, value);
 	}
 
-	function scriptExecute(func:String, args:Array<Dynamic>) {
-		try {
+	public function scriptExecute(func:String, args:Array<Dynamic>):Void
+	{
+		try
+		{
 			script?.executeFunc(func, args);
-		} catch (e:Dynamic) {
+		}
+		catch (e:Dynamic)
+		{
 			trace('Error executing $func!\n$e');
 		}
 	}

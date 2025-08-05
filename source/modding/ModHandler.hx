@@ -5,19 +5,19 @@ import polymod.Polymod;
 import polymod.backends.PolymodAssets.PolymodAssetType;
 import polymod.fs.PolymodFileSystem;
 import polymod.format.ParseRules;
-#end
+import flixel.util.FlxStringUtil;
 
-class ModHandler {
+class ModHandler
+{
 	static final MOD_DIR:String = 'mods';
 	static final GLOBAL_MOD_ID:String = 'global';
 	static final CORE_DIR:String = 'assets';
 
-	static final API_VERSION:String = '1.0.5';
+	static final API_VERSION:String = '1.0.6';
 	static final API_VERSION_MATCH:String = '*.*.*';
 
 	static var fs(default, null):IFileSystem;
 
-	#if FUTURE_POLYMOD
 	private static final extensions:Map<String, PolymodAssetType> = [
 		'ogg' => AUDIO_GENERIC,
 		'wav' => AUDIO_GENERIC,
@@ -37,11 +37,11 @@ class ModHandler {
 	];
 
 	public static var trackedMods:Array<ModMetadata> = [];
-	#end
 
-	public static function reload():Void {
-		#if FUTURE_POLYMOD
+	public static function reload():Void
+	{
 		trace('Reloading Polymod...');
+
 		if (!FileSystem.exists('./mods/'))
 			FileSystem.createDirectory('./mods/');
 		if (!FileSystem.exists('mods/mods-go-here.txt'))
@@ -49,17 +49,9 @@ class ModHandler {
 
 		fs = PolymodFileSystem.makeFileSystem(null, {modRoot: MOD_DIR});
 
-		loadMods(getMods());
-		#else
-		trace("Polymod reloading is not supported on your Platform!");
-		#end
-	}
-
-	#if FUTURE_POLYMOD
-	public static function loadMods(folders:Array<String>):Void {
-		var loadedModlist:Array<ModMetadata> = Polymod.init({
+		Polymod.init({
 			modRoot: MOD_DIR,
-			dirs: folders,
+			dirs: getMods(),
 			customFilesystem: fs,
 			framework: OPENFL,
 			apiVersionRule: API_VERSION,
@@ -71,20 +63,14 @@ class ModHandler {
 			extensionMap: extensions,
 			ignoredFiles: Polymod.getDefaultIgnoreList()
 		});
-
-		if (loadedModlist == null)
-			return;
-
-		trace('Loading Successful, ${loadedModlist.length} / ${folders.length} new mods.');
-
-		for (mod in loadedModlist)
-			trace('Name: ${mod.title}, [${mod.id}]');
 	}
 
-	public static function getMods():Array<String> {
+	public static function getMods():Array<String>
+	{
 		trackedMods = [];
 
-		if (FlxG.save.data.disabledMods == null) {
+		if (FlxG.save.data.disabledMods == null)
+		{
 			FlxG.save.data.disabledMods = [];
 			FlxG.save.flush();
 		}
@@ -96,8 +82,13 @@ class ModHandler {
 
 		trace('Searching for Mods...');
 
-		for (i in Polymod.scan({modRoot: MOD_DIR, apiVersionRule: API_VERSION_MATCH, errorCallback: onError})) {
-			if (i != null) {
+		for (i in Polymod.scan({modRoot: MOD_DIR, apiVersionRule: API_VERSION_MATCH, errorCallback: onError}))
+		{
+			if (i.id == GLOBAL_MOD_ID)
+				continue;
+
+			if (i != null)
+			{
 				trackedMods.push(i);
 				if (!FlxG.save.data.disabledMods.contains(i.id))
 					daList.push(i.id);
@@ -110,42 +101,47 @@ class ModHandler {
 		return daList != null && daList.length > 0 ? daList : [];
 	}
 
-	public static function getModIDs():Array<String> {
+	public static function getModIDs():Array<String>
+	{
 		return (trackedMods.length > 0) ? [for (i in trackedMods) i.id] : [];
 	}
 
-	public static function getParseRules():ParseRules {
+	public static function getParseRules():ParseRules
+	{
 		final output:ParseRules = ParseRules.getDefault();
-		output.addType("txt", TextFileFormat.LINES);
-		output.addType("json", TextFileFormat.JSON);
-		output.addType("hx", TextFileFormat.PLAINTEXT);
-		output.addType("hxs", TextFileFormat.PLAINTEXT);
-		output.addType("hxc", TextFileFormat.PLAINTEXT);
-		output.addType("hscript", TextFileFormat.PLAINTEXT);
-		output.addType("lua", TextFileFormat.PLAINTEXT);
-		output.addType("frag", TextFileFormat.PLAINTEXT);
-		output.addType("vert", TextFileFormat.PLAINTEXT);
+		output.addType('txt', TextFileFormat.LINES);
+		output.addType('json', TextFileFormat.JSON);
+		output.addType('hx', TextFileFormat.PLAINTEXT);
+		output.addType('hxs', TextFileFormat.PLAINTEXT);
+		output.addType('hxc', TextFileFormat.PLAINTEXT);
+		output.addType('hscript', TextFileFormat.PLAINTEXT);
+		output.addType('lua', TextFileFormat.PLAINTEXT);
+		output.addType('frag', TextFileFormat.PLAINTEXT);
+		output.addType('vert', TextFileFormat.PLAINTEXT);
 		return output != null ? output : null;
 	}
 
-	static function onError(error:PolymodError):Void {
-		switch (error.code) {
-			case MOD_LOAD_PREPARE:
-				trace(error.message);
-			case MOD_LOAD_DONE:
-				trace(error.message);
-			case MISSING_ICON:
-				trace(error.message);
-			default:
-				switch (error.severity) {
-					case NOTICE:
-						trace(error.message);
-					case WARNING:
-						trace(error.message);
-					case ERROR:
-						trace(error.message);
-				}
+	static function onError(error:PolymodError):Void
+	{
+		var code:String = FlxStringUtil.toTitleCase(Std.string(error.code).split('_').join(' '));
+
+		switch (error.severity)
+		{
+			case NOTICE:
+				FlxG.log.notice('($code) ${error.message}');
+			case WARNING:
+				FlxG.log.warn('($code) ${error.message}');
+
+				#if (windows && debug)
+				WindowsAPI.messageBox(code, error.message);
+				#end
+			case ERROR:
+				FlxG.log.error('($code) ${error.message}');
+
+				#if windows
+				WindowsAPI.messageBox(code, error.message, MSG_ERROR);
+				#end
 		}
 	}
-	#end
 }
+#end

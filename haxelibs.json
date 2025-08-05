@@ -30,21 +30,31 @@
 		},
 		{
 			"name": "hscript",
+			"type": "git",
+			"ref": "master",
+			"url": "https://github.com/HaxeFoundation/hscript"
+		},
+		{
+			"name": "rulescript",
 			"type": "haxelib"
 		},
 		{
-			"name": "linc_luajit",
-			"type": "git",
-			"ref": "master",
-			"url": "https://github.com/superpowers04/linc_luajit"
+			"name": "hxluajit",
+			"type": "haxelib"
+		},
+		{
+			"name": "hxluajit-wrapper",
+			"type": "haxelib"
 		},
 		{
 			"name": "tjson",
 			"type": "haxelib"
 		},
 		{
-			"name": "polymod",
-			"type": "haxelib"
+			"name": "scriptless-polymod",
+			"type": "git",
+			"ref": "master",
+			"url": "https://github.com/JoaTH-Team/scriptless-polymod"
 		},
 		{
 			"name": "thx.core",

@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
@@ -8,15 +8,25 @@ import sys.io.Process;
 #end
 import debug.FPS;
 
+typedef GameConfig =
+{
+	var gameDimensions:Array<Int>;
+	var initialState:Class<FlxState>;
+	var framerate:Int;
+	var skipSplash:Bool;
+	var startFullscreen:Bool;
+}
+
 #if (linux && !debug)
 @:cppInclude('./external/gamemode_client.h')
 @:cppFileCode('#define GAMEMODE_AUTO')
 #end
-class Main extends openfl.display.Sprite {
+class Main extends openfl.display.Sprite
+{
 	public final config:Dynamic = {
 		gameDimensions: [1280, 720],
 		initialState: InitialState,
-		defaultFPS: 60,
+		framerate: 60,
 		skipSplash: true,
 		startFullscreen: false
 	};
@@ -26,16 +36,12 @@ class Main extends openfl.display.Sprite {
 
 	public static var framerate(get, set):Float;
 
-	static function set_framerate(cap:Float):Float {
-		if (FlxG.game != null) {
-			var _framerate:Int = Std.int(cap);
-			if (_framerate > FlxG.drawFramerate) {
-				FlxG.updateFramerate = _framerate;
-				FlxG.drawFramerate = _framerate;
-			} else {
-				FlxG.drawFramerate = _framerate;
-				FlxG.updateFramerate = _framerate;
-			}
+	static function set_framerate(cap:Float):Float
+	{
+		if (FlxG.game != null)
+		{
+			FlxG.updateFramerate = Std.int(cap);
+			FlxG.drawFramerate = Std.int(cap);
 		}
 		return Lib.current.stage.frameRate = cap;
 	}
@@ -44,26 +50,28 @@ class Main extends openfl.display.Sprite {
 		return Lib.current.stage.frameRate;
 
 	#if desktop
-	static function __init__():Void {
+	static function __init__():Void
+	{
 		var origin:String = #if hl Sys.getCwd() #else Sys.programPath() #end;
 
 		var configPath:String = Path.directory(Path.withoutExtension(origin));
 		#if windows
-		configPath += "/alsoft.ini";
+		configPath += '/alsoft.ini';
 		#elseif mac
-		configPath = Path.directory(configPath) + "/Resources/alsoft.conf";
+		configPath = '${Path.directory(configPath)}/Resources/alsoft.conf';
 		#else
-		configPath += "/alsoft.conf";
+		configPath += '/alsoft.conf';
 		#end
 
-		Sys.putEnv("ALSOFT_CONF", configPath);
+		Sys.putEnv('ALSOFT_CONF', configPath);
 	}
 	#end
 
-	public function new() {
+	public function new():Void
+	{
 		super();
 
-		#if desktop
+		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#if cpp
 		untyped __global__.__hxcpp_set_critical_error_handler(onCrash);
@@ -75,14 +83,14 @@ class Main extends openfl.display.Sprite {
 		#end
 
 		framerate = 60; // default framerate
-		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash,
+		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.framerate, config.framerate, config.skipSplash,
 			config.startFullscreen));
 
 		fpsDisplay = new FPS(10, 10, 0xffffff);
 		addChild(fpsDisplay);
 
 		#if (linux || mac)
-		Lib.current.stage.window.setIcon(lime.graphics.Image.fromFile("icon.png"));
+		Lib.current.stage.window.setIcon(lime.graphics.Image.fromFile('icon.png'));
 		#end
 
 		#if FUTURE_DISCORD_RPC
@@ -93,23 +101,25 @@ class Main extends openfl.display.Sprite {
 		Application.current.window.onFocusIn.add(onWindowFocusIn);
 
 		#if windows
-		Lib.current.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (evt:openfl.events.KeyboardEvent) -> {
-			if (evt.keyCode == openfl.ui.Keyboard.F2) {
+		Lib.current.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (evt:openfl.events.KeyboardEvent) ->
+		{
+			if (evt.keyCode == openfl.ui.Keyboard.F2)
+			{
 				var sp = Lib.current.stage;
 				var position = new openfl.geom.Rectangle(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 
 				var image:BitmapData = new BitmapData(Std.int(position.width), Std.int(position.height), false, 0xFEFEFE);
 				image.draw(sp, true);
 
-				if (!FileSystem.exists("./screenshots/"))
-					FileSystem.createDirectory("./screenshots/");
+				if (!FileSystem.exists('./screenshots/'))
+					FileSystem.createDirectory('./screenshots/');
 
 				var bytes = image.encode(position, new openfl.display.PNGEncoderOptions());
 
 				var curDate:String = Date.now().toString();
-				curDate = StringTools.replace(curDate, " ", "_");
+				curDate = StringTools.replace(curDate, ' ', '_');
 
-				File.saveBytes("screenshots/Screenshot-" + curDate + ".png", bytes);
+				File.saveBytes('screenshots/Screenshot-' + curDate + '.png', bytes);
 			}
 		});
 		#end
@@ -126,14 +136,16 @@ class Main extends openfl.display.Sprite {
 	var focused:Bool = true;
 	var focusMusicTween:FlxTween;
 
-	function onWindowFocusOut() {
+	function onWindowFocusOut():Void
+	{
 		focused = false;
 
-		if (Type.getClass(FlxG.state) != PlayState) {
+		if (Type.getClass(FlxG.state) != PlayState)
+		{
 			oldVol = FlxG.sound.volume;
 			newVol = (oldVol > 0.3) ? 0.3 : (oldVol > 0.1) ? 0.1 : 0;
 
-			trace("Game unfocused");
+			trace('Game unfocused');
 
 			if (focusMusicTween != null)
 				focusMusicTween.cancel();
@@ -143,13 +155,16 @@ class Main extends openfl.display.Sprite {
 		}
 	}
 
-	function onWindowFocusIn() {
-		new FlxTimer().start(0.2, (tmr:FlxTimer) -> {
+	function onWindowFocusIn():Void
+	{
+		new FlxTimer().start(0.2, (tmr:FlxTimer) ->
+		{
 			focused = true;
 		});
 
-		if (Type.getClass(FlxG.state) != PlayState) {
-			trace("Game focused");
+		if (Type.getClass(FlxG.state) != PlayState)
+		{
+			trace('Game focused');
 
 			if (focusMusicTween != null)
 				focusMusicTween.cancel();
@@ -160,12 +175,16 @@ class Main extends openfl.display.Sprite {
 		}
 	}
 
-	private function onCrash(e:UncaughtErrorEvent):Void {
+	#if CRASH_HANDLER
+	private static function onCrash(e:UncaughtErrorEvent):Void
+	{
 		var stack:Array<String> = [];
 		stack.push(e.error);
 
-		for (stackItem in CallStack.exceptionStack(true)) {
-			switch (stackItem) {
+		for (stackItem in CallStack.exceptionStack(true))
+		{
+			switch (stackItem)
+			{
 				case CFunction:
 					stack.push('C Function');
 				case Module(m):
@@ -186,23 +205,18 @@ class Main extends openfl.display.Sprite {
 		final msg:String = stack.join('\n');
 
 		#if sys
-		try {
+		try
+		{
 			if (!FileSystem.exists('./crash/'))
 				FileSystem.createDirectory('./crash/');
 
-			File.saveContent('./crash/'
-				+ Lib.application.meta.get('file')
-				+ '-'
-				+ Date.now().toString().replace(' ', '-').replace(':', "'")
-				+ '.txt',
-				msg
-				+ '\n');
-		} catch (e:Dynamic) {
-			Sys.println("Error!\nCouldn't save the crash dump because:\n" + e);
+			File.saveContent('./crash/${Lib.application.meta.get('file')}-${Date.now().toString().replace(' ', '-').replace(':', "'")}.txt', '$msg\n');
 		}
+		catch (e:Dynamic)
+			Sys.println('Error!\nCouldn\'t save the crash dump because:\n$e');
 		#end
 
-		#if (flixel < "6.0.0")
+		#if (flixel < '6.0.0')
 		FlxG.bitmap.dumpCache();
 		#end
 		FlxG.bitmap.clearCache();
@@ -217,19 +231,62 @@ class Main extends openfl.display.Sprite {
 		#end
 
 		#if windows
-		WindowsAPI.messageBox('Error!',
-			'Uncaught Error: \n' + msg +
-			'\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
-			MSG_ERROR);
+		WindowsAPI.messageBox('Error!', 'Uncaught Error: \n$msg
+			\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/JoaTH-Team/Rhythmo-SC/issues', MSG_ERROR);
 		#else
-		Lib.application.window.alert('Uncaught Error: \n'
-			+ msg
-			+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues',
-			'Error!');
+		Lib.application.window.alert('Uncaught Error: \n$msg
+			\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/JoaTH-Team/Rhythmo-SC/issues', 'Error!');
 		#end
-		Sys.println('Uncaught Error: \n'
-			+ msg
-			+ '\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/Joalor64GH/Rhythmo-SC/issues');
+		Sys.println('Uncaught Error: \n$msg
+			\n\nIf you think this shouldn\'t have happened, report this error to GitHub repository!\nhttps://github.com/JoaTH-Team/Rhythmo-SC/issues');
 		Sys.exit(1);
 	}
+
+	#if cpp
+	private static function onFatalCrash(msg:String):Void
+	{
+		var errMsg:String = '';
+		var path:String;
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+		var dateNow:String = Date.now().toString();
+
+		dateNow = dateNow.replace(' ', '_');
+		dateNow = dateNow.replace(':', "'");
+
+		path = './crash/Rhythmo_$dateNow.txt';
+
+		errMsg += '${msg}\n';
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += 'in ${file} (line ${line})\n';
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += '\n\nPlease report this error to the GitHub page: https://github.com/JoaTH-Team/Rhythmo-SC/issues';
+
+		if (!FileSystem.exists('./crash/'))
+			FileSystem.createDirectory('./crash/');
+
+		File.saveContent(path, '$errMsg\n');
+
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		Sys.println(errMsg);
+		Sys.println('Crash dump saved in ${Path.normalize(path)}');
+
+		Application.current.window.alert(errMsg, 'CRITICAL ERROR!');
+		#if FUTURE_DISCORD_RPC
+		DiscordClient.shutdown();
+		#end
+		Sys.exit(1);
+	}
+	#end
+	#end
 }

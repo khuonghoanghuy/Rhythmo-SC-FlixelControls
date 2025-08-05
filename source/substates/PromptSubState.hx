@@ -1,11 +1,13 @@
 package substates;
 
-class PromptSubState extends FlxSubState {
+class PromptSubState extends FlxSubState
+{
 	var question:String;
 	var callbackYes:Void->Void;
 	var callbackNo:Void->Void;
 
-	public function new(question:String, callbackYes:Void->Void, ?callbackNo:Void->Void) {
+	public function new(question:String, callbackYes:Void->Void, ?callbackNo:Void->Void):Void
+	{
 		super();
 
 		this.question = question;
@@ -25,7 +27,8 @@ class PromptSubState extends FlxSubState {
 		questionTxt.scrollFactor.set();
 		add(questionTxt);
 
-		var btnYes:FlxButton = new FlxButton(0, box.height / 2 + 200, Localization.get("yes"), () -> {
+		var btnYes:FlxButton = new FlxButton(0, box.height / 2 + 200, Localization.get('yes'), () ->
+		{
 			if (callbackYes != null)
 				callbackYes();
 			close();
@@ -37,7 +40,8 @@ class PromptSubState extends FlxSubState {
 		btnYes.screenCenter(X);
 		add(btnYes);
 
-		var btnNo:FlxButton = new FlxButton(0, btnYes.y + 50, Localization.get("no"), () -> {
+		var btnNo:FlxButton = new FlxButton(0, btnYes.y + 50, Localization.get('no'), () ->
+		{
 			if (callbackNo != null)
 				callbackNo();
 			close();

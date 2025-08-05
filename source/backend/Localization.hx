@@ -11,33 +11,38 @@ import hx_arabic_shaper.bidi.UBA;
  * Please credit me if you use it!
  * @author Joalor64GH
  */
-class Localization {
-	private static final DEFAULT_DIR:String = "languages";
+class Localization
+{
+	private static final DEFAULT_DIR:String = 'languages';
 
 	private static var data:Map<String, Dynamic>;
 	private static var currentLanguage:String;
 
-	public static var DEFAULT_FONT:String = "vcr";
+	public static var DEFAULT_FONT:String = 'vcr';
 
-	public static var DEFAULT_LANGUAGE:String = "en";
+	public static var DEFAULT_LANGUAGE:String = 'en';
 	public static var directory:String = DEFAULT_DIR;
 
 	public static var systemLanguage(get, never):String;
 
-	public static function get_systemLanguage() {
+	public static function get_systemLanguage():String
+	{
 		#if openfl
 		return Capabilities.language;
 		#else
-		return throw "This Variable is for OpenFl only!";
+		return throw 'This variable is for OpenFL only!';
 		#end
 	}
 
-	public static function loadLanguages() {
+	public static function loadLanguages():Void
+	{
 		data = new Map<String, Dynamic>();
 
-		var path:String = Paths.txt("languages/languagesList");
-		if (Paths.exists(path)) {
-			for (language in Paths.getText(path).split('\n')) {
+		var path:String = Paths.txt('languages/languagesList');
+		if (Paths.exists(path))
+		{
+			for (language in Paths.getText(path).split('\n'))
+			{
 				var langCode:String = language.trim().split(':')[1];
 				data.set(langCode, loadLanguageData(langCode));
 			}
@@ -48,16 +53,21 @@ class Localization {
 		ArabicReshaper.init(config);
 	}
 
-	private static function loadLanguageData(language:String):Dynamic {
-		try {
+	private static function loadLanguageData(language:String):Dynamic
+	{
+		try
+		{
 			return TJSON.parse(Paths.getText(path(language)));
-		} catch (e:Dynamic) {
+		}
+		catch (e:Dynamic)
+		{
 			trace('language file not found: $e');
 			return TJSON.parse(Paths.getText(path(DEFAULT_LANGUAGE)));
 		}
 	}
 
-	public static function switchLanguage(newLanguage:String) {
+	public static function switchLanguage(newLanguage:String):Void
+	{
 		if (newLanguage == currentLanguage)
 			return;
 
@@ -66,44 +76,38 @@ class Localization {
 		trace('Language changed to $currentLanguage');
 	}
 
-	public static function get(key:String, ?language:String):String {
+	public static function get(key:String, ?language:String):String
+	{
 		var targetLanguage:String = language != null ? language : currentLanguage;
 		var languageData = data.get(targetLanguage);
 
-		if (data != null && data.exists(targetLanguage) && languageData != null && Reflect.hasField(languageData, key)) {
+		if (data != null && data.exists(targetLanguage) && languageData != null && Reflect.hasField(languageData, key))
+		{
 			var field:String = Reflect.field(languageData, key);
-			return (targetLanguage == "ar") ? shapeArabicText(field) : field;
+			return (targetLanguage == 'ar') ? shapeArabicText(field) : field;
 		}
 
 		return 'missing key: $key';
 	}
 
-	public static function getFont():String {
-		if (data != null && data.exists(currentLanguage)) {
+	public static function getFont():String
+	{
+		if (data != null && data.exists(currentLanguage))
+		{
 			var languageData = data.get(currentLanguage);
-			return Reflect.hasField(languageData, "customFont") ? Reflect.field(languageData, "customFont") : DEFAULT_FONT;
+			return Reflect.hasField(languageData, 'customFont') ? Reflect.field(languageData, 'customFont') : DEFAULT_FONT;
 		}
 
 		return DEFAULT_FONT;
 	}
 
-	private static function path(language:String)
-		return Paths.file(Path.join([directory, language + ".json"]));
+	private static function path(language:String):String
+		return Paths.file(Path.join([directory, '$language.json']));
 
 	// for arabic text
 	public static function shapeArabicText(text:String):String
 		return UBA.display(ArabicReshaper.reshape(text));
 
-	public static function dispose()
+	public static function dispose():Void
 		ArabicReshaper.dispose();
-}
-
-class Locale {
-	public var lang:String;
-	public var code:String;
-
-	public function new(lang:String, code:String) {
-		this.lang = lang;
-		this.code = code;
-	}
 }

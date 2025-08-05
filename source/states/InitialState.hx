@@ -1,16 +1,17 @@
 package states;
 
-class InitialState extends ExtendableState {
+class InitialState extends ExtendableState
+{
 	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 1, 0xFFAA00AA);
 	var intro:FlxSprite;
 
 	var timer:Float = 0;
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		ModHandler.reload();
 		SaveData.init();
+		Input.refreshControls();
 		Achievements.load();
 		HighScore.load();
 
@@ -40,11 +41,12 @@ class InitialState extends ExtendableState {
 		intro.alpha = 0;
 		add(intro);
 		FlxTween.tween(intro, {alpha: 1}, 1, {ease: FlxEase.quadOut});
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		timer++;
 
 		gradientBar.scale.y += Math.sin(timer / 10) * 0.001;
@@ -55,9 +57,12 @@ class InitialState extends ExtendableState {
 			startGame();
 		else
 			new FlxTimer().start(3, (tmr:FlxTimer) -> startGame());
+
+		super.update(elapsed);
 	}
 
-	function startGame() {
+	function startGame():Void
+	{
 		ExtendableState.switchState((UpdateState.mustUpdate) ? new UpdateState() : new TitleState());
 	}
 }

@@ -2,11 +2,13 @@ package objects;
 
 import openfl.geom.Rectangle;
 
-class RoundedSprite extends FlxSprite {
+class RoundedSprite extends FlxSprite
+{
 	private var cornerSize(default, set):Float = 10;
 	private var Color:FlxColor;
 
-	private function set_cornerSize(Value:Float):Float {
+	private function set_cornerSize(Value:Float):Float
+	{
 		if (cornerSize == Value)
 			return Value;
 
@@ -15,7 +17,8 @@ class RoundedSprite extends FlxSprite {
 		return Value;
 	}
 
-	public function new(X:Float, Y:Float, Width:Float, Height:Float, Color:FlxColor) {
+	public function new(X:Float, Y:Float, Width:Float, Height:Float, Color:FlxColor):Void
+	{
 		super(X, Y);
 		this.width = Width;
 		this.height = Height;
@@ -25,7 +28,8 @@ class RoundedSprite extends FlxSprite {
 		regen();
 	}
 
-	private function regen() {
+	private function regen():Void
+	{
 		pixels.fillRect(new Rectangle(0, 0, cornerSize, cornerSize), 0x0);
 		round(false, false);
 		pixels.fillRect(new Rectangle(width - cornerSize, 0, cornerSize, cornerSize), 0x0);
@@ -36,7 +40,8 @@ class RoundedSprite extends FlxSprite {
 		round(true, true);
 	}
 
-	private function round(flipX:Bool, flipY:Bool) {
+	private function round(flipX:Bool, flipY:Bool):Void
+	{
 		var antiX:Float = (width - cornerSize);
 		var antiY:Float = flipY ? (height - 1) : 0;
 		if (flipY)

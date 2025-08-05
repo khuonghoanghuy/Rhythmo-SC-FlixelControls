@@ -1,14 +1,14 @@
 package states;
 
-class EditorState extends ExtendableState {
-	final options:Array<String> = ["Chart Editor", "Song Selection Editor"];
+class EditorState extends ExtendableState
+{
+	final options:Array<String> = ['Chart Editor', 'Song Selection Editor'];
 	var grpOptions:FlxTypedGroup<FlxText>;
 	var curSelected:Int = 0;
 	var daText:FlxText;
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		var bg:FlxSprite = new GameSprite().loadGraphic(Paths.image('menu/backgrounds/options_bg'));
 		bg.color = 0x5a5656;
 		add(bg);
@@ -20,49 +20,58 @@ class EditorState extends ExtendableState {
 		grpOptions = new FlxTypedGroup<FlxText>();
 		add(grpOptions);
 
-		for (i in 0...options.length) {
+		for (i in 0...options.length)
+		{
 			var optionTxt:FlxText = new FlxText(20, 20 + (i * 50), 0, options[i], 32);
 			optionTxt.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			optionTxt.ID = i;
 			grpOptions.add(optionTxt);
 		}
 
-		daText = new FlxText(5, FlxG.height - 30, 0, "", 12);
+		daText = new FlxText(5, FlxG.height - 30, 0, '', 12);
 		daText.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(daText);
 
 		changeSelection(0, false);
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		updateText();
 
 		if (Input.justPressed('up') || Input.justPressed('down'))
 			changeSelection(Input.justPressed('up') ? -1 : 1);
 
-		if (Input.justPressed('exit')) {
+		if (Input.justPressed('exit'))
+		{
 			ExtendableState.switchState(new MenuState());
 			FlxG.sound.play(Paths.sound('cancel'));
 		}
+
+		super.update(elapsed);
 	}
 
-	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {
+	private function changeSelection(change:Int = 0, ?playSound:Bool = true):Void
+	{
 		if (playSound)
 			FlxG.sound.play(Paths.sound('scroll'));
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
-		grpOptions.forEach(function(txt:FlxText) {
+		grpOptions.forEach(function(txt:FlxText)
+		{
 			txt.alpha = (txt.ID == curSelected) ? 1 : 0.6;
 		});
 	}
 
-	function updateText() {
-		switch (curSelected) {
+	function updateText():Void
+	{
+		switch (curSelected)
+		{
 			case 0:
-				daText.text = "Making your own chart";
+				daText.text = 'Making your own chart';
 			case 1:
-				daText.text = "Add your own song onto play selection";
+				daText.text = 'Add your own song onto play selection';
 		}
 	}
 }

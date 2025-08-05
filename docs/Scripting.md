@@ -14,7 +14,7 @@ Currently, the following extensions are supported:
 ## Limitations
 The following are not supported:
 * Keywords:
-    * `package`, `import` (another function emulates this), `class`, `typedef`, `metadata`, `final`
+    * `typedef`, `metadata`, `final`
 * Wildcard imports (`import flixel.*`)
 * Access modifiers (e.g., `private`, `public`)
 
@@ -25,32 +25,13 @@ The following are not supported:
 * `version` - Returns the current game version.
 
 ## Default Functions
-* `import(daClass:String, ?asDa:String)` - See [Imports](https://github.com/Joalor64GH/Rhythmo-SC/wiki/Scripting#imports) for more.
 * `trace(value:Dynamic)` - The equivalent of `trace` in normal Haxe.
 * `stopScript()` - Stops the current script.
 * `addScript(path:String)` - Adds a new script during gameplay (PlayState).
 * `importScript(source:String)` - Gives access to another script's local functions and variables.
 
 ## Imports
-To import a class, use:
-```hx
-import('package.Class');
-```
-
-To import an enumerator, use:
-```hx
-import('package.Enum');
-```
-
-To import with an alias, use:
-```hx
-import('package.Class', 'Name');
-
-var aliasClass:Name;
-```
-
-You can basically use this to import any class/enum you'd like. <br>
-Otherwise, here is a list of the current classes you can use that are already imported:
+Below is a list of the current classes you can use that are already imported:
 
 ### Standard Haxe Classes
 * `Array`
@@ -130,10 +111,11 @@ Some useful templates to get started. For the default template, use [this](https
 
 ### FlxSprite
 ```hx
-import('flixel.FlxSprite');
-import('states.PlayState');
+import flixel.FlxSprite;
+import states.PlayState;
 
-function create() {
+function create() 
+{
 	var spr:FlxSprite = new FlxSprite(0, 0).makeGraphic(50, 50, FlxColor.BLACK);
 	add(spr);
 }
@@ -141,11 +123,12 @@ function create() {
 
 #### Animated Sprite
 ```hx
-import('flixel.FlxSprite');
-import('states.PlayState');
-import('backend.Paths');
+import flixel.FlxSprite;
+import states.PlayState;
+import backend.Paths;
 
-function create() {
+function create() 
+{
 	var spr:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('gameplay/banan'), true, 102, 103);
 	spr.animation.add('rotate', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], 14);
 	spr.animation.play('rotate');
@@ -156,10 +139,11 @@ function create() {
 
 ### FlxText
 ```hx
-import('flixel.text.FlxText');
-import('states.PlayState');
+import flixel.text.FlxText;
+import states.PlayState;
 
-function create() {
+function create() 
+{
 	var text:FlxText = new FlxText(0, 0, 0, "Hello World", 64);
 	text.screenCenter();
 	add(text);
@@ -168,13 +152,14 @@ function create() {
 
 ### Parsing a JSON
 ```hx
-import('sys.FileSystem');
-import('sys.io.File');
-import('haxe.Json');
+import sys.FileSystem;
+import sys.io.File;
+import haxe.Json;
 
 var json:Dynamic;
 
-function create() {
+function create() 
+{
 	if (FileSystem.exists('assets/data.json'))
 		json = Json.parse(File.getContent('assets/data.json'));
 
@@ -184,14 +169,15 @@ function create() {
 
 ### Custom States/Substates
 ```hx
-import('states.ScriptedState');
-import('substates.ScriptedSubState');
-import('backend.ExtendableState');
-import('flixel.text.FlxText');
-import('flixel.FlxSprite');
-import('backend.Input');
+import states.ScriptedState;
+import substates.ScriptedSubState;
+import backend.ExtendableState;
+import flixel.text.FlxText;
+import flixel.FlxSprite;
+import backend.Input;
 
-function create() {
+function create() 
+{
 	var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, FlxColor.WHITE);
 	add(bg);
 
@@ -200,7 +186,8 @@ function create() {
 	add(text);
 }
 
-function update(elapsed:Float) {
+function update(elapsed:Float) 
+{
 	if (Input.justPressed('accept'))
 		ExtendableState.switchState(new ScriptedState('name', [/* arguments, if any */])); // load custom state
 
@@ -217,10 +204,13 @@ And just in case your script doesn't load or something goes wrong, press `F4` to
 Script 1:
 ```hx
 // assets/helpers/spriteHandler.hxs
-import('flixel.FlxSprite');
-import('backend.Paths');
+package helpers;
 
-function createSprite(x:Float, y:Float, graphic:String) {
+import flixel.FlxSprite;
+import backend.Paths;
+
+function createSprite(x:Float, y:Float, graphic:String) 
+{
 	var spr:FlxSprite = new FlxSprite(x, y);
 	spr.loadGraphic(Paths.image(graphic));
 	add(spr);
@@ -240,16 +230,17 @@ function create() {
 
 ### Using a Custom Shader
 ```hx
-import('flixel.addons.display.FlxRuntimeShader');
-import('openfl.filters.ShaderFilter');
-import('openfl.utils.Assets');
-import('flixel.FlxG');
-import('backend.Paths');
+import flixel.addons.display.FlxRuntimeShader;
+import openfl.filters.ShaderFilter;
+import openfl.utils.Assets;
+import flixel.FlxG;
+import backend.Paths;
 
 var shader:FlxRuntimeShader;
 var shader2:FlxRunTimeShader;
 
-function create() {
+function create() 
+{
 	shader = new FlxRuntimeShader(Assets.getText(Paths.frag('rain')), null);
 	shader.setFloat('uTime', 0);
 	shader.setFloatArray('uScreenResolution', [FlxG.width, FlxG.height]);
@@ -259,7 +250,8 @@ function create() {
 	FlxG.camera.filters = [shader2];
 }
 
-function update(elapsed:Float) {
+function update(elapsed:Float) 
+{
 	shader.setFloat("uTime", shader.getFloat("uTime") + elapsed);
 	shader.setFloatArray("uCameraBounds", [
 		FlxG.camera.scroll.x + FlxG.camera.viewMarginX,

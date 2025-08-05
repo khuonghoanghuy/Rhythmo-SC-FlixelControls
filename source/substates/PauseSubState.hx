@@ -1,6 +1,7 @@
 package substates;
 
-class PauseSubState extends ExtendableSubState {
+class PauseSubState extends ExtendableSubState
+{
 	var tipTxt:FlxText;
 	var isTweening:Bool = false;
 	var lastString:String = '';
@@ -9,14 +10,14 @@ class PauseSubState extends ExtendableSubState {
 	var pauseGrp:FlxTypedGroup<FlxText>;
 	var curSelected:Int = 0;
 
-	public function new() {
-		super();
+	public function new():Void
+	{
+		super(0x8CFFFFFF);
+	}
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
-		bg.alpha = 0.55;
-		add(bg);
-
-		var text:FlxText = new FlxText(0, 0, 0, Localization.get("pauseTxt"), 12);
+	override public function create():Void
+	{
+		var text:FlxText = new FlxText(0, 0, 0, Localization.get('pauseTxt'), 12);
 		text.setFormat(Paths.font(Localization.getFont()), 64, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.screenCenter(X);
 		add(text);
@@ -24,7 +25,8 @@ class PauseSubState extends ExtendableSubState {
 		pauseGrp = new FlxTypedGroup<FlxText>();
 		add(pauseGrp);
 
-		for (i in 0...pauseOptions.length) {
+		for (i in 0...pauseOptions.length)
+		{
 			var text:FlxText = new FlxText(0, 245 + (i * 65), 0, Localization.get(pauseOptions[i]), 32);
 			text.setFormat(Paths.font(Localization.getFont()), 80, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.screenCenter(X);
@@ -36,18 +38,19 @@ class PauseSubState extends ExtendableSubState {
 		bottomPanel.alpha = 0.65;
 		add(bottomPanel);
 
-		tipTxt = new FlxText(20, FlxG.height - 80, 1000, "", 22);
+		tipTxt = new FlxText(20, FlxG.height - 80, 1000, '', 22);
 		tipTxt.setFormat(Paths.font('vcr.ttf'), 26, 0xFFffffff, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(tipTxt);
 
 		changeSelection(0, false);
+
+		super.create();
 	}
 
 	var timer:Float = 0;
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		tipTxt.screenCenter(X);
 
 		if (isTweening)
@@ -58,50 +61,64 @@ class PauseSubState extends ExtendableSubState {
 		if (Input.justPressed('up') || Input.justPressed('down'))
 			changeSelection(Input.justPressed('up') ? -1 : 1);
 
-		if (Input.justPressed('accept')) {
-			switch (curSelected) {
-				case 0: close();
-				case 1: FlxG.resetState();
+		if (Input.justPressed('accept'))
+		{
+			switch (curSelected)
+			{
+				case 0:
+					close();
+				case 1:
+					FlxG.resetState();
 				case 2:
 					ExtendableState.switchState(new options.OptionsState(true));
 					FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 				case 3:
-					if (PlayState.campaignMode) PlayState.campaignMode = false;
+					if (PlayState.campaignMode)
+						PlayState.campaignMode = false;
 					ExtendableState.switchState(new SongSelectState());
 					FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 					PlayState.chartingMode = false;
 				case 4:
-					if (PlayState.campaignMode) PlayState.campaignMode = false;
+					if (PlayState.campaignMode)
+						PlayState.campaignMode = false;
 					ExtendableState.switchState(new MenuState());
 					FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
 					PlayState.chartingMode = false;
 			}
 		}
+
+		super.update(elapsed);
 	}
 
-	private function changeSelection(change:Int = 0, ?playSound:Bool = true) {
+	private function changeSelection(change:Int = 0, ?playSound:Bool = true):Void
+	{
 		if (playSound)
 			FlxG.sound.play(Paths.sound('scroll'));
 		curSelected = FlxMath.wrap(curSelected + change, 0, pauseOptions.length - 1);
 		pauseGrp.forEach((txt:FlxText) -> txt.color = (txt.ID == curSelected) ? FlxColor.LIME : FlxColor.WHITE);
 	}
 
-	function changeText() {
-		var textArray:Array<String> = Paths.getTextArray(Paths.txt('data/tipText'));
+	function changeText():Void
+	{
+		var textArray:Array<String> = Paths.getTextArray(Paths.txt('data/menu/tipText'));
 		var idx:Int = FlxG.random.int(0, textArray.length - 1);
 		var selectedText:String = textArray[idx].replace('--', '\n');
-		if (selectedText == lastString && textArray.length > 1) {
-			for (i in 0...textArray.length) {
+		if (selectedText == lastString && textArray.length > 1)
+		{
+			for (i in 0...textArray.length)
+			{
 				var tryIdx = FlxG.random.int(0, textArray.length - 1);
 				selectedText = textArray[tryIdx].replace('--', '\n');
-				if (selectedText != lastString) break;
+				if (selectedText != lastString)
+					break;
 			}
 		}
 		tipTxt.alpha = 1;
 		isTweening = true;
 		FlxTween.tween(tipTxt, {alpha: 0}, 1, {
 			ease: FlxEase.linear,
-			onComplete: (twn:FlxTween) -> {
+			onComplete: (twn:FlxTween) ->
+			{
 				tipTxt.text = selectedText;
 				lastString = selectedText;
 				tipTxt.alpha = 0;

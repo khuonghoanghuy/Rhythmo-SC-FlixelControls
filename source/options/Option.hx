@@ -2,7 +2,8 @@ package options;
 
 import haxe.Exception;
 
-enum OptionType {
+enum OptionType
+{
 	Toggle;
 	Integer(min:Int, max:Int, step:Int);
 	Decimal(min:Float, max:Float, step:Float);
@@ -10,7 +11,8 @@ enum OptionType {
 	Choice(choices:Array<String>);
 }
 
-class Option {
+class Option
+{
 	public var name:String;
 	public var desc:String;
 	public var type:OptionType;
@@ -21,15 +23,18 @@ class Option {
 	public var showNotesplash:Bool = false;
 	public var onChange:Dynamic->Void;
 
-	public function new(name:String, desc:String, type:OptionType, value:Dynamic):Void {
+	public function new(name:String, desc:String, type:OptionType, value:Dynamic):Void
+	{
 		this.name = name;
 		this.desc = desc;
 		this.type = type;
 		this.value = value;
 	}
 
-	public function changeValue(?direction:Int = 0):Void {
-		switch (type) {
+	public function changeValue(?direction:Int = 0):Void
+	{
+		switch (type)
+		{
 			case OptionType.Toggle:
 				value = !value;
 			case OptionType.Integer(min, max, step):
@@ -45,20 +50,25 @@ class Option {
 			onChange(value);
 	}
 
-	public function execute():Void {
-		try {
+	public function execute():Void
+	{
+		try
+		{
 			if (type == OptionType.Function && (value != null && Reflect.isFunction(value)))
 				Reflect.callMethod(null, value, []);
-		} catch (e:Exception)
+		}
+		catch (e:Exception)
 			FlxG.log.error('Unable to call the function for "$name" option: ${e.message}');
 	}
 
-	public function toString():String {
+	public function toString():String
+	{
 		var formattedString:String = 'Error!';
 
-		switch (type) {
+		switch (type)
+		{
 			case OptionType.Toggle:
-				formattedString = '$name: ${value ? Localization.get("on") : Localization.get("off")}';
+				formattedString = '$name: ${value ? Localization.get('on') : Localization.get('off')}';
 			case OptionType.Integer(_, _, _):
 				formattedString = '$name: $value${showPercentage ? '%' : ''}';
 			case OptionType.Decimal(_, _, _):

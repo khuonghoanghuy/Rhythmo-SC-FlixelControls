@@ -2,19 +2,22 @@ package backend;
 
 import backend.Song.SongData;
 
-typedef BPMChangeEvent = {
+typedef BPMChangeEvent =
+{
 	var stepTime:Int;
 	var songTime:Float;
 	var bpm:Float;
 }
 
-typedef TimeScaleChangeEvent = {
+typedef TimeScaleChangeEvent =
+{
 	var stepTime:Int;
 	var songTime:Float;
 	var timeScale:Array<Int>;
 }
 
-class Conductor {
+class Conductor
+{
 	public static var bpm(default, set):Float = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
@@ -29,21 +32,24 @@ class Conductor {
 
 	public static var stepsPerSection:Int = 16;
 
-	public function new() {}
+	public function new():Void {}
 
-	public static function set_bpm(newBpm:Float) {
+	public static function set_bpm(newBpm:Float):Float
+	{
 		recalculateStuff();
 		return bpm = newBpm;
 	}
 
-	public static function recalculateStuff(?multi:Float = 1) {
+	public static function recalculateStuff(?multi:Float = 1):Void
+	{
 		safeZoneOffset = Math.floor((safeFrames / 60) * 1000) * multi;
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / timeScale[1];
 		stepsPerSection = Math.floor((16 / timeScale[1]) * timeScale[0]);
 	}
 
-	public static function mapBPMChanges(song:SongData, ?songMultiplier:Float = 1.0) {
+	public static function mapBPMChanges(song:SongData, ?songMultiplier:Float = 1.0):Void
+	{
 		bpmChangeMap = [];
 		timeScaleChangeMap = [];
 
@@ -52,13 +58,16 @@ class Conductor {
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
 
-		for (i in 0...song.notes.length) {
+		for (i in 0...song.notes.length)
+		{
 			var note = song.notes[i];
-			if (note.changeBPM && note.bpm != curBPM) {
+			if (note.changeBPM && note.bpm != curBPM)
+			{
 				curBPM = note.bpm;
 				bpmChangeMap.push({stepTime: totalSteps, songTime: totalPos, bpm: curBPM});
 			}
-			if (note.changeTimeScale && note.timeScale[0] != curTimeScale[0] && note.timeScale[1] != curTimeScale[1]) {
+			if (note.changeTimeScale && note.timeScale[0] != curTimeScale[0] && note.timeScale[1] != curTimeScale[1])
+			{
 				curTimeScale = note.timeScale;
 				timeScaleChangeMap.push({stepTime: totalSteps, songTime: totalPos, timeScale: curTimeScale});
 			}

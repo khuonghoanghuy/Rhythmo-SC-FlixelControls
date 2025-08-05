@@ -2,7 +2,8 @@ package states;
 
 import backend.Song;
 
-class PlayState extends ExtendableState {
+class PlayState extends ExtendableState
+{
 	public static var instance:PlayState = null;
 
 	public static var song:SongData = null;
@@ -24,7 +25,7 @@ class PlayState extends ExtendableState {
 	public var combo:Int = 0;
 	public var misses:Int = 0;
 	public var hits:Int = 0;
-	public var rank:String = "";
+	public var rank:String = '';
 	public var scoreTxt:FlxText;
 
 	public var precisions:Array<FlxText> = [];
@@ -70,25 +71,27 @@ class PlayState extends ExtendableState {
 	private var detailsText:String = '';
 	#end
 
-	override public function new() {
+	public function new():Void
+	{
 		super();
 
-		if (song == null) {
+		if (song == null)
+		{
 			song = {
-				song: "Test",
+				song: 'Test',
 				notes: [],
 				bpm: 100,
 				timeSignature: [4, 4]
 			};
-		} else
+		}
+		else
 			song = Song.loadSongfromJson(Paths.formatToSongPath(song.song));
 
 		instance = this;
 	}
 
-	override function create() {
-		super.create();
-
+	override public function create():Void
+	{
 		Paths.clearStoredMemory();
 
 		if (FlxG.sound.music != null)
@@ -131,20 +134,24 @@ class PlayState extends ExtendableState {
 		var startX:Float = (FlxG.width - totalWidth) / 2;
 		var noteY:Float = (SaveData.settings.downScroll) ? FlxG.height - 250 : 50;
 
-		for (i in 0...noteDirs.length) {
-			var note:Note = new Note(startX + i * noteWidth, noteY, noteDirs[i], "receptor");
+		for (i in 0...noteDirs.length)
+		{
+			var note:Note = new Note(startX + i * noteWidth, noteY, noteDirs[i], 'receptor');
 			strumline.add(note);
 		}
 
-		// load from "scripts" folder
+		// load from 'scripts' folder
 		var foldersToCheck:Array<String> = [Paths.file('scripts/')];
 		#if FUTURE_POLYMOD
 		for (mod in ModHandler.getModIDs())
 			foldersToCheck.push('mods/$mod/scripts/');
 		#end
-		for (folder in foldersToCheck) {
-			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
-				for (file in FileSystem.readDirectory(folder)) {
+		for (folder in foldersToCheck)
+		{
+			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder))
+			{
+				for (file in FileSystem.readDirectory(folder))
+				{
 					if (Paths.validScriptType(file))
 						scriptArray.push(new HScript(folder + file));
 					if (file.endsWith('.lua'))
@@ -153,11 +160,11 @@ class PlayState extends ExtendableState {
 			}
 		}
 
-		scoreTxt = new FlxText(0, (FlxG.height * (SaveData.settings.downScroll ? 0.11 : 0.89)) + 20, FlxG.width, "", 20);
+		scoreTxt = new FlxText(0, (FlxG.height * (SaveData.settings.downScroll ? 0.11 : 0.89)) + 20, FlxG.width, '', 20);
 		scoreTxt.setFormat(Paths.font(Localization.getFont()), 35, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.screenCenter(X);
 
-		judgementCounter = new FlxText(20, 0, 0, "", 20);
+		judgementCounter = new FlxText(20, 0, 0, '', 20);
 		judgementCounter.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		judgementCounter.screenCenter(Y);
 		add(judgementCounter);
@@ -168,7 +175,7 @@ class PlayState extends ExtendableState {
 		add(timeBar);
 		add(scoreTxt);
 
-		timeTxt = new FlxText(20, timeBar.y - 5, 0, "[-:--/-:--]", 20);
+		timeTxt = new FlxText(20, timeBar.y - 5, 0, '[-:--/-:--]', 20);
 		timeTxt.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(timeTxt);
 
@@ -192,9 +199,12 @@ class PlayState extends ExtendableState {
 		for (mod in ModHandler.getModIDs())
 			foldersToCheck.push('mods/$mod/songs/${Paths.formatToSongPath(song.song)}/');
 		#end
-		for (folder in foldersToCheck) {
-			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder)) {
-				for (file in FileSystem.readDirectory(folder)) {
+		for (folder in foldersToCheck)
+		{
+			if (FileSystem.exists(folder) && FileSystem.isDirectory(folder))
+			{
+				for (file in FileSystem.readDirectory(folder))
+				{
 					if (Paths.validScriptType(file))
 						scriptArray.push(new HScript(folder + file));
 					if (file.endsWith('.lua'))
@@ -217,11 +227,15 @@ class PlayState extends ExtendableState {
 
 		Paths.music('Basically_Professionally_Musically');
 
+		super.create();
+
 		Paths.clearUnusedMemory();
 	}
 
-	function startCountdown() {
-		if (startedCountdown) {
+	function startCountdown():Void
+	{
+		if (startedCountdown)
+		{
 			callOnScripts('startCountdown', []);
 			callOnLuas('startCountdown', []);
 			return;
@@ -229,7 +243,8 @@ class PlayState extends ExtendableState {
 
 		var ret:Dynamic = callOnScripts('startCountdown', []);
 		var retLua:Dynamic = callOnLuas('startCountdown', []);
-		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop)
+		{
 			startedCountdown = true;
 			Conductor.songPosition = -Conductor.crochet * 5;
 			FlxG.sound.play(Paths.sound('cDown3'));
@@ -237,7 +252,8 @@ class PlayState extends ExtendableState {
 			countdown3.screenCenter();
 			add(countdown3);
 			FlxTween.tween(countdown3, {alpha: 0}, Conductor.crochet / 1000, {
-				onComplete: (twn:FlxTween) -> {
+				onComplete: (twn:FlxTween) ->
+				{
 					remove(countdown3);
 					countdown3.destroy();
 					FlxG.sound.play(Paths.sound('cDown2'));
@@ -245,7 +261,8 @@ class PlayState extends ExtendableState {
 					countdown2.screenCenter();
 					add(countdown2);
 					FlxTween.tween(countdown2, {alpha: 0}, Conductor.crochet / 1000, {
-						onComplete: (twn:FlxTween) -> {
+						onComplete: (twn:FlxTween) ->
+						{
 							remove(countdown2);
 							countdown2.destroy();
 							FlxG.sound.play(Paths.sound('cDown1'));
@@ -253,18 +270,21 @@ class PlayState extends ExtendableState {
 							countdown1.screenCenter();
 							add(countdown1);
 							FlxTween.tween(countdown1, {alpha: 0}, Conductor.crochet / 1000, {
-								onComplete: (twn:FlxTween) -> {
+								onComplete: (twn:FlxTween) ->
+								{
 									remove(countdown1);
 									countdown1.destroy();
 									FlxG.sound.play(Paths.sound('cDownGo'));
 									go = new GameSprite().loadGraphic(Paths.image('gameplay/go'));
 									go.screenCenter();
 									add(go);
-									strumline.forEachAlive((strum:FlxSprite) -> {
+									strumline.forEachAlive((strum:FlxSprite) ->
+									{
 										FlxTween.tween(strum, {angle: 360}, Conductor.crochet / 1000 * 2, {ease: FlxEase.cubeInOut});
 									});
 									FlxTween.tween(go, {alpha: 0}, Conductor.crochet / 1000, {
-										onComplete: (twn:FlxTween) -> {
+										onComplete: (twn:FlxTween) ->
+										{
 											remove(go);
 											go.destroy();
 										}
@@ -278,7 +298,8 @@ class PlayState extends ExtendableState {
 		}
 	}
 
-	function startSong() {
+	function startSong():Void
+	{
 		startingSong = false;
 
 		FlxG.sound.playMusic(Paths.song(Paths.formatToSongPath(song.song)), 1, false);
@@ -292,7 +313,8 @@ class PlayState extends ExtendableState {
 		#end
 	}
 
-	override function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		callOnScripts('update', [elapsed]);
 		callOnLuas('update', [elapsed]);
 
@@ -304,18 +326,22 @@ class PlayState extends ExtendableState {
 			return;
 
 		if (!startingSong && updateTime)
-			timeTxt.text = "[" + msToTimestamp(FlxG.sound.music.time) + "/" + msToTimestamp(FlxG.sound.music.length) + "]";
+			timeTxt.text = '[' + msToTimestamp(FlxG.sound.music.time) + '/' + msToTimestamp(FlxG.sound.music.length) + ']';
 
 		if (startedCountdown)
 			Conductor.songPosition += elapsed * 1000;
 
-		if (startingSong) {
+		if (startingSong)
+		{
 			if (startedCountdown && Conductor.songPosition >= 0)
 				startSong();
 			else if (!startedCountdown)
 				Conductor.songPosition = -Conductor.crochet * 5;
-		} else {
-			if (!paused && FlxG.sound.music != null && FlxG.sound.music.active && FlxG.sound.music.playing) {
+		}
+		else
+		{
+			if (!paused && FlxG.sound.music != null && FlxG.sound.music.active && FlxG.sound.music.playing)
+			{
 				Conductor.songPosition = FlxG.sound.music.time;
 				timeBar.value = (Conductor.songPosition / FlxG.sound.music.length);
 			}
@@ -323,19 +349,21 @@ class PlayState extends ExtendableState {
 
 		accuracy = (!SaveData.settings.botPlay) ? Utilities.boundTo(Math.floor((score * 100) / ((hits + misses) * 3.5)) * 0.01, 0, 100) : 0;
 		judgementCounter.text = 'Perfects: ${perfects}\nNices: ${nices}\nOkays: ${okays}\nNos: ${nos}';
-		scoreTxt.text = (SaveData.settings.botPlay) ? Localization.get("botplayTxt") : Localization.get("scoreTxt")
+		scoreTxt.text = (SaveData.settings.botPlay) ? Localization.get('botplayTxt') : Localization.get('scoreTxt')
 			+ score
 			+ ' // '
-			+ Localization.get("missTxt")
+			+ Localization.get('missTxt')
 			+ misses
 			+ ' // '
-			+ Localization.get("accTxt")
+			+ Localization.get('accTxt')
 			+ accuracy
 			+ '%'
 			+ ' (${generateRank()})';
 
-		if (spawnNotes.length > 0) {
-			while (spawnNotes.length > 0 && spawnNotes[0].strum - Conductor.songPosition < (1500 * songMultiplier)) {
+		if (spawnNotes.length > 0)
+		{
+			while (spawnNotes.length > 0 && spawnNotes[0].strum - Conductor.songPosition < (1500 * songMultiplier))
+			{
 				var dunceNote:Note = spawnNotes[0];
 				notes.add(dunceNote);
 
@@ -344,7 +372,8 @@ class PlayState extends ExtendableState {
 			}
 		}
 
-		for (note in notes) {
+		for (note in notes)
+		{
 			var strum = strumline.members[Utilities.getNoteIndex(note.dir)];
 
 			if (SaveData.settings.downScroll)
@@ -352,7 +381,8 @@ class PlayState extends ExtendableState {
 			else
 				note.y = strum.y - (0.45 * (Conductor.songPosition - note.strum) * FlxMath.roundDecimal(speed, 2));
 
-			if (Conductor.songPosition > note.strum + (120 * songMultiplier) && note != null && note.type != "sustain") {
+			if (Conductor.songPosition > note.strum + (120 * songMultiplier) && note != null && note.type != 'sustain')
+			{
 				noteMiss(note.dir);
 				destroyNote(note);
 			}
@@ -370,7 +400,8 @@ class PlayState extends ExtendableState {
 	var lastStepHit:Int = -1;
 	var lastBeatHit:Int = -1;
 
-	override function stepHit() {
+	override public function stepHit():Void
+	{
 		super.stepHit();
 
 		if (curStep == lastStepHit)
@@ -381,7 +412,8 @@ class PlayState extends ExtendableState {
 		callOnLuas('stepHit', [curStep]);
 	}
 
-	override function beatHit() {
+	override public function beatHit():Void
+	{
 		super.beatHit();
 
 		if (lastBeatHit >= curBeat)
@@ -396,8 +428,10 @@ class PlayState extends ExtendableState {
 		callOnLuas('beatHit', [curBeat]);
 	}
 
-	override function openSubState(SubState:FlxSubState) {
-		if (!paused) {
+	override function openSubState(SubState:FlxSubState):Void
+	{
+		if (!paused)
+		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.pause();
 
@@ -412,8 +446,10 @@ class PlayState extends ExtendableState {
 		Paths.clearUnusedMemory();
 	}
 
-	override function closeSubState() {
-		if (paused) {
+	override function closeSubState():Void
+	{
+		if (paused)
+		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.resume();
 
@@ -434,8 +470,10 @@ class PlayState extends ExtendableState {
 	}
 
 	#if FUTURE_DISCORD_RPC
-	override function onFocus():Void {
-		if (health > 0 && !paused) {
+	override function onFocus():Void
+	{
+		if (health > 0 && !paused)
+		{
 			if (Conductor.songPosition > 0.0)
 				DiscordClient.changePresence(detailsText, song.song, 'icon', true, FlxG.sound.music.length - Conductor.songPosition);
 			else
@@ -446,7 +484,8 @@ class PlayState extends ExtendableState {
 		super.onFocus();
 	}
 
-	override function onFocusLost():Void {
+	override function onFocusLost():Void
+	{
 		if (health > 0 && !paused)
 			DiscordClient.changePresence('Paused - ' + detailsText, song.song, 'icon');
 		callOnScripts('onFocusLost', []);
@@ -455,10 +494,12 @@ class PlayState extends ExtendableState {
 	}
 	#end
 
-	function pause() {
+	function pause():Void
+	{
 		var ret:Dynamic = callOnScripts('pause', []);
 		var retLua:Dynamic = callOnLuas('pause', []);
-		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop)
+		{
 			persistentUpdate = false;
 			persistentDraw = true;
 
@@ -469,7 +510,8 @@ class PlayState extends ExtendableState {
 		}
 	}
 
-	function openChartEditor() {
+	function openChartEditor():Void
+	{
 		persistentUpdate = false;
 		ExtendableState.switchState(new ChartingState());
 		ChartingState.song = song;
@@ -478,24 +520,29 @@ class PlayState extends ExtendableState {
 			FlxG.sound.music.stop();
 	}
 
-	public var curRating:String = "perfect";
+	public var curRating:String = 'perfect';
 
 	var justPressed:Array<Bool> = [];
 	var pressed:Array<Bool> = [];
 	var released:Array<Bool> = [];
 
-	function inputFunction() {
+	function inputFunction():Void
+	{
 		justPressed = [];
 		pressed = [];
 		released = [];
 
-		for (i in 0...4) {
-			if (!SaveData.settings.botPlay) {
+		for (i in 0...4)
+		{
+			if (!SaveData.settings.botPlay)
+			{
 				var key = noteDirs[i];
 				justPressed.push(Input.justPressed(key));
 				pressed.push(Input.pressed(key));
 				released.push(Input.justReleased(key));
-			} else { // prevent player input when botplay is on
+			}
+			else
+			{ // prevent player input when botplay is on
 				justPressed.push(false);
 				pressed.push(false);
 				released.push(false);
@@ -508,22 +555,29 @@ class PlayState extends ExtendableState {
 			konami = (konami == 2 || konami == 3) ? konami += 1 : 0;
 		if (Input.justPressed('up'))
 			konami = (konami == 0 || konami == 1) ? konami + 1 : 0;
-		if (Input.justPressed('right')) {
-			if (konami == 5 || konami == 7) {
+		if (Input.justPressed('right'))
+		{
+			if (konami == 5 || konami == 7)
+			{
 				konami++;
-				if (konami > 7) {
+				if (konami > 7)
+				{
 					FlxG.sound.play(Paths.sound('unlock'));
 					didKonami = true;
 				}
-			} else
+			}
+			else
 				konami = 0;
 		}
 
-		for (i in 0...justPressed.length) {
-			if (justPressed[i]) {
+		for (i in 0...justPressed.length)
+		{
+			if (justPressed[i])
+			{
 				if (!SaveData.settings.botPlay)
 					strumline.members[i].press();
-				if (SaveData.settings.antiMash) {
+				if (SaveData.settings.antiMash)
+				{
 					FlxG.sound.play(Paths.sound('miss${FlxG.random.int(1, 4)}'), 0.65);
 					noteMiss(noteDirs[i]);
 				}
@@ -532,19 +586,23 @@ class PlayState extends ExtendableState {
 
 		for (i in 0...released.length)
 			if (released[i])
-				strumline.members[i].animation.play("receptor");
+				strumline.members[i].animation.play('receptor');
 
 		var possibleNotes:Array<Note> = [];
 
-		for (note in notes) {
+		for (note in notes)
+		{
 			if (note == null)
 				continue;
 			note.calculateCanBeHit();
-			if (!SaveData.settings.botPlay) {
-				if (note.canBeHit && !note.tooLate && note.type != "sustain")
+			if (!SaveData.settings.botPlay)
+			{
+				if (note.canBeHit && !note.tooLate && note.type != 'sustain')
 					possibleNotes.push(note);
-			} else {
-				if ((note.type != "sustain" ? note.strum : note.strum - 1) <= Conductor.songPosition)
+			}
+			else
+			{
+				if ((note.type != 'sustain' ? note.strum : note.strum - 1) <= Conductor.songPosition)
 					possibleNotes.push(note);
 			}
 		}
@@ -554,21 +612,24 @@ class PlayState extends ExtendableState {
 		var doNotHit:Array<Bool> = [false, false, false, false];
 		var noteDataTimes:Array<Float> = [-1, -1, -1, -1];
 
-		if (possibleNotes.length > 0) {
-			for (i in 0...possibleNotes.length) {
+		if (possibleNotes.length > 0)
+		{
+			for (i in 0...possibleNotes.length)
+			{
 				var note = possibleNotes[i];
 
 				if ((justPressed[Utilities.getNoteIndex(note.dir)]
 					&& !doNotHit[Utilities.getNoteIndex(note.dir)]
 					&& !SaveData.settings.botPlay)
-					|| SaveData.settings.botPlay) {
+					|| SaveData.settings.botPlay)
+				{
 					if (SaveData.settings.hitSoundVolume > 0)
 						FlxG.sound.play(Paths.sound('hitsound' + SaveData.settings.hitSoundType), SaveData.settings.hitSoundVolume / 100);
 
 					var noteMs = (SaveData.settings.botPlay) ? 0 : (Conductor.songPosition - note.strum) / songMultiplier;
 					var roundedDecimalNoteMs:Float = FlxMath.roundDecimal(noteMs, 3);
 
-					curRating = (isPerfect) ? "perfect-golden" : "perfect";
+					curRating = (isPerfect) ? 'perfect-golden' : 'perfect';
 
 					if (Math.abs(noteMs) > 22.5)
 						curRating = (isPerfect) ? 'perfect-golden' : 'perfect';
@@ -585,13 +646,15 @@ class PlayState extends ExtendableState {
 					if (!SaveData.settings.botPlay)
 						strumline.members[Utilities.getNoteIndex(note.dir)].press();
 
-					if (note.type != "sustain")
+					if (note.type != 'sustain')
 						noteHit(note, curRating);
 				}
 			}
 
-			if (possibleNotes.length > 0) {
-				for (i in 0...possibleNotes.length) {
+			if (possibleNotes.length > 0)
+			{
+				for (i in 0...possibleNotes.length)
+				{
 					var note = possibleNotes[i];
 
 					if (note.strum == noteDataTimes[Utilities.getNoteIndex(note.dir)] && doNotHit[Utilities.getNoteIndex(note.dir)])
@@ -601,30 +664,33 @@ class PlayState extends ExtendableState {
 		}
 	}
 
-	function destroyNote(note:Note) {
+	function destroyNote(note:Note):Void
+	{
 		note.active = false;
 		notes.remove(note, true);
 		note.kill();
 		note.destroy();
 	}
 
-	function noteHit(note:Note, rating:String) {
+	function noteHit(note:Note, rating:String):Void
+	{
 		var ratingScores:Array<Int> = [350, 200, 100, 50];
 		var scoreToAdd:Int = 0;
 
-		switch (rating) {
-			case "perfect", "perfect-golden":
+		switch (rating)
+		{
+			case 'perfect', 'perfect-golden':
 				scoreToAdd = ratingScores[0];
 				perfects++;
-			case "nice":
+			case 'nice':
 				scoreToAdd = ratingScores[1];
 				isPerfect = false;
 				nices++;
-			case "okay":
+			case 'okay':
 				scoreToAdd = ratingScores[2];
 				isPerfect = false;
 				okays++;
-			case "no":
+			case 'no':
 				scoreToAdd = ratingScores[3];
 				isPerfect = false;
 				nos++;
@@ -635,7 +701,8 @@ class PlayState extends ExtendableState {
 		hits++;
 		health += 0.1;
 
-		if (rating == 'perfect' || rating == 'perfect-golden') {
+		if (rating == 'perfect' || rating == 'perfect-golden')
+		{
 			var splash:NoteSplash = noteSplashes.recycle(NoteSplash);
 			splash.setupSplash(note.x, note.y, Utilities.getNoteIndex(note.dir));
 			noteSplashes.add(splash);
@@ -660,7 +727,8 @@ class PlayState extends ExtendableState {
 		FlxTween.tween(precision, {y: (SaveData.settings.downScroll ? -260 : 260)}, 0.01, {ease: FlxEase.bounceOut});
 		precisions.push(precision);
 
-		for (i in seperatedScore) {
+		for (i in seperatedScore)
+		{
 			var numScore:FlxSprite = new GameSprite();
 			numScore.loadGraphic(Paths.image('gameplay/num' + Std.int(i) + ((isPerfect) ? '-golden' : '')));
 			numScore.scale.set(0.5, 0.5);
@@ -675,7 +743,8 @@ class PlayState extends ExtendableState {
 				add(precision);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
-				onComplete: (twn:FlxTween) -> {
+				onComplete: (twn:FlxTween) ->
+				{
 					numScore.destroy();
 				},
 				startDelay: 1
@@ -684,7 +753,8 @@ class PlayState extends ExtendableState {
 			daLoop++;
 		}
 
-		if (SaveData.settings.displayMS) {
+		if (SaveData.settings.displayMS)
+		{
 			FlxTween.tween(precision, {alpha: 0}, 0.2, {
 				startDelay: Conductor.crochet * 0.001
 			});
@@ -692,11 +762,12 @@ class PlayState extends ExtendableState {
 
 		callOnScripts('noteHit', [note, rating]);
 		callOnLuas('noteHit', [note, rating]);
-		if (note.type != "sustain")
+		if (note.type != 'sustain')
 			destroyNote(note);
 	}
 
-	function noteMiss(direction:String) {
+	function noteMiss(direction:String):Void
+	{
 		isPerfect = false;
 		combo = 0;
 		score -= 10;
@@ -706,7 +777,8 @@ class PlayState extends ExtendableState {
 		callOnLuas('noteMiss', [direction]);
 	}
 
-	function generateRank():String {
+	function generateRank():String
+	{
 		var rankConditions:Array<Bool> = [
 			accuracy >= 100, // P
 			accuracy >= 95, // S
@@ -717,30 +789,36 @@ class PlayState extends ExtendableState {
 			accuracy <= 60 // F
 		];
 
-		var rankArray:Array<String> = ["P", "S", "A", "B", "C", "D", "F"];
-		for (i in 0...rankConditions.length) {
-			if (rankConditions[i]) {
+		var rankArray:Array<String> = ['P', 'S', 'A', 'B', 'C', 'D', 'F'];
+		for (i in 0...rankConditions.length)
+		{
+			if (rankConditions[i])
+			{
 				rank = rankArray[i];
 				break;
 			}
 		}
 
-		return (accuracy <= 0 || SaveData.settings.botPlay) ? "?" : rank;
+		return (accuracy <= 0 || SaveData.settings.botPlay) ? '?' : rank;
 	}
 
-	function endSong() {
+	function endSong():Void
+	{
 		var ret:Dynamic = callOnScripts('endSong', []);
 		var retLua:Dynamic = callOnLuas('endSong', []);
-		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop) {
+		if (ret != HScript.Function_Stop || retLua != LuaScript.Function_Stop)
+		{
 			timeTxt.visible = timeBar.visible = false;
 			canPause = false;
 
-			if (chartingMode) {
+			if (chartingMode)
+			{
 				openChartEditor();
 				return;
 			}
 
-			if (!gotAchievement) {
+			if (!gotAchievement)
+			{
 				var achievementName = checkForAchievement([
 					'full_combo',
 					'single_digit_miss',
@@ -763,40 +841,51 @@ class PlayState extends ExtendableState {
 			if (!SaveData.settings.botPlay)
 				HighScore.saveScore(song.song, score);
 
-			if (campaignMode) {
+			if (campaignMode)
+			{
 				campaignScore += score;
 				CampaignState.curSongIndex++;
-				if (CampaignState.curSongIndex < CampaignState.songList.length) {
+				if (CampaignState.curSongIndex < CampaignState.songList.length)
+				{
 					var songName:String = CampaignState.songList[CampaignState.curSongIndex];
 					PlayState.song = Song.loadSongfromJson(Paths.formatToSongPath(songName));
 					ExtendableState.switchState(new PlayState());
-				} else {
+				}
+				else
+				{
 					if (!SaveData.settings.botPlay)
 						HighScore.saveCampaignScore(campaignScore);
 					goToResults(campaignScore);
 				}
-			} else
+			}
+			else
 				goToResults(score);
 		}
 	}
 
-	function goToResults(finalScore:Int) {
-		new FlxTimer().start(0.5, (tmr:FlxTimer) -> {
+	function goToResults(finalScore:Int):Void
+	{
+		new FlxTimer().start(0.5, (tmr:FlxTimer) ->
+		{
 			persistentUpdate = true;
 			openSubState(new ResultsSubState(rank, finalScore, accuracy));
 		});
 	}
 
-	function checkForAchievement(achs:Array<String> = null):String {
+	function checkForAchievement(achs:Array<String> = null):String
+	{
 		if (chartingMode || SaveData.settings.botPlay)
 			return null;
 
-		for (i in 0...achs.length) {
+		for (i in 0...achs.length)
+		{
 			var achievementName:String = achs[i];
-			if (!Achievements.isUnlocked(achievementName) && !SaveData.settings.botPlay) {
+			if (!Achievements.isUnlocked(achievementName) && !SaveData.settings.botPlay)
+			{
 				var unlock:Bool = false;
 
-				switch (achievementName) {
+				switch (achievementName)
+				{
 					case 'full_combo':
 						if (misses == 0)
 							unlock = true;
@@ -807,25 +896,25 @@ class PlayState extends ExtendableState {
 						if (misses > 10)
 							unlock = true;
 					case 'perfect':
-						if (rank == "P")
+						if (rank == 'P')
 							unlock = true;
 					case 'super':
-						if (rank == "S")
+						if (rank == 'S')
 							unlock = true;
 					case 'amazing':
-						if (rank == "A")
+						if (rank == 'A')
 							unlock = true;
 					case 'be_better':
-						if (rank == "B")
+						if (rank == 'B')
 							unlock = true;
 					case 'can_improve':
-						if (rank == "C")
+						if (rank == 'C')
 							unlock = true;
 					case 'dont_give_up':
-						if (rank == "D")
+						if (rank == 'D')
 							unlock = true;
 					case 'failed':
-						if (rank == "F")
+						if (rank == 'F')
 							unlock = true;
 					case 'speed_demon':
 						if (SaveData.settings.songSpeed == 10)
@@ -835,15 +924,17 @@ class PlayState extends ExtendableState {
 							unlock = true;
 				}
 
-				if (unlock) {
+				if (unlock)
+				{
 					gotAchievement = true;
 					Achievements.unlock(achievementName, {
 						date: Date.now(),
 						song: song.song
-					}, () -> {
-						gotAchievement = false;
-						endSong();
-					});
+					}, () ->
+						{
+							gotAchievement = false;
+							endSong();
+						});
 					return achievementName;
 				}
 			}
@@ -852,16 +943,19 @@ class PlayState extends ExtendableState {
 		return null;
 	}
 
-	function generateSong() {
+	function generateSong():Void
+	{
 		Conductor.bpm = song.bpm;
 		Conductor.recalculateStuff(songMultiplier);
 		Conductor.safeZoneOffset *= songMultiplier;
 		Conductor.songPosition = 0;
 
-		for (section in song.notes) {
+		for (section in song.notes)
+		{
 			Conductor.recalculateStuff(songMultiplier);
 
-			for (note in section.sectionNotes) {
+			for (note in section.sectionNotes)
+			{
 				var strum = strumline.members[note.noteData % noteDirs.length];
 
 				var daStrumTime:Float = note.noteStrum + 1 * songMultiplier;
@@ -874,7 +968,7 @@ class PlayState extends ExtendableState {
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "note");
+				var swagNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], 'note');
 				swagNote.strum = daStrumTime;
 				swagNote.sustainLength = note.noteSus;
 				swagNote.lastNote = oldNote;
@@ -885,17 +979,20 @@ class PlayState extends ExtendableState {
 
 				spawnNotes.push(swagNote);
 
-				for (susNote in 0...Math.floor(susLength)) {
+				for (susNote in 0...Math.floor(susLength))
+				{
 					oldNote = spawnNotes[Std.int(spawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], "sustain");
+					var sustainNote:Note = new Note(strum.x, strum.y, noteDirs[daNoteData], 'sustain');
 					sustainNote.strum = daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 					sustainNote.lastNote = oldNote;
 
-					if (susNote == Math.floor(susLength) - 1) {
+					if (susNote == Math.floor(susLength) - 1)
+					{
 						sustainNote.isEndNote = true;
 						sustainNote.animation.play('holdend');
-					} else
+					}
+					else
 						sustainNote.animation.play('hold');
 
 					oldNote.nextNote = sustainNote;
@@ -910,14 +1007,16 @@ class PlayState extends ExtendableState {
 	function sortStuff(Obj1:Note, Obj2:Note):Int
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strum, Obj2.strum);
 
-	function msToTimestamp(ms:Float) {
+	function msToTimestamp(ms:Float):String
+	{
 		var seconds = Math.round(ms) / 1000;
-		var minutesLeft = Std.string(seconds / 60).split(".")[0];
-		var secondsLeft = Std.string(seconds % 60).split(".")[0];
-		return '${minutesLeft}:${(secondsLeft.length == 1 ? "0" : "") + secondsLeft}';
+		var minutesLeft = Std.string(seconds / 60).split('.')[0];
+		var secondsLeft = Std.string(seconds % 60).split('.')[0];
+		return '${minutesLeft}:${(secondsLeft.length == 1 ? '0' : '') + secondsLeft}';
 	}
 
-	override function destroy() {
+	override public function destroy():Void
+	{
 		callOnScripts('destroy', []);
 		super.destroy();
 
@@ -929,10 +1028,12 @@ class PlayState extends ExtendableState {
 		luaArray = [];
 	}
 
-	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
+	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic
+	{
 		var value:Dynamic = HScript.Function_Continue;
 
-		for (i in 0...scriptArray.length) {
+		for (i in 0...scriptArray.length)
+		{
 			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
 			final bool:Bool = call == HScript.Function_Continue;
 			if (!bool && call != null)
@@ -942,10 +1043,12 @@ class PlayState extends ExtendableState {
 		return value;
 	}
 
-	private function callOnLuas(funcName:String, args:Array<Dynamic>):Dynamic {
+	private function callOnLuas(funcName:String, args:Array<Dynamic>):Dynamic
+	{
 		var value:Dynamic = LuaScript.Function_Continue;
 
-		for (i in 0...luaArray.length) {
+		for (i in 0...luaArray.length)
+		{
 			var ret:Dynamic = luaArray[i].callFunction(funcName, args);
 			if (ret != LuaScript.Function_Continue)
 				value = ret;

@@ -2,7 +2,8 @@ package objects;
 
 import openfl.geom.*;
 
-class Bar extends GameSprite {
+class Bar extends GameSprite
+{
 	private var _bgBarBit:BitmapData;
 	private var _bgBarRect:Rectangle;
 	private var _zeroOffset:Point;
@@ -16,7 +17,8 @@ class Bar extends GameSprite {
 
 	public var value:Float = 0;
 
-	public function new(x:Float = 0, y:Float = 0, width:Int = 100, height:Int = 10, bgColor:FlxColor, fgColor:FlxColor) {
+	public function new(x:Float = 0, y:Float = 0, width:Int = 100, height:Int = 10, bgColor:FlxColor, fgColor:FlxColor):Void
+	{
 		super(x, y);
 
 		this.barWidth = width;
@@ -28,30 +30,32 @@ class Bar extends GameSprite {
 		_fgBarRect = new Rectangle();
 		_fgBarPoint = new Point();
 
-		_bgBarBit = Paths.setBitmap("bgBarBitmap", new BitmapData(barWidth, barHeight, true, bgColor));
+		_bgBarBit = Paths.setBitmap('bgBarBitmap', new BitmapData(barWidth, barHeight, true, bgColor));
 		_bgBarRect.setTo(0, 0, barWidth, barHeight);
 
-		_fgBarBit = Paths.setBitmap("fgBarBitmap", new BitmapData(barWidth, barHeight, true, fgColor));
+		_fgBarBit = Paths.setBitmap('fgBarBitmap', new BitmapData(barWidth, barHeight, true, fgColor));
 		_fgBarRect.setTo(0, 0, barWidth, barHeight);
 
 		makeGraphic(width, height, FlxColor.TRANSPARENT, true);
 	}
 
-	override public function destroy() {
+	override public function destroy():Void
+	{
 		_bgBarBit = null;
-		Paths.disposeBitmap("bgBarBitmap");
+		Paths.disposeBitmap('bgBarBitmap');
 		_bgBarRect = null;
 		_zeroOffset = null;
 
 		_fgBarBit = null;
-		Paths.disposeBitmap("fgBarBitmap");
+		Paths.disposeBitmap('fgBarBitmap');
 		_fgBarRect = null;
 		_fgBarRect = null;
 
 		super.destroy();
 	}
 
-	override public function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		super.update(elapsed);
 
 		pixels.copyPixels(_bgBarBit, _bgBarRect, _zeroOffset);

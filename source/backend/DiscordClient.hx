@@ -1,21 +1,24 @@
 package backend;
 
 #if FUTURE_DISCORD_RPC
-import hxdiscord_rpc.Discord as RichPresence;
+import hxdiscord_rpc.Discord;
 import hxdiscord_rpc.Types;
 import sys.thread.Thread;
 
-class DiscordClient {
+class DiscordClient
+{
 	public static var initialized:Bool = false;
 
-	private static final _defaultID:String = "1353181104307306666";
+	private static final _defaultID:String = '1353181104307306666';
 	public static var clientID(default, set):String = _defaultID;
 
-	private static function set_clientID(newID:String) {
+	private static function set_clientID(newID:String):String
+	{
 		var change:Bool = (clientID != newID);
 		clientID = newID;
 
-		if (change && initialized) {
+		if (change && initialized)
+		{
 			shutdown();
 			load();
 			changePresence();
@@ -23,7 +26,8 @@ class DiscordClient {
 		return newID;
 	}
 
-	public static function load():Void {
+	public static function load():Void
+	{
 		if (initialized)
 			return;
 
@@ -31,16 +35,19 @@ class DiscordClient {
 		handlers.ready = cpp.Function.fromStaticFunction(onReady);
 		handlers.disconnected = cpp.Function.fromStaticFunction(onDisconnected);
 		handlers.errored = cpp.Function.fromStaticFunction(onError);
-		RichPresence.Initialize(clientID, cpp.RawPointer.addressOf(handlers), false, null);
+		Discord.Initialize(clientID, cpp.RawPointer.addressOf(handlers), false, null);
 
-		Thread.create(function() {
-			while (true) {
-				RichPresence.RunCallbacks();
+		Thread.create(function()
+		{
+			while (true)
+			{
+				Discord.RunCallbacks();
 				Sys.sleep(1);
 			}
 		});
 
-		Application.current.window.onClose.add(() -> {
+		Application.current.window.onClose.add(() ->
+		{
 			if (initialized)
 				shutdown();
 		});
@@ -49,7 +56,8 @@ class DiscordClient {
 	}
 
 	public static function changePresence(details:String = 'In the Menus', ?state:String, ?smallImageKey:String, ?hasStartTimestamp:Bool,
-			?endTimestamp:Float):Void {
+			?endTimestamp:Float):Void
+	{
 		final discordPresence:DiscordRichPresence = new DiscordRichPresence();
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
@@ -66,10 +74,11 @@ class DiscordClient {
 		discordPresence.smallImageKey = smallImageKey;
 		discordPresence.startTimestamp = Std.int(startTimestamp / 1000);
 		discordPresence.endTimestamp = Std.int(endTimestamp / 1000);
-		RichPresence.UpdatePresence(cpp.RawConstPointer.addressOf(discordPresence));
+		Discord.UpdatePresence(cpp.RawConstPointer.addressOf(discordPresence));
 	}
 
-	private static function onReady(request:cpp.RawConstPointer<DiscordUser>):Void {
+	private static function onReady(request:cpp.RawConstPointer<DiscordUser>):Void
+	{
 		final user:cpp.Star<DiscordUser> = cpp.ConstPointer.fromRaw(request).ptr;
 
 		if (Std.parseInt(cast(user.discriminator, String)) != 0)
@@ -80,20 +89,24 @@ class DiscordClient {
 		changePresence('Just Started');
 	}
 
-	public static function resetClientID() {
+	public static function resetClientID():Void
+	{
 		clientID = _defaultID;
 	}
 
-	public static function shutdown() {
+	public static function shutdown():Void
+	{
 		initialized = false;
-		RichPresence.Shutdown();
+		Discord.Shutdown();
 	}
 
-	private static function onDisconnected(errorCode:Int, message:cpp.ConstCharStar):Void {
+	private static function onDisconnected(errorCode:Int, message:cpp.ConstCharStar):Void
+	{
 		trace('(Discord) Disconnected ($errorCode: ${cast (message, String)})');
 	}
 
-	private static function onError(errorCode:Int, message:cpp.ConstCharStar):Void {
+	private static function onError(errorCode:Int, message:cpp.ConstCharStar):Void
+	{
 		trace('(Discord) Error ($errorCode: ${cast (message, String)})');
 	}
 }

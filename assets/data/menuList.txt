@@ -1,6 +1,0 @@
-play
-mods
-awards
-credits
-options
-exit

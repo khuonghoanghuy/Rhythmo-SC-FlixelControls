@@ -1,10 +1,12 @@
 package backend;
 
-@:structInit class SaveSettings {
+@:structInit class SaveSettings
+{
 	public var lang:String = 'en';
 	public var hitSoundType:String = 'Default';
 	public var noteSkinType:String = 'Default';
 	public var noteSplashType:String = 'Default';
+	public var volume:Int = 100;
 	public var framerate:Int = 60;
 	public var songSpeed:Int = 2;
 	public var hitSoundVolume:Int = 0;
@@ -36,10 +38,12 @@ package backend;
 	];
 }
 
-class SaveData {
+class SaveData
+{
 	public static var settings:SaveSettings = {};
 
-	public static function init() {
+	public static function init():Void
+	{
 		for (key in Reflect.fields(settings))
 			if (Reflect.field(FlxG.save.data, key) != null)
 				Reflect.setField(settings, key, Reflect.field(FlxG.save.data, key));
@@ -47,7 +51,8 @@ class SaveData {
 		if (Main.fpsDisplay != null)
 			Main.fpsDisplay.visible = settings.fpsCounter;
 
-		if (FlxG.save.data.framerate == null) {
+		if (FlxG.save.data.framerate == null)
+		{
 			final refreshRate:Int = FlxG.stage.application.window.displayMode.refreshRate;
 			settings.framerate = Std.int(FlxMath.bound(refreshRate, 60, 240));
 		}
@@ -55,7 +60,8 @@ class SaveData {
 		Main.framerate = settings.framerate;
 	}
 
-	public static function saveSettings() {
+	public static function saveSettings():Void
+	{
 		for (key in Reflect.fields(settings))
 			Reflect.setField(FlxG.save.data, key, Reflect.field(settings, key));
 

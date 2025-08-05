@@ -1,26 +1,34 @@
 package modding;
 
-import hscript.*;
+import rulescript.*;
+import rulescript.parsers.*;
 
-class HScript extends FlxBasic {
+class HScript extends FlxBasic
+{
 	public var locals(get, set):Map<String, {r:Dynamic}>;
 
-	function get_locals()
+	function get_locals():Map<String, {r:Dynamic}>
 		return @:privateAccess interp.locals;
 
-	function set_locals(local)
+	function set_locals(local):Map<String, {r:Dynamic}>
 		return @:privateAccess interp.locals = local;
 
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
-	public var parser:Parser = new Parser();
-	public var interp:Interp = new Interp();
+	public var parser:HxParser = new HxParser();
+	public var interp:RuleScriptInterp = new RuleScriptInterp();
 
-	public function new(?file:String, ?execute:Bool = true) {
+	public var script:RuleScript = null;
+
+	public function new(?file:String, ?execute:Bool = true):Void
+	{
 		super();
 
-		parser.allowJSON = parser.allowTypes = parser.allowMetadata = true;
+		script = new RuleScript(interp, parser);
+		script.scriptName = ~/\.(hx|hxs|hxc|hscript)$/.replace(file.split('/').pop(), '');
+
+		parser.allowAll();
 		parser.preprocesorValues = macros.Macros.getDefines();
 
 		// Default Variables & Functions
@@ -29,251 +37,100 @@ class HScript extends FlxBasic {
 		setVariable('Function_Continue', Function_Continue);
 		setVariable('platform', PlatformUtil.getPlatform());
 		setVariable('version', Lib.application.meta.get('version'));
-		setVariable('import', importFunc);
 		setVariable('trace', (v:Dynamic) -> trace(v));
-		setVariable('importScript', importScriptFunc);
+		setVariable('importScript', (source:String) ->
+		{
+			var name:String = StringTools.replace(source, '.', '/');
+			var hscript:HScript = new HScript(Paths.script(name), false);
+			hscript.execute(Paths.script(name), false);
+			return hscript.getAll();
+		});
 		setVariable('stopScript', () -> this.destroy());
 
 		// Haxe
-		var haxeClasses:Array<Dynamic> = [
-			['Array', Array],
-			['Bool', Bool],
-			['Date', Date],
-			['DateTools', DateTools],
-			['Dynamic', Dynamic],
-			['EReg', EReg],
-			#if sys ['File', File], ['FileSystem', FileSystem], #end
-			['Float', Float],
-			['Int', Int],
-			['Json', Json],
-			['Lambda', Lambda],
-			['Math', Math],
-			['Path', Path],
-			['Reflect', Reflect],
-			['Std', Std],
-			['StringBuf', StringBuf],
-			['String', String],
-			['StringTools', StringTools],
-			#if sys ['Sys', Sys], #end
-			['TJSON', TJSON],
-			['Type', Type],
-			['Xml', Xml]
-		];
-		for (pair in haxeClasses)
-			setVariable(pair[0], pair[1]);
-		setVariable('createThread', createThreadFunc);
+		setVariable('Array', Array);
+		setVariable('Bool', Bool);
+		setVariable('Date', Date);
+		setVariable('DateTools', DateTools);
+		setVariable('Dynamic', Dynamic);
+		setVariable('EReg', EReg);
+		#if sys
+		setVariable('File', File);
+		setVariable('FileSystem', FileSystem);
+		#end
+		setVariable('Float', Float);
+		setVariable('Int', Int);
+		setVariable('Json', Json);
+		setVariable('Lambda', Lambda);
+		setVariable('Math', Math);
+		setVariable('Path', Path);
+		setVariable('Reflect', Reflect);
+		setVariable('Std', Std);
+		setVariable('StringBuf', StringBuf);
+		setVariable('String', String);
+		setVariable('StringTools', StringTools);
+		#if sys
+		setVariable('Sys', Sys);
+		#end
+		setVariable('TJSON', TJSON);
+		setVariable('Type', Type);
+		setVariable('Xml', Xml);
 
 		// OpenFL
-		var openflClasses:Array<Dynamic> = [
-			['Assets', Assets],
-			['BitmapData', BitmapData],
-			['Lib', Lib],
-			['ShaderFilter', ShaderFilter],
-			['Sound', Sound]
-		];
-		for (pair in openflClasses)
-			setVariable(pair[0], pair[1]);
+		setVariable('Assets', Assets);
+		setVariable('BitmapData', BitmapData);
+		setVariable('Lib', Lib);
+		setVariable('ShaderFilter', ShaderFilter);
+		setVariable('Sound', Sound);
 
 		// Flixel
-		setVariable('FlxAxes', getFlxAxes());
+		setVariable('FlxAxes', {
+			'X': FlxAxes.X,
+			'Y': FlxAxes.Y,
+			'XY': FlxAxes.XY
+		});
 		setVariable('FlxBackdrop', FlxBackdrop);
 		setVariable('FlxBasic', FlxBasic);
 		setVariable('FlxCamera', FlxCamera);
-		setVariable('FlxCameraFollowStyle', getFlxCameraFollowStyle());
-		setVariable('FlxColor', getFlxColor());
+		setVariable('FlxCameraFollowStyle', {
+			'LOCKON': FlxCamera.FlxCameraFollowStyle.LOCKON,
+			'PLATFORMER': FlxCamera.FlxCameraFollowStyle.PLATFORMER,
+			'TOPDOWN': FlxCamera.FlxCameraFollowStyle.TOPDOWN,
+			'TOPDOWN_TIGHT': FlxCamera.FlxCameraFollowStyle.TOPDOWN_TIGHT,
+			'SCREEN_BY_SCREEN': FlxCamera.FlxCameraFollowStyle.SCREEN_BY_SCREEN,
+			'NO_DEAD_ZONE': FlxCamera.FlxCameraFollowStyle.NO_DEAD_ZONE
+		});
+		setVariable('FlxColor', {
+			'BLACK': FlxColor.BLACK,
+			'BLUE': FlxColor.BLUE,
+			'BROWN': FlxColor.BROWN,
+			'CYAN': FlxColor.CYAN,
+			'GRAY': FlxColor.GRAY,
+			'GREEN': FlxColor.GREEN,
+			'LIME': FlxColor.LIME,
+			'MAGENTA': FlxColor.MAGENTA,
+			'ORANGE': FlxColor.ORANGE,
+			'PINK': FlxColor.PINK,
+			'PURPLE': FlxColor.PURPLE,
+			'RED': FlxColor.RED,
+			'TRANSPARENT': FlxColor.TRANSPARENT,
+			'WHITE': FlxColor.WHITE,
+			'YELLOW': FlxColor.YELLOW,
+			'add': FlxColor.add,
+			'fromCMYK': FlxColor.fromCMYK,
+			'fromHSB': FlxColor.fromHSB,
+			'fromHSL': FlxColor.fromHSL,
+			'fromInt': FlxColor.fromInt,
+			'fromRGB': FlxColor.fromRGB,
+			'fromRGBFloat': FlxColor.fromRGBFloat,
+			'fromString': FlxColor.fromString,
+			'interpolate': FlxColor.interpolate,
+			'to24Bit': function(color:Int) return color & 0xffffff
+		});
 		setVariable('FlxEase', FlxEase);
 		setVariable('FlxG', FlxG);
 		setVariable('FlxGroup', FlxGroup);
-		setVariable('FlxKey', getFlxKey());
-		setVariable('FlxMath', FlxMath);
-		setVariable('FlxObject', FlxObject);
-		setVariable('FlxRuntimeShader', FlxRuntimeShader);
-		setVariable('FlxSound', FlxSound);
-		setVariable('FlxSprite', FlxSprite);
-		setVariable('FlxSpriteGroup', FlxSpriteGroup);
-		setVariable('FlxText', FlxText);
-		setVariable('FlxTextAlign', getFlxTextAlign());
-		setVariable('FlxTextBorderStyle', getFlxTextBorderStyle());
-		setVariable('FlxTimer', FlxTimer);
-		setVariable('FlxTween', FlxTween);
-		setVariable('FlxTypedGroup', FlxTypedGroup);
-		setVariable('createTypedGroup', (?variable) -> return variable = new FlxTypedGroup<Dynamic>());
-		setVariable('createSpriteGroup', (?variable) -> return variable = new FlxSpriteGroup());
-
-		// State Stuff
-		setVariable('add', FlxG.state.add);
-		setVariable('remove', FlxG.state.remove);
-		setVariable('insert', FlxG.state.insert);
-		setVariable('members', FlxG.state.members);
-		setVariable('state', FlxG.state);
-
-		// Rhythmo
-		var gameClasses:Array<Dynamic> = [
-			['Achievements', Achievements],
-			['Bar', Bar],
-			['Conductor', Conductor],
-			#if FUTURE_DISCORD_RPC ['DiscordClient', DiscordClient], #end
-			['ExtendableState', ExtendableState],
-			['ExtendableSubState', ExtendableSubState],
-			['GameSprite', GameSprite],
-			['HighScore', HighScore],
-			['Input', Input],
-			['Localization', Localization],
-			['LuaScript', LuaScript],
-			['Main', Main],
-			#if FUTURE_POLYMOD ['ModHandler', ModHandler], #end
-			['Note', Note],
-			['Paths', Paths],
-			['PlayState', PlayState],
-			['Rating', Rating],
-			['SaveData', SaveData],
-			['ScriptedState', ScriptedState],
-			['ScriptedSubState', ScriptedSubState],
-			['Song', Song],
-			['Utilities', Utilities]
-		];
-		for (pair in gameClasses)
-			setVariable(pair[0], pair[1]);
-
-		if (FlxG.state is PlayState && PlayState.instance != null)
-			setVariable('game', PlayState.instance);
-
-		if (execute && file != null)
-			this.execute(file);
-	}
-
-	function importFunc(daClass:String, ?asDa:String) {
-		final splitClassName = [for (e in daClass.split('.')) e.trim()];
-		final className = splitClassName.join('.');
-		final daClassObj:Class<Dynamic> = Type.resolveClass(className);
-		final daEnum:Enum<Dynamic> = Type.resolveEnum(className);
-
-		if (daClassObj == null && daEnum == null)
-			Lib.application.window.alert('Class / Enum at $className does not exist.', 'HScript Error!');
-		else if (daEnum != null) {
-			var daEnumField = {};
-			for (daConstructor in daEnum.getConstructors())
-				Reflect.setField(daEnumField, daConstructor, daEnum.createByName(daConstructor));
-			setVariable(asDa != null && asDa != '' ? asDa : splitClassName[splitClassName.length - 1], daEnumField);
-		} else
-			setVariable(asDa != null && asDa != '' ? asDa : splitClassName[splitClassName.length - 1], daClassObj);
-	}
-
-	function importScriptFunc(source:String) {
-		var name = StringTools.replace(source, '.', '/');
-		var script = new HScript(Paths.script(name), false);
-		script.execute(Paths.script(name), false);
-		return script.getAll();
-	}
-
-	function createThreadFunc(func:Void->Void) {
-		#if sys sys.thread.Thread.create(func); #else func(); #end
-	}
-
-	public function execute(file:String, ?executeCreate:Bool = true):Void {
-		try {
-			interp.execute(parser.parseString(File.getContent(file)));
-		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-		trace('Script Loaded Succesfully: $file');
-		if (executeCreate)
-			executeFunc('create', []);
-	}
-
-	public function executeStr(code:String):Dynamic {
-		try {
-			@:privateAccess parser.line = 1;
-			return interp.execute(parser.parseString(code));
-		} catch (e:Dynamic) {
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-			return null;
-		}
-	}
-
-	public function setVariable(name:String, val:Dynamic):Void {
-		try {
-			interp?.variables.set(name, val);
-			locals.set(name, {r: val});
-		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-	}
-
-	public function getVariable(name:String):Dynamic {
-		try {
-			if (locals.exists(name) && locals[name] != null)
-				return locals.get(name).r;
-			else if (interp.variables.exists(name))
-				return interp?.variables.get(name);
-		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-		return null;
-	}
-
-	public function removeVariable(name:String):Void {
-		try {
-			interp?.variables.remove(name);
-		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-	}
-
-	public function existsVariable(name:String):Bool {
-		try {
-			return interp?.variables.exists(name);
-		} catch (e:Dynamic)
-			Lib.application.window.alert(Std.string(e), 'HScript Error!');
-		return false;
-	}
-
-	public function executeFunc(funcName:String, ?args:Array<Dynamic>):Dynamic {
-		if (existsVariable(funcName)) {
-			try {
-				return Reflect.callMethod(this, getVariable(funcName), args == null ? [] : args);
-			} catch (e:Dynamic)
-				Lib.application.window.alert(Std.string(e), 'HScript Error!');
-		}
-		return null;
-	}
-
-	public function getAll():Dynamic {
-		var balls:Dynamic = {};
-		for (i in locals.keys())
-			Reflect.setField(balls, i, getVariable(i));
-		for (i in interp.variables.keys())
-			Reflect.setField(balls, i, getVariable(i));
-		return balls;
-	}
-
-	public function getFlxColor()
-		return {
-			"BLACK": FlxColor.BLACK,
-			"BLUE": FlxColor.BLUE,
-			"BROWN": FlxColor.BROWN,
-			"CYAN": FlxColor.CYAN,
-			"GRAY": FlxColor.GRAY,
-			"GREEN": FlxColor.GREEN,
-			"LIME": FlxColor.LIME,
-			"MAGENTA": FlxColor.MAGENTA,
-			"ORANGE": FlxColor.ORANGE,
-			"PINK": FlxColor.PINK,
-			"PURPLE": FlxColor.PURPLE,
-			"RED": FlxColor.RED,
-			"TRANSPARENT": FlxColor.TRANSPARENT,
-			"WHITE": FlxColor.WHITE,
-			"YELLOW": FlxColor.YELLOW,
-			"add": FlxColor.add,
-			"fromCMYK": FlxColor.fromCMYK,
-			"fromHSB": FlxColor.fromHSB,
-			"fromHSL": FlxColor.fromHSL,
-			"fromInt": FlxColor.fromInt,
-			"fromRGB": FlxColor.fromRGB,
-			"fromRGBFloat": FlxColor.fromRGBFloat,
-			"fromString": FlxColor.fromString,
-			"interpolate": FlxColor.interpolate,
-			"to24Bit": function(color:Int) return color & 0xffffff
-		};
-
-	public static function getFlxKey()
-		return {
+		setVariable('FlxKey', {
 			'ANY': -2,
 			'NONE': -1,
 			'A': 65,
@@ -373,42 +230,159 @@ class HScript extends FlxBasic {
 			'toStringMap': FlxKey.toStringMap,
 			'fromString': FlxKey.fromString,
 			'toString': function(key:Int) return FlxKey.toStringMap.get(key)
-		};
+		});
+		setVariable('FlxMath', FlxMath);
+		setVariable('FlxObject', FlxObject);
+		setVariable('FlxRuntimeShader', FlxRuntimeShader);
+		setVariable('FlxSound', FlxSound);
+		setVariable('FlxSprite', FlxSprite);
+		setVariable('FlxSpriteGroup', FlxSpriteGroup);
+		setVariable('FlxText', FlxText);
+		setVariable('FlxTextAlign', {
+			'LEFT': FlxTextAlign.LEFT,
+			'CENTER': FlxTextAlign.CENTER,
+			'RIGHT': FlxTextAlign.RIGHT,
+			'JUSTIFY': FlxTextAlign.JUSTIFY
+		});
+		setVariable('FlxTextBorderStyle', {
+			'NONE': FlxTextBorderStyle.NONE,
+			'SHADOW': FlxTextBorderStyle.SHADOW,
+			'OUTLINE': FlxTextBorderStyle.OUTLINE,
+			'OUTLINE_FAST': FlxTextBorderStyle.OUTLINE_FAST
+		});
+		setVariable('FlxTimer', FlxTimer);
+		setVariable('FlxTween', FlxTween);
+		setVariable('FlxTypedGroup', FlxTypedGroup);
+		setVariable('createTypedGroup', (?variable) -> return variable = new FlxTypedGroup<Dynamic>());
+		setVariable('createSpriteGroup', (?variable) -> return variable = new FlxSpriteGroup());
 
-	public function getFlxCameraFollowStyle()
-		return {
-			"LOCKON": FlxCamera.FlxCameraFollowStyle.LOCKON,
-			"PLATFORMER": FlxCamera.FlxCameraFollowStyle.PLATFORMER,
-			"TOPDOWN": FlxCamera.FlxCameraFollowStyle.TOPDOWN,
-			"TOPDOWN_TIGHT": FlxCamera.FlxCameraFollowStyle.TOPDOWN_TIGHT,
-			"SCREEN_BY_SCREEN": FlxCamera.FlxCameraFollowStyle.SCREEN_BY_SCREEN,
-			"NO_DEAD_ZONE": FlxCamera.FlxCameraFollowStyle.NO_DEAD_ZONE
-		};
+		// State Stuff
+		setVariable('add', FlxG.state.add);
+		setVariable('remove', FlxG.state.remove);
+		setVariable('insert', FlxG.state.insert);
+		setVariable('members', FlxG.state.members);
+		setVariable('state', FlxG.state);
 
-	public function getFlxTextAlign()
-		return {
-			"LEFT": FlxTextAlign.LEFT,
-			"CENTER": FlxTextAlign.CENTER,
-			"RIGHT": FlxTextAlign.RIGHT,
-			"JUSTIFY": FlxTextAlign.JUSTIFY
-		};
+		// Rhythmo
+		setVariable('Achievements', Achievements);
+		setVariable('Bar', Bar);
+		setVariable('Conductor', Conductor);
+		#if FUTURE_DISCORD_RPC
+		setVariable('DiscordClient', DiscordClient);
+		#end
+		setVariable('ExtendableState', ExtendableState);
+		setVariable('ExtendableSubState', ExtendableSubState);
+		setVariable('GameSprite', GameSprite);
+		setVariable('HighScore', HighScore);
+		setVariable('Input', Input);
+		setVariable('Localization', Localization);
+		setVariable('LuaScript', LuaScript);
+		setVariable('Main', Main);
+		#if FUTURE_POLYMOD
+		setVariable('ModHandler', ModHandler);
+		#end
+		setVariable('Note', Note);
+		setVariable('Paths', Paths);
+		setVariable('PlayState', PlayState);
+		setVariable('Rating', Rating);
+		setVariable('SaveData', SaveData);
+		setVariable('ScriptedState', ScriptedState);
+		setVariable('ScriptedSubState', ScriptedSubState);
+		setVariable('Song', Song);
+		setVariable('Utilities', Utilities);
 
-	public function getFlxTextBorderStyle()
-		return {
-			"NONE": FlxTextBorderStyle.NONE,
-			"SHADOW": FlxTextBorderStyle.SHADOW,
-			"OUTLINE": FlxTextBorderStyle.OUTLINE,
-			"OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
-		};
+		if (FlxG.state is PlayState && PlayState.instance != null)
+			setVariable('game', PlayState.instance);
 
-	public function getFlxAxes()
-		return {
-			"X": FlxAxes.X,
-			"Y": FlxAxes.Y,
-			"XY": FlxAxes.XY
-		};
+		if (execute && file != null)
+			this.execute(file);
+	}
 
-	override function destroy() {
+	public function execute(file:String, ?executeCreate:Bool = true):Void
+	{
+		script.tryExecute(File.getContent(file));
+		trace('Script Loaded Succesfully: $file');
+		if (executeCreate)
+			executeFunc('create', []);
+	}
+
+	public function executeStr(code:String):Dynamic
+	{
+		return script.tryExecute(code);
+	}
+
+	public function setVariable(name:String, val:Dynamic):Void
+	{
+		try
+		{
+			script?.variables.set(name, val);
+			locals.set(name, {r: val});
+		}
+		catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
+	}
+
+	public function getVariable(name:String):Dynamic
+	{
+		try
+		{
+			if (locals.exists(name) && locals[name] != null)
+				return locals.get(name).r;
+			else if (script.variables.exists(name))
+				return script?.variables.get(name);
+		}
+		catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
+		return null;
+	}
+
+	public function removeVariable(name:String):Void
+	{
+		try
+		{
+			script?.variables.remove(name);
+		}
+		catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
+	}
+
+	public function existsVariable(name:String):Bool
+	{
+		try
+		{
+			return script?.variables.exists(name);
+		}
+		catch (e:Dynamic)
+			Lib.application.window.alert(Std.string(e), 'HScript Error!');
+		return false;
+	}
+
+	public function executeFunc(funcName:String, ?args:Array<Dynamic>):Dynamic
+	{
+		if (existsVariable(funcName))
+		{
+			try
+			{
+				return Reflect.callMethod(this, getVariable(funcName), args == null ? [] : args);
+			}
+			catch (e:Dynamic)
+				Lib.application.window.alert(Std.string(e), 'HScript Error!');
+		}
+		return null;
+	}
+
+	public function getAll():Dynamic
+	{
+		var balls:Dynamic = {};
+		for (i in locals.keys())
+			Reflect.setField(balls, i, getVariable(i));
+		for (i in interp.variables.keys())
+			Reflect.setField(balls, i, getVariable(i));
+		return balls;
+	}
+
+	override public function destroy():Void
+	{
 		super.destroy();
 		parser = null;
 		interp = null;

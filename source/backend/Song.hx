@@ -1,6 +1,7 @@
 package backend;
 
-typedef SongData = {
+typedef SongData =
+{
 	var song:String;
 	var notes:Array<SectionData>;
 	var bpm:Float;
@@ -8,7 +9,8 @@ typedef SongData = {
 	var timeSignature:Array<Int>;
 }
 
-typedef SectionData = {
+typedef SectionData =
+{
 	var sectionNotes:Array<NoteData>;
 	var bpm:Float;
 	var changeBPM:Bool;
@@ -18,13 +20,15 @@ typedef SectionData = {
 	var stepsPerSection:Int;
 }
 
-typedef NoteData = {
+typedef NoteData =
+{
 	var noteStrum:Float;
 	var noteData:Int;
 	var noteSus:Float;
 }
 
-class Song {
+class Song
+{
 	public static function loadSongfromJson(song:String):Dynamic
 		return Json.parse(Paths.getText(Paths.json('songs/$song/chart')));
 }

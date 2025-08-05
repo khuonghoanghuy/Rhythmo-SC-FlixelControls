@@ -1,7 +1,9 @@
 package backend;
 
-class PlatformUtil {
-	public static function getPlatform():String {
+class PlatformUtil
+{
+	public static function getPlatform():String
+	{
 		#if windows
 		return 'windows';
 		#elseif linux

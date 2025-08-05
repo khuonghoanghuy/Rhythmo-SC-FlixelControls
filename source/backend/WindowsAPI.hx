@@ -19,7 +19,8 @@ package backend;
     #endif
     ')
 @:dox(hide)
-class WindowsAPI {
+class WindowsAPI
+{
 	@:functionCode('
         int darkMode = enable ? 1 : 0;
         HWND window = GetActiveWindow();
@@ -28,7 +29,8 @@ class WindowsAPI {
     ')
 	public static function setDarkMode(enable:Bool) {}
 
-	public static function darkMode(enable:Bool) {
+	public static function darkMode(enable:Bool)
+	{
 		setDarkMode(enable);
 		Application.current.window.borderless = true;
 		Application.current.window.borderless = false;
@@ -39,12 +41,14 @@ class WindowsAPI {
     ')
 	public static function showMessageBox(caption:String, message:String, icon:MessageBoxIcon = MSG_WARNING) {}
 
-	public static function messageBox(caption:String, message:String, icon:MessageBoxIcon = MSG_WARNING) {
+	public static function messageBox(caption:String, message:String, icon:MessageBoxIcon = MSG_WARNING)
+	{
 		showMessageBox(caption, message, icon);
 	}
 }
 
-@:enum abstract MessageBoxIcon(Int) {
+@:enum abstract MessageBoxIcon(Int)
+{
 	var MSG_ERROR:MessageBoxIcon = 0x00000010;
 	var MSG_QUESTION:MessageBoxIcon = 0x00000020;
 	var MSG_WARNING:MessageBoxIcon = 0x00000030;

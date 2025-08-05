@@ -1,16 +1,29 @@
 package substates;
 
-class ResultsSubState extends ExtendableSubState {
+class ResultsSubState extends ExtendableSubState
+{
 	var bg:FlxSprite;
 	var rankSpr:FlxSprite;
 	var rankTxt:FlxText;
 	var anyKeyTxt:FlxText;
 
+	var rank:String;
+	var score:Int;
+	var accuracy:Float;
+
 	var tweens:Array<FlxTween> = [];
 
-	public function new(rank:String, score:Int, accuracy:Float) {
+	public function new(rank:String, score:Int, accuracy:Float):Void
+	{
 		super();
 
+		this.rank = rank;
+		this.score = score;
+		this.accuracy = accuracy;
+	}
+
+	override public function create():Void
+	{
 		persistentUpdate = true;
 
 		bg = new FlxSprite().makeGraphic(1280, 720, FlxColor.BLACK);
@@ -20,12 +33,13 @@ class ResultsSubState extends ExtendableSubState {
 		rankSpr = new GameSprite(700, 0).loadGraphic(Paths.image('gameplay/rankings/' + rank.toLowerCase()));
 		rankSpr.screenCenter(Y);
 		rankSpr.alpha = 0;
-		if (rank != "?")
+		if (rank != '?')
 			add(rankSpr);
 
 		rankSpr.angle = -4;
 
-		new FlxTimer().start(0.01, (tmr:FlxTimer) -> {
+		new FlxTimer().start(0.01, (tmr:FlxTimer) ->
+		{
 			if (rankSpr.angle == -4)
 				tweens.push(FlxTween.angle(rankSpr, rankSpr.angle, 4, 4, {ease: FlxEase.quartInOut}));
 			if (rankSpr.angle == 4)
@@ -33,18 +47,18 @@ class ResultsSubState extends ExtendableSubState {
 		}, 0);
 
 		rankTxt = new FlxText(10, 300, FlxG.width,
-			Localization.get("resultsTxt")
-			+ Localization.get("scoreTxt")
+			Localization.get('resultsTxt')
+			+ Localization.get('scoreTxt')
 			+ score
-			+ "\n"
-			+ Localization.get("accTxt")
+			+ '\n'
+			+ Localization.get('accTxt')
 			+ accuracy
-			+ "%", 12);
+			+ '%', 12);
 		rankTxt.setFormat(Paths.font(Localization.getFont()), 40, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		rankTxt.alpha = 0;
 		add(rankTxt);
 
-		anyKeyTxt = new FlxText(10, 480, 0, Localization.get("ctrlGuide"), 12);
+		anyKeyTxt = new FlxText(10, 480, 0, Localization.get('ctrlGuide'), 12);
 		anyKeyTxt.setFormat(Paths.font(Localization.getFont()), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		anyKeyTxt.alpha = 0;
 		add(anyKeyTxt);
@@ -53,28 +67,37 @@ class ResultsSubState extends ExtendableSubState {
 		tweens.push(FlxTween.tween(rankTxt, {alpha: 1}, 1, {ease: FlxEase.quadOut}));
 		tweens.push(FlxTween.tween(rankSpr, {alpha: 1}, 2, {ease: FlxEase.quadOut}));
 		tweens.push(FlxTween.tween(anyKeyTxt, {alpha: 1}, 2.5, {ease: FlxEase.quadOut}));
+
+		super.create();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
+	override public function update(elapsed:Float):Void
+	{
 		for (i in tweens)
 			if (i != null)
 				i.active = true;
 
-		if (Input.justPressed('any')) {
+		if (Input.justPressed('any'))
+		{
 			FlxG.sound.playMusic(Paths.music('Basically_Professionally_Musically'), 0.75);
-			if (PlayState.campaignMode) {
+			if (PlayState.campaignMode)
+			{
 				PlayState.campaignMode = false;
 				ExtendableState.switchState(new CampaignState());
-			} else
+			}
+			else
 				ExtendableState.switchState(new SongSelectState());
 		}
+
+		super.update(elapsed);
 	}
 
-	override function destroy() {
-		for (i in tweens) {
-			if (i != null) {
+	override public function destroy():Void
+	{
+		for (i in tweens)
+		{
+			if (i != null)
+			{
 				i.cancel();
 				i.destroy();
 				i = null;

@@ -1,6 +1,7 @@
 package objects;
 
-class Note extends GameSprite {
+class Note extends GameSprite
+{
 	public var dir:String = ''; // note direction
 	public var type:String = ''; // receptor, plain, or sustain
 
@@ -23,7 +24,8 @@ class Note extends GameSprite {
 	public var scaleX:Float = 0;
 	public var scaleY:Float = 0;
 
-	public function new(x:Float, y:Float, dir:String, type:String) {
+	public function new(x:Float, y:Float, dir:String, type:String):Void
+	{
 		super(x, y);
 
 		this.dir = dir;
@@ -32,23 +34,25 @@ class Note extends GameSprite {
 		loadGraphic(Paths.image('gameplay/noteskins/${SaveData.settings.noteSkinType.toLowerCase()}/note_$dir'), true, 200, 200);
 		scale.set(0.6, 0.6);
 
-		animation.add("note", [0], 1);
-		animation.add("press", [1], 1);
-		animation.add("receptor", [2], 1);
-		animation.add("hold", [0], 1); // placeholder
-		animation.add("holdend", [0], 1); // placeholder
+		animation.add('note', [0], 1);
+		animation.add('press', [1], 1);
+		animation.add('receptor', [2], 1);
+		animation.add('hold', [3], 1);
+		animation.add('holdend', [4], 1);
 
-		animation.play((type == 'receptor') ? "receptor" : "note");
+		animation.play((type == 'receptor') ? 'receptor' : 'note');
 
-		if (type == "sustain" && lastNote != null) {
+		if (type == 'sustain' && lastNote != null)
+		{
 			alpha = 0.4;
 			scale.set(0.4, 0.4);
 
-			animation.play("holdend");
+			animation.play('holdend');
 			updateHitbox();
 
-			if (lastNote.type == "sustain" && Utilities.getNoteIndex(dir) <= 0) {
-				lastNote.animation.play("hold");
+			if (lastNote.type == 'sustain' && Utilities.getNoteIndex(dir) <= 0)
+			{
+				lastNote.animation.play('hold');
 				lastNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.instance.speed;
 				lastNote.updateHitbox();
 			}
@@ -59,22 +63,25 @@ class Note extends GameSprite {
 
 		var noteColor = NoteColors.getNoteColor(Utilities.getNoteIndex(dir));
 
-		if (colorSwap != null && noteColor != null) {
+		if (colorSwap != null && noteColor != null)
+		{
 			colorSwap.r = noteColor[0];
 			colorSwap.g = noteColor[1];
 			colorSwap.b = noteColor[2];
 		}
 	}
 
-	public function press() {
-		animation.play("press");
+	public function press():Void
+	{
+		animation.play('press');
 
 		scale.set(0.5, 0.5);
 		FlxTween.cancelTweensOf(this.scale);
 		FlxTween.tween(this.scale, {x: 0.6, y: 0.6}, 0.3, {ease: FlxEase.quadOut});
 	}
 
-	override function update(elapsed:Float) {
+	override public function update(elapsed:Float):Void
+	{
 		scaleX = scale.x;
 		scaleY = scale.y;
 
@@ -84,12 +91,16 @@ class Note extends GameSprite {
 			alpha = 0.3;
 	}
 
-	public function calculateCanBeHit() {
-		if (type == "sustain") {
+	public function calculateCanBeHit():Void
+	{
+		if (type == 'sustain')
+		{
 			canBeHit = shouldHit ? (strum > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
 				&& strum < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5)) : (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
 					&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2);
-		} else {
+		}
+		else
+		{
 			canBeHit = shouldHit ? (strum > Conductor.songPosition - Conductor.safeZoneOffset
 				&& strum < Conductor.songPosition + Conductor.safeZoneOffset) : (strum > Conductor.songPosition - Conductor.safeZoneOffset * 0.3
 					&& strum < Conductor.songPosition + Conductor.safeZoneOffset * 0.2);

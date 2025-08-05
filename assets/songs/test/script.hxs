@@ -1,7 +1,5 @@
-import('flixel.FlxSprite');
-import('states.PlayState');
-
-function create() {
+function create()
+{
 	var spr:FlxSprite = new FlxSprite(0, 0).makeGraphic(50, 50, FlxColor.BLACK);
 	game.add(spr);
 }
