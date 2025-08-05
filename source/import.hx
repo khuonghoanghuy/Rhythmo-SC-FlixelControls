@@ -36,16 +36,28 @@ import sys.io.*;
 #end
 
 // Game Imports
-import states.*;
-import substates.*;
-import backend.*;
-import modding.*;
-import objects.*;
-import shaders.*;
+import rhythmo.api.*;
+import rhythmo.api.native.WindowsAPI;
+import rhythmo.backend.*;
+import rhythmo.input.Input;
+import rhythmo.locale.Localization;
+import rhythmo.modding.*;
+import rhythmo.objects.*;
+import rhythmo.objects.game.*;
+import rhythmo.options.*;
+import rhythmo.shaders.*;
+import rhythmo.states.*;
+import rhythmo.states.editors.*;
+import rhythmo.states.menus.*;
+import rhythmo.substates.*;
+import rhythmo.util.*;
+
+import rhythmo.Paths;
+import rhythmo.SaveData;
 
 using StringTools;
-using backend.Utilities;
-using backend.Utilities.MapUtil;
+using rhythmo.util.Util;
+using rhythmo.util.Util.MapUtil;
 
 #if !debug
 @:noDebug

@@ -5,7 +5,7 @@
 * [X] Reformat Files
 * [X] Overhaul HScript (Using RuleScript)
 * [X] Overhaul Lua (Using hxluajit-wrapper)
-* [ ] Reorganize Source Code
+* [X] Reorganize Source Code
 * [X] Improve Modding Support
 * [ ] Optimizations
 

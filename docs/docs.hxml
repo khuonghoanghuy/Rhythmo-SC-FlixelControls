@@ -33,8 +33,7 @@
 --remap flash:openfl
 --macro flixel.system.macros.FlxDefines.run()
 
---macro allowPackage('flash')
---macro include('my.pack')
+--macro include('rhythmo')
 --macro include('flixel', true, ['flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*'])
 --macro keep('Main')
 

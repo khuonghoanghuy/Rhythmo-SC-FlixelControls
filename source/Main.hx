@@ -6,7 +6,7 @@ import haxe.CallStack;
 import haxe.io.Path;
 import sys.io.Process;
 #end
-import debug.FPS;
+import rhythmo.debug.FPS;
 
 typedef GameConfig =
 {
