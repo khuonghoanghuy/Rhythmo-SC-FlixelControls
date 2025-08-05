@@ -53,7 +53,7 @@
 		{
 			"name": "scriptless-polymod",
 			"type": "git",
-			"ref": "master",
+			"ref": "main",
 			"url": "https://github.com/JoaTH-Team/scriptless-polymod"
 		},
 		{
