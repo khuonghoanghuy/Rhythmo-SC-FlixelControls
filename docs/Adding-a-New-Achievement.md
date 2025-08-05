@@ -21,9 +21,6 @@ Examples:
 
 HScript:
 ```hx
-import('states.PlayState');
-import('backend.Achievements');
-
 var condition:Bool = false;
 var allowEndSong:Bool = false;
 
