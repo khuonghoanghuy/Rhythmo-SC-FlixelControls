@@ -1,5 +1,3 @@
-package scripts;
-
 /**
  * Called when the script is created.
  */
@@ -60,3 +58,4 @@ function endSong() {}
  * Called when the script is destroyed.
  */
 function destroy() {}
+
