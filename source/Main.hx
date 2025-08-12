@@ -20,10 +20,6 @@ typedef GameConfig =
 	var startFullscreen:Bool;
 }
 
-#if (linux && !debug)
-@:cppInclude('./external/gamemode_client.h')
-@:cppFileCode('#define GAMEMODE_AUTO')
-#end
 class Main extends openfl.display.Sprite
 {
 	public final config:GameConfig = {
