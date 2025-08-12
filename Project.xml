@@ -111,6 +111,7 @@
 	<haxeflag name="--macro" value="include('rhythmo')" />
 	<haxeflag name="--macro"
 		value="include('flixel', true, ['flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*'])" />
+	<haxeflag name="--macro" value="nullSafety('rhythmo.util')" />
 
 	<!-- [ Icon ] -->
 

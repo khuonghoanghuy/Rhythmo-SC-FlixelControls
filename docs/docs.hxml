@@ -36,6 +36,7 @@
 
 --macro include('rhythmo')
 --macro include('flixel', true, ['flixel.addons.editors.spine.*', 'flixel.addons.nape.*', 'flixel.system.macros.*'])
+--macro nullSafety('rhythmo.util')
 --macro keep('Main')
 
 --no-output
