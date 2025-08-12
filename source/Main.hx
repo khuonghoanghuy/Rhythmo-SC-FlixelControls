@@ -11,18 +11,9 @@ import rhythmo.debug.FPS;
 import hxgamemode.GamemodeClient;
 #end
 
-typedef GameConfig =
-{
-	var gameDimensions:Array<Int>;
-	var initialState:Class<FlxState>;
-	var framerate:Int;
-	var skipSplash:Bool;
-	var startFullscreen:Bool;
-}
-
 class Main extends openfl.display.Sprite
 {
-	public final config:GameConfig = {
+	public final config:Dynamic = {
 		gameDimensions: [1280, 720],
 		initialState: InitialState,
 		framerate: 60,
