@@ -10,7 +10,7 @@ class LuaScript extends FlxBasic
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 
-	public var vm:Null<RawPointer<Lua_State>> = LuaL.newstate();
+	public var lua:Null<RawPointer<Lua_State>> = LuaL.newstate();
 	public var hscript:HScript = null;
 
 	private var game:PlayState;
@@ -22,11 +22,11 @@ class LuaScript extends FlxBasic
 		if (FlxG.state is PlayState && PlayState.instance != null)
 			this.game = PlayState.instance;
 
-		LuaL.openlibs(vm);
+		LuaL.openlibs(lua);
 
 		try
 		{
-			LuaUtils.doString(vm, File.getContent(file));
+			LuaUtils.doString(lua, File.getContent(file));
 		}
 		catch (e:Dynamic)
 		{
@@ -286,13 +286,13 @@ class LuaScript extends FlxBasic
 				if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 					ret = null;
 				if (ret == null)
-					Lua.pushnil(vm);
+					Lua.pushnil(lua);
 				return ret;
 			}
 			catch (e:Dynamic)
 			{
 				Lib.application.window.alert(e, 'Lua Error!');
-				Lua.pushnil(vm);
+				Lua.pushnil(lua);
 				return null;
 			}
 		});
@@ -305,13 +305,13 @@ class LuaScript extends FlxBasic
 				if (ret != null && !isOfTypes(ret, [Bool, Int, Float, String, Array]))
 					ret = null;
 				if (ret == null)
-					Lua.pushnil(vm);
+					Lua.pushnil(lua);
 				return ret;
 			}
 			catch (e:Dynamic)
 			{
 				Lib.application.window.alert(e, 'Lua Error!');
-				Lua.pushnil(vm);
+				Lua.pushnil(lua);
 				return null;
 			}
 		});
@@ -344,25 +344,25 @@ class LuaScript extends FlxBasic
 
 	public function callFunction(name:String, args:Array<Dynamic>):Dynamic
 	{
-		if (vm == null)
+		if (lua == null)
 			return Function_Continue;
 
-		LuaUtils.callFunctionByName(vm, name, args);
+		LuaUtils.callFunctionByName(lua, name, args);
 		return Function_Continue;
 	}
 
 	public function setCallback(name:String, func:Dynamic):Void
-		return LuaUtils.addFunction(vm, name, func);
+		return LuaUtils.addFunction(lua, name, func);
 
 	public function setVar(name:String, value:Dynamic):Void
 	{
-		if (vm == null)
+		if (lua == null)
 			return;
-		LuaUtils.setVariable(vm, name, value);
+		LuaUtils.setVariable(lua, name, value);
 	}
 
 	public function getVar(name:String):Dynamic
-		return LuaUtils.getVariable(vm, name);
+		return LuaUtils.getVariable(lua, name);
 
 	public static function isOfTypes(value:Any, types:Array<Dynamic>):Bool
 	{
@@ -484,10 +484,10 @@ class LuaScript extends FlxBasic
 
 	override public function destroy():Void
 	{
-		if (vm != null)
+		if (lua != null)
 		{
-			Lua.close(vm);
-			vm = null;
+			Lua.close(lua);
+			lua = null;
 		}
 	}
 }
