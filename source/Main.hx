@@ -7,6 +7,9 @@ import haxe.io.Path;
 import sys.io.Process;
 #end
 import rhythmo.debug.FPS;
+#if linux
+import hxgamemode.GamemodeClient;
+#end
 
 typedef GameConfig =
 {
@@ -23,7 +26,7 @@ typedef GameConfig =
 #end
 class Main extends openfl.display.Sprite
 {
-	public final config:Dynamic = {
+	public final config:GameConfig = {
 		gameDimensions: [1280, 720],
 		initialState: InitialState,
 		framerate: 60,
@@ -52,6 +55,13 @@ class Main extends openfl.display.Sprite
 	#if desktop
 	static function __init__():Void
 	{
+		#if linux
+		if (GamemodeClient.request_start() != 0)
+			Sys.println('Failed to request gamemode start: ${GamemodeClient.error_string()}...');
+		else
+			Sys.println('Succesfully requested gamemode to start...');
+		#end
+
 		var origin:String = #if hl Sys.getCwd() #else Sys.programPath() #end;
 
 		var configPath:String = Path.directory(Path.withoutExtension(origin));

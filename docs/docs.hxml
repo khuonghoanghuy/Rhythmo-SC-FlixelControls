@@ -10,6 +10,7 @@
 -L hxluajit-wrapper
 -L scriptless-polymod
 -L hxdiscord_rpc
+-L hxgamemode
 -L hx_arabic_shaper
 -L hxcpp-debug-server
 -L jsonpath

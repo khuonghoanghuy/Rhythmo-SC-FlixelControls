@@ -40,7 +40,19 @@
 
 	<!-- [ Game Assets & Etc. ] -->
 
-	<assets path="assets" />
+	<assets path="assets/achievements" />
+	<assets path="assets/data" />
+	<assets path="assets/fonts" />
+	<assets path="assets/images" />
+	<assets path="assets/languages" />
+	<assets path="assets/music" />
+	<assets path="assets/scripts" />
+	<assets path="assets/shaders" />
+	<assets path="assets/songs" />
+	<assets path="assets/sounds" />
+	<assets path="assets/states" />
+	<assets path="assets/substates" />
+
 	<assets path="mods" if="FUTURE_POLYMOD" />
 
 	<section if="desktop">
@@ -61,6 +73,7 @@
 	<haxelib name="scriptless-polymod" if="FUTURE_POLYMOD" />
 	<haxelib name="hxdiscord_rpc" if="FUTURE_DISCORD_RPC" />
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
+	<haxelib name="hxgamemode" if="linux" />
 	<haxelib name="hx_arabic_shaper" />
 
 	<!-- [ Defines ] -->
