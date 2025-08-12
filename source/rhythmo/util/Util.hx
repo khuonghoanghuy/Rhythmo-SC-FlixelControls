@@ -42,9 +42,3 @@ class Util
 		#end
 	}
 }
-
-class MapUtil
-{
-	public static function hasKey<K, V>(map:Map<K, V>, key:K):Bool
-		return map[key] != null;
-}
