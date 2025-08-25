@@ -1,7 +1,7 @@
 # To-Dos
 ## Current To-Dos
 ### High Priority
-* [ ] Finish chart for Harmony of No Tomorrow
+* [X] Finish chart for Harmony of No Tomorrow
 * [X] Reformat Files
 * [X] Overhaul HScript (Using RuleScript)
 * [X] Overhaul Lua (Using hxluajit-wrapper)
