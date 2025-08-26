@@ -7,6 +7,9 @@ using haxe.io.Path;
 typedef FileAssets = #if sys FileSystem; #else Assets; #end
 typedef GarbageCollect = #if cpp cpp.vm.Gc; #elseif hl hl.Gc; #elseif neko neko.vm.Gc; #end
 
+/**
+ * Enum representing different types of sprite sheets.
+ */
 enum SpriteSheetType
 {
 	ASEPRITE;
@@ -16,6 +19,9 @@ enum SpriteSheetType
 	TEXTURE_PATCHER_XML;
 }
 
+/**
+ * Provides utility functions for handling asset paths and loading assets in a game.
+ */
 @:keep
 @:access(openfl.display.BitmapData)
 class Paths

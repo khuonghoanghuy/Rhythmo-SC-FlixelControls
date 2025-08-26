@@ -1,5 +1,9 @@
 package rhythmo.util;
 
+/**
+ * Basic utilities needed for the game.
+ * @author Joalor64
+ */
 @:keep
 class Util
 {
@@ -30,7 +34,7 @@ class Util
 		}
 	}
 
-	public static function openUrlPlease(url:String)
+	public static function openUrlPlease(url:String):Void
 	{
 		#if linux
 		var cmd = Sys.command('xdg-open', [url]);

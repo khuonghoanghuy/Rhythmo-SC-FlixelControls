@@ -38,10 +38,19 @@ package rhythmo;
 	];
 }
 
+/**
+ * Handles saving and loading game settings.
+ */
 class SaveData
 {
+	/**
+	 * Stores the game settings.
+	 */
 	public static var settings:SaveSettings = {};
 
+	/**
+	 * Loads the settings from the save data and applies them.
+	 */
 	public static function init():Void
 	{
 		for (key in Reflect.fields(settings))
@@ -60,13 +69,14 @@ class SaveData
 		Main.framerate = settings.framerate;
 	}
 
+	/**
+	 * Saves the current settings to the save data.
+	 */
 	public static function saveSettings():Void
 	{
 		for (key in Reflect.fields(settings))
 			Reflect.setField(FlxG.save.data, key, Reflect.field(settings, key));
 
 		FlxG.save.flush();
-
-		trace('settings saved!');
 	}
 }

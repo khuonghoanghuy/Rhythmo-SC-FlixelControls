@@ -3,11 +3,18 @@ package rhythmo.debug;
 import openfl.text.*;
 import openfl.events.Event;
 
+/**
+ * Class for displaying FPS and memory usage in the game.
+ * @author Joalor64
+ */
 class FPS extends TextField
 {
 	public var borderSize:Int = 1;
 	public var borders:Array<TextField> = new Array<TextField>();
 
+	/**
+	 * Array to store timestamps for FPS calculation.
+	 */
 	private var times:Array<Float> = [];
 
 	public function new(x:Float, y:Float, color:Int, ?font:String):Void

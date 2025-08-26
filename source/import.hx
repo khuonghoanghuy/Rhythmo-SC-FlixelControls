@@ -1,8 +1,8 @@
 #if !macro
 // Default Imports
 import flixel.*;
-import flixel.math.*;
 import flixel.util.*;
+import flixel.math.*;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.FlxRuntimeShader;
@@ -57,6 +57,7 @@ import rhythmo.SaveData;
 
 using StringTools;
 using rhythmo.util.Util;
+using rhythmo.util.Util.MapUtil;
 
 #if !debug
 @:noDebug

@@ -5,11 +5,21 @@ import hxdiscord_rpc.Discord;
 import hxdiscord_rpc.Types;
 import sys.thread.Thread;
 
+/**
+ * Class to handle Discord Rich Presence integration.
+ */
 class DiscordClient
 {
+	/**
+	 * If Discord Rich Presence has been initialized.
+	 */
 	public static var initialized:Bool = false;
 
+	/**
+	 * The default Discord Client ID.
+	 */
 	private static final _defaultID:String = '1353181104307306666';
+
 	public static var clientID(default, set):String = _defaultID;
 
 	private static function set_clientID(newID:String):String
@@ -26,6 +36,9 @@ class DiscordClient
 		return newID;
 	}
 
+	/**
+	 * Initializes Discord Rich Presence.
+	 */
 	public static function load():Void
 	{
 		if (initialized)

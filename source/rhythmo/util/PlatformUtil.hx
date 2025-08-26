@@ -1,7 +1,15 @@
 package rhythmo.util;
 
+/**
+ * Utility used to return a specific platform for conditional pusposes.
+ * @author Joalor64
+ */
 class PlatformUtil
 {
+	/**
+	 * Returns the currrent platform the game is running on.
+	 * @return The current platform.
+	 */
 	public static function getPlatform():String
 	{
 		#if windows

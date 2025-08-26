@@ -5,6 +5,7 @@ import haxe.zip.Reader;
 import haxe.io.BytesOutput;
 
 /**
+ * Basic auto-updater used to update the game while it's still running.
  * @author maybekoi
  * @see https://github.com/Moon4K-Dev/Moon4K-Legacy
  */

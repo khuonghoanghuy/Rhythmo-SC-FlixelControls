@@ -7,12 +7,19 @@ import haxe.io.Path;
 import sys.io.Process;
 #end
 import rhythmo.debug.FPS;
+
+/**
+ * The main entry point for the game.
+ */
 #if linux
 import hxgamemode.GamemodeClient;
 #end
-
 class Main extends openfl.display.Sprite
 {
+	/**
+	 * Configuration for the game.
+	 * This includes the game dimensions, framerate, initial state, and options for splash screen and fullscreen.
+	 */
 	public final config:Dynamic = {
 		gameDimensions: [1280, 720],
 		initialState: InitialState,
@@ -21,7 +28,14 @@ class Main extends openfl.display.Sprite
 		startFullscreen: false
 	};
 
+	/**
+	 * The frame rate display.
+	 */
 	public static var fpsDisplay:FPS;
+
+	/**
+	 * The toast notification display.
+	 */
 	public static var toast:ToastCore;
 
 	public static var framerate(get, set):Float;
@@ -48,7 +62,7 @@ class Main extends openfl.display.Sprite
 		else
 			Sys.println('Succesfully requested gamemode to start...');
 		#end
-
+		
 		var origin:String = #if hl Sys.getCwd() #else Sys.programPath() #end;
 
 		var configPath:String = Path.directory(Path.withoutExtension(origin));
@@ -64,6 +78,9 @@ class Main extends openfl.display.Sprite
 	}
 	#end
 
+	/**
+	 * Initializes the game and sets up the application.
+	 */
 	public function new():Void
 	{
 		super();
