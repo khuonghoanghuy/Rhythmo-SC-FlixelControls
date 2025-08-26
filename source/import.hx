@@ -57,7 +57,6 @@ import rhythmo.SaveData;
 
 using StringTools;
 using rhythmo.util.Util;
-using rhythmo.util.Util.MapUtil;
 
 #if !debug
 @:noDebug
