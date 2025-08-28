@@ -56,14 +56,14 @@ class ChartingState extends ExtendableState
 
 		if (song == null)
 		{
-			song =
-				{
-					song: 'Test',
-					notes: [],
-					bpm: 100,
-					timeSignature: [4, 4]
-				};
-		} else
+			song = {
+				song: 'Test',
+				notes: [],
+				bpm: 100,
+				timeSignature: [4, 4]
+			};
+		}
+		else
 			song = Song.loadSongfromJson(Paths.formatToSongPath(song.song));
 
 		instance = this;
@@ -81,8 +81,7 @@ class ChartingState extends ExtendableState
 		#end
 
 		menuStructure = [
-			'Help' => [
-				{name: 'Controls', func: () -> openSubState(new HelpSubState())}],
+			'Help' => [{name: 'Controls', func: () -> openSubState(new HelpSubState())}],
 			'Chart' => [
 				{name: 'Playtest', func: openPlayState},
 				{name: 'Edit Metadata', func: () -> openSubState(new SongDataSubState())}
@@ -107,12 +106,11 @@ class ChartingState extends ExtendableState
 
 						for (note in notesCopied)
 						{
-							var clonedNote =
-								{
-									noteStrum: note.noteStrum + Conductor.stepCrochet * (4 * 4 * (curSection - sectionToCopy)),
-									noteData: note.noteData,
-									noteSus: note.noteSus
-								};
+							var clonedNote = {
+								noteStrum: note.noteStrum + Conductor.stepCrochet * (4 * 4 * (curSection - sectionToCopy)),
+								noteData: note.noteData,
+								noteSus: note.noteSus
+							};
 							song.notes[curSection].sectionNotes.push(clonedNote);
 						}
 
@@ -159,17 +157,17 @@ class ChartingState extends ExtendableState
 							add(savedText);
 							new FlxTimer().start(2.25, (tmr:FlxTimer) ->
 							{
-								FlxTween.tween(savedText, {alpha: 0}, 0.75,
+								FlxTween.tween(savedText, {alpha: 0}, 0.75, {
+									ease: FlxEase.quadOut,
+									onComplete: (twn:FlxTween) ->
 									{
-										ease: FlxEase.quadOut,
-										onComplete: (twn:FlxTween) ->
-										{
-											remove(savedText);
-											savedText.destroy();
-										}
-									});
+										remove(savedText);
+										savedText.destroy();
+									}
+								});
 							});
-						} catch (e:Dynamic)
+						}
+						catch (e:Dynamic)
 						{
 							trace('Error while saving chart: ' + e);
 						}
@@ -324,7 +322,8 @@ class ChartingState extends ExtendableState
 			dummyArrow.visible = true;
 			dummyArrow.x = Math.floor(FlxG.mouse.x / gridSize) * gridSize;
 			dummyArrow.y = (Input.pressed('shift')) ? FlxG.mouse.y : Math.floor(FlxG.mouse.y / snappedGridSize) * snappedGridSize;
-		} else
+		}
+		else
 			dummyArrow.visible = false;
 
 		if (FlxG.mouse.justPressed)
@@ -440,12 +439,11 @@ class ChartingState extends ExtendableState
 		var noteData:Int = Math.floor((gridBG.x + (FlxG.mouse.x / gridSize)) - 2);
 		var strumTime:Float = getStrumTime(dummyArrow.y) + sectionStartTime();
 
-		var newNote:NoteData =
-			{
-				noteStrum: strumTime,
-				noteData: noteData,
-				noteSus: 0
-			};
+		var newNote:NoteData = {
+			noteStrum: strumTime,
+			noteData: noteData,
+			noteSus: 0
+		};
 
 		if (song.notes[curSection] == null)
 			addSection();
@@ -496,74 +494,43 @@ class ChartingState extends ExtendableState
 
 	public function updateGrid():Void
 	{
-		var noteCount = song.notes[curSection].sectionNotes.length;
-		var sustainCount = 0;
-
-		while (renderedNotes.members.length < noteCount)
-			for (i in 0...noteCount)
-				renderedNotes.add(new Note(0, 0, Util.getDirection(song.notes[curSection].sectionNotes[i].noteData % 4), "note"));
-
-		for (note in renderedNotes.members)
-			note.exists = false;
-
-		for (i in 0...noteCount)
+		renderedNotes.forEach(function(note:Note)
 		{
-			var sectionNote = song.notes[curSection].sectionNotes[i];
-			var daSus = sectionNote.noteSus;
-			var direction = Util.getDirection(sectionNote.noteData % 4);
+			note.kill();
+			note.destroy();
+		}, true);
 
-			var note = renderedNotes.members[i];
-			note.exists = true;
+		renderedNotes.clear();
+
+		while (renderedSustains.members.length > 0)
+			renderedSustains.remove(renderedSustains.members[0], true);
+
+		for (sectionNote in song.notes[curSection].sectionNotes)
+		{
+			var daSus = sectionNote.noteSus;
+			var direction:String = Util.getDirection(sectionNote.noteData % 4);
+			var note:Note = new Note(0, 0, direction, 'note');
 			note.strum = sectionNote.noteStrum;
 			note.sustainLength = daSus;
+
 			note.setGraphicSize(gridSize, gridSize);
 			note.updateHitbox();
 
 			note.x = gridBG.x + Math.floor((sectionNote.noteData % 4) * gridSize);
 			note.y = Math.floor(getYfromStrum((sectionNote.noteStrum - sectionStartTime())));
+
 			note.rawNoteData = sectionNote.noteData;
-			note.dir = direction;
-		}
 
-		while (renderedNotes.members.length > noteCount)
-		{
-			var extraNote = renderedNotes.members.pop();
-			extraNote.exists = false;
-		}
+			renderedNotes.add(note);
 
-		for (sectionNote in song.notes[curSection].sectionNotes)
-			if (sectionNote.noteSus > 0)
-				sustainCount++;
-
-		while (renderedSustains.members.length < sustainCount)
-			renderedSustains.add(new FlxSprite());
-
-		for (sus in renderedSustains.members)
-			sus.exists = false;
-
-		var susIdx = 0;
-		for (sectionNote in song.notes[curSection].sectionNotes)
-		{
-			if (sectionNote.noteSus > 0)
+			if (daSus > 0)
 			{
-				var noteIdx = song.notes[curSection].sectionNotes.indexOf(sectionNote);
-				var note = renderedNotes.members[noteIdx];
 				var rgb = SaveData.settings.notesRGB[sectionNote.noteData % 4];
-				var height = Math.floor(FlxMath.remapToRange(sectionNote.noteSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height));
-				var sustainVis = renderedSustains.members[susIdx];
-
-				sustainVis.makeGraphic(8, height, FlxColor.fromRGB(rgb[0], rgb[1], rgb[2]));
-				sustainVis.x = note.x + (gridSize / 2);
-				sustainVis.y = note.y + gridSize;
-				sustainVis.exists = true;
-				susIdx++;
+				var sustainVis:FlxSprite = new FlxSprite(note.x + (gridSize / 2),
+					note.y + gridSize).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)),
+						FlxColor.fromRGB(rgb[0], rgb[1], rgb[2]));
+				renderedSustains.add(sustainVis);
 			}
-		}
-
-		while (renderedSustains.members.length > sustainCount)
-		{
-			var extraSus = renderedSustains.members.pop();
-			extraSus.exists = false;
 		}
 	}
 
@@ -584,15 +551,14 @@ class ChartingState extends ExtendableState
 		if (coolLength == 0)
 			col = Std.int(Conductor.timeScale[0] * Conductor.timeScale[1]);
 
-		var sec:SectionData =
-			{
-				sectionNotes: [],
-				bpm: song.bpm,
-				changeBPM: false,
-				timeScale: Conductor.timeScale,
-				changeTimeScale: false,
-				stepsPerSection: 16
-			};
+		var sec:SectionData = {
+			sectionNotes: [],
+			bpm: song.bpm,
+			changeBPM: false,
+			timeScale: Conductor.timeScale,
+			changeTimeScale: false,
+			stepsPerSection: 16
+		};
 
 		song.notes.push(sec);
 	}
@@ -619,7 +585,8 @@ class ChartingState extends ExtendableState
 			}
 
 			updateGrid();
-		} else
+		}
+		else
 		{
 			addSection();
 
@@ -797,11 +764,13 @@ class LoadSongSubState extends ExtendableSubState
 			{
 				ChartingState.song = Song.loadSongfromJson(Paths.formatToSongPath(input.text));
 				FlxG.resetState();
-			} catch (e:Dynamic)
+			}
+			catch (e:Dynamic)
 			{
 				trace('Error loading chart!\n$e');
 			}
-		} else if (Input.justPressed('exit'))
+		}
+		else if (Input.justPressed('exit'))
 			close();
 
 		super.update(elapsed);
