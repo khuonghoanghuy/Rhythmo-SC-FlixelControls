@@ -500,7 +500,7 @@ class ChartingState extends ExtendableState
 		var sustainCount = 0;
 
 		while (renderedNotes.members.length < noteCount)
-			renderedNotes.add(new Note(0, 0, "left", "note"));
+			renderedNotes.add(new Note(0, 0, Util.getDirection(song.notes[curSection].sectionNotes[i].noteData % 4), "note"));
 
 		for (note in renderedNotes.members)
 			note.exists = false;
