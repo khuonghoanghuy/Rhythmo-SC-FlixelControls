@@ -3,6 +3,8 @@
 -L flixel
 -L flixel-addons
 -L flixel-ui
+-L haxeui-core
+-L haxeui-flixel
 -L tjson
 -L hscript
 -L rulescript

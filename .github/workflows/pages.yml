@@ -30,6 +30,8 @@ jobs:
           haxelib install flixel
           haxelib install flixel-addons
           haxelib install flixel-ui
+          haxelib git haxeui-core https://github.com/haxeui/haxeui-core 0212d8fdfcafeb5f0d5a41e1ddba8ff21d0e183b
+          haxelib git haxeui-flixel https://github.com/haxeui/haxeui-flixel 63a906a6148958dbfde8c7b48d90b0693767fd95
           haxelib install tjson
           haxelib git hscript https://github.com/HaxeFoundation/hscript
           haxelib install rulescript
