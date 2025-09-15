@@ -17,7 +17,8 @@ typedef DropdownMenuItem =
 	var func:Void->Void;
 }
 
-class ChartingState extends ExtendableState
+@:build(haxe.ui.ComponentBuilder.build("assets/ui/main-view.xml"))
+class ChartingState extends haxe.ui.backend.flixel.UIState
 {
 	public static var instance:ChartingState = null;
 	public static var song:SongData = null;

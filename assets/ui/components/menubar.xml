@@ -1,0 +1,31 @@
+<menubar id="menubar" width="100%">
+        <style>
+        .menu {
+            width: 120px;
+        }
+        </style>
+        <menu text="File">
+            <menu-item text="Load Song" />
+            <menu-item text="Load JSON" />
+            <menu-item text="Save" />
+            <menu-item text="Save As..." />
+            <menu-separator />
+            <menu-item text="Exit" />
+        </menu>
+
+        <menu text="Edit">
+            <menu-item text="Copy Section" shortcutText="Ctrl+C" />
+            <menu-item text="Paste Section" shortcutText="Ctrl+V" />
+            <menu-item text="Clear Section" />
+            <menu-item text="Clear Song" />
+        </menu>
+
+        <menu text="Chart">
+            <menu-item text="Playtest" />
+            <menu-item text="Edit Metadata" />
+        </menu>
+
+        <menu text="Help">
+            <menu-item text="Controls" />
+        </menu>
+    </menubar>

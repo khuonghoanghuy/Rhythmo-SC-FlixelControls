@@ -7,6 +7,7 @@ import haxe.io.Path;
 import sys.io.Process;
 #end
 import rhythmo.debug.FPS;
+import haxe.ui.Toolkit;
 
 /**
  * The main entry point for the game.
@@ -84,6 +85,12 @@ class Main extends openfl.display.Sprite
 	public function new():Void
 	{
 		super();
+
+		Toolkit.init();
+    	Toolkit.theme = 'dark'; 
+    	Toolkit.autoScale = false;
+    	haxe.ui.focus.FocusManager.instance.autoFocus = false;
+    	haxe.ui.tooltips.ToolTipManager.defaultDelay = 200;
 
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);

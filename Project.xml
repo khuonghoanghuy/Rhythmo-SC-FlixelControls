@@ -66,6 +66,9 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 
+	<haxelib name="haxeui-core" />
+	<haxelib name="haxeui-flixel" />
+
 	<haxelib name="tjson" />
 	<haxelib name="hscript" />
 	<haxelib name="rulescript" />

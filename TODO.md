@@ -8,6 +8,7 @@
 * [X] Reorganize Source Code
 * [X] Improve Modding Support
 * [ ] Add documentation inside files
+* [ ] Redo Chart Editor Again
 * [ ] Optimizations
 
 ### Low Priority
