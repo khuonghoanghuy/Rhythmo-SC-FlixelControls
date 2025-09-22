@@ -81,7 +81,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 		DiscordClient.changePresence('Chart Editor', null, null, true);
 		#end
 
-		menuStructure = [
+		/*menuStructure = [
 			'Help' => [{name: 'Controls', func: () -> openSubState(new HelpSubState())}],
 			'Chart' => [
 				{name: 'Playtest', func: openPlayState},
@@ -176,7 +176,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 				},
 				{name: 'Save Chart As', func: saveSong}
 			]
-		];
+		];*/
 
 		var mouseSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('cursor/cursor'));
 		FlxG.mouse.load(mouseSpr.pixels);
@@ -226,7 +226,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 
 		var xPos:Int = 10;
 
-		for (menuName in menuStructure.keys())
+		/*for (menuName in menuStructure.keys())
 		{
 			var label:FlxText = new FlxText(xPos, 5, 0, menuName, 16);
 			label.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -275,7 +275,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 
 			dropDowns.set(menuName, items);
 			xPos += 70;
-		}
+		}*/
 
 		super.create();
 	}
@@ -389,7 +389,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 		super.update(elapsed);
 	}
 
-	function toggleDropdown(label:String):Void
+	/*function toggleDropdown(label:String):Void
 	{
 		for (key in dropDowns.keys())
 		{
@@ -407,7 +407,7 @@ class ChartingState extends haxe.ui.backend.flixel.UIState
 			for (item in group)
 				item.visible = false;
 		activeDropdown = '';
-	}
+	}*/
 
 	function openPlayState():Void
 	{
