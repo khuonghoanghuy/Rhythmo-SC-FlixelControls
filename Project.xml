@@ -78,6 +78,7 @@
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
 	<haxelib name="hxgamemode" if="linux" />
 	<haxelib name="hx_arabic_shaper" />
+	<haxelib name="flixel-controls" />
 
 	<!-- [ Defines ] -->
 
